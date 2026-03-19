@@ -136,7 +136,7 @@ export default function FAQSection() {
         >
           {[
             { q: "What is MentorLeap?", a: "MentorLeap is an AI-powered professional development platform founded by Mridu Bhandari. It combines real-world leadership frameworks with MISHA — an intelligent mentorship assistant designed to help professionals master communication, confidence, and career growth." },
-            { q: "How does MISHA help learners?", a: "MISHA provides 24×7 support by helping you structure your narrative, increase visibility, and strengthen your professional voice. Whether you are preparing for high-stakes meetings or seeking career clarity, MISHA offers instant, intelligence-driven guidance." },
+            { q: "How does MISHA help learners?", a: "MISHA provides 24×7 support by helping you master your narrative, increase your visibility, and strengthen your voice. Whether you are preparing for high-stakes meetings or seeking career clarity, MISHA offers instant, intelligence-driven guidance." },
             { q: "Is there a certificate for the programs?", a: "Yes, every professional program at MentorLeap, including our bootcamps and masterclasses, comes with a verified Certificate of Completion. These certificates recognize your commitment to strategic leadership and advanced communication skills." }
           ].map((faq, i) => {
             const isOpen = openIndex === i;

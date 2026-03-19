@@ -211,11 +211,11 @@ export default function MishaSection() {
 
             {/* PHILOSOPHY */}
             <div className="grid gap-2 mb-6 mt-4">
-              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">M –</span> <span className="text-[#cbd5f5]">Mentorship</span></div>
-              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">I –</span> <span className="text-[#cbd5f5]">Intelligence</span></div>
-              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">S –</span> <span className="text-[#cbd5f5]">Strategic</span></div>
-              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">H –</span> <span className="text-[#cbd5f5]">Humanise</span></div>
-              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">A –</span> <span className="text-[#cbd5f5]">Advancement</span></div>
+              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">M –</span> <span className="text-[#cbd5f5]">Master your narrative</span></div>
+              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">I –</span> <span className="text-[#cbd5f5]">Increase your visibility</span></div>
+              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">S –</span> <span className="text-[#cbd5f5]">Strengthen your voice</span></div>
+              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">H –</span> <span className="text-[#cbd5f5]">Humanise your leadership</span></div>
+              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">A –</span> <span className="text-[#cbd5f5]">Accelerate your growth</span></div>
             </div>
 
             {/* FULL FORM OMITTED */}
