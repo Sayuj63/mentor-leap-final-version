@@ -23,19 +23,30 @@ function getFirebaseAdmin() {
     return admin;
 }
 
-// Getters to ensure we only call getFirebaseAdmin() when needed
-export const db = {
-    collection: (name: string) => getFirebaseAdmin().firestore().collection(name),
-    doc: (path: string) => getFirebaseAdmin().firestore().doc(path),
-} as any; // Cast to any to preserve compatibility with existing service calls
+// Proxy-based wrappers to ensure we only call getFirebaseAdmin() when needed 
+// and still provide access to all underlying methods
+export const db = new Proxy({}, {
+    get(target, prop) {
+        const firestore = getFirebaseAdmin().firestore();
+        const value = (firestore as any)[prop];
+        return typeof value === 'function' ? value.bind(firestore) : value;
+    }
+}) as any;
 
-export const auth = {
-    verifyIdToken: (token: string) => getFirebaseAdmin().auth().verifyIdToken(token),
-    setCustomUserClaims: (uid: string, claims: any) => getFirebaseAdmin().auth().setCustomUserClaims(uid, claims),
-} as any;
+export const auth = new Proxy({}, {
+    get(target, prop) {
+        const authService = getFirebaseAdmin().auth();
+        const value = (authService as any)[prop];
+        return typeof value === 'function' ? value.bind(authService) : value;
+    }
+}) as any;
 
-export const storage = {
-    bucket: (name?: string) => getFirebaseAdmin().storage().bucket(name),
-} as any;
+export const storage = new Proxy({}, {
+    get(target, prop) {
+        const storageService = getFirebaseAdmin().storage();
+        const value = (storageService as any)[prop];
+        return typeof value === 'function' ? value.bind(storageService) : value;
+    }
+}) as any;
 
 export { admin };
