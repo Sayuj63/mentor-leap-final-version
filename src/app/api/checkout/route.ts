@@ -37,11 +37,30 @@ export async function POST(req: NextRequest) {
         else if (couponCode === "5050" && enrollCount < 20) price = Math.round(price * 0.5);
 
         // 4. Handle Free Enrollment
+        // 4. Handle Free Enrollment
         if (price === 0) {
-            await db.collection("users").doc(decodedToken.uid).update({
-                enrolledCourses: admin.firestore.FieldValue.arrayUnion(itemId),
-                ...(userDetails && { profileDetails: userDetails }) // Capture details if provided
+            const batch = db.batch();
+            const userRef = db.collection("users").doc(decodedToken.uid);
+            
+            // Update user's enrollment list
+            if (itemType === "course") {
+                batch.update(userRef, {
+                    enrolledCourses: admin.firestore.FieldValue.arrayUnion(itemId),
+                    ...(userDetails && { profileDetails: userDetails })
+                });
+            } else {
+                batch.update(userRef, {
+                    registeredEvents: admin.firestore.FieldValue.arrayUnion(itemId),
+                    ...(userDetails && { profileDetails: userDetails })
+                });
+            }
+
+            // Increment enrollment count for the item
+            batch.update(itemRef, {
+                enrollmentCount: admin.firestore.FieldValue.increment(1)
             });
+
+            await batch.commit();
             return NextResponse.json({ success: true, type: "free" });
         }
 
