@@ -422,7 +422,7 @@ export default function CourseDetailPage() {
           window.location.href = `/course-player/${courseId}`;
         }}
         title="Congratulations!"
-        message="You are one of the first 10 participants to secure a free seat. Enjoy your learning journey!"
+        message="Congratulations! You have just been one of the first 10 people to enroll in the course. You will be getting this course for free!"
         ctaText="Start Learning"
         onCtaClick={() => window.location.href = `/course-player/${courseId}`}
       />

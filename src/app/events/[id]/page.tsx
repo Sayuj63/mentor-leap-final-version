@@ -459,7 +459,7 @@ export default function EventDetailsPage() {
         isOpen={showSuccessOverlay}
         onClose={() => setShowSuccessOverlay(false)}
         title="Congratulations!"
-        message="You are one of the first 10 participants to secure a free seat. Welcome to MentorLeap!"
+        message="Congratulations! You have just been one of the first 10 people to enroll in the course. You will be getting the course for free!"
         ctaText="View My Events"
         onCtaClick={() => router.push("/dashboard/my-events")}
       />
