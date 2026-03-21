@@ -12,7 +12,7 @@ export interface Event {
     speaker: string;
     seats: number;
     banner: string; // Cloudinary URL
-    googleMeetLink: string;
+    zoomLink: string;
     attendees: string[]; // Array of user UIDs
     createdAt: admin.firestore.Timestamp | Date;
 }

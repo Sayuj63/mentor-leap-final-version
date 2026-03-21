@@ -23,7 +23,7 @@ export default function AdminEvents() {
     price: 0,
     speaker: "Mridu Bhandari",
     seats: 50,
-    googleMeetLink: "",
+    zoomLink: "",
   });
   const [bannerFile, setBannerFile] = useState<File | null>(null);
 
@@ -70,7 +70,7 @@ export default function AdminEvents() {
 
       showToast("Event created successfully!", "success");
       setIsModalOpen(false);
-      setFormData({ title: "", description: "", type: "webinar", date: "", price: 0, speaker: "Mridu Bhandari", seats: 50, googleMeetLink: "" });
+      setFormData({ title: "", description: "", type: "webinar", date: "", price: 0, speaker: "Mridu Bhandari", seats: 50, zoomLink: "" });
       setBannerFile(null);
       fetchEvents();
     } catch (error: any) {
@@ -146,7 +146,7 @@ export default function AdminEvents() {
                     <td className="px-8 py-6 border-b border-white/5 text-[#cbd5f5] font-medium">{formatDate(event.date)}</td>
                     <td className="px-8 py-6 border-b border-white/5 font-mono text-[#00e5ff] font-bold">₹{event.price || 0}</td>
                     <td className="px-8 py-6 border-b border-white/5 text-right">
-                      <Button variant="outline" onClick={() => window.open(event.googleMeetLink, '_blank')}>Join Link</Button>
+                      <Button variant="outline" onClick={() => window.open(event.zoomLink, '_blank')}>Join Link</Button>
                     </td>
                   </tr>
                 ))
@@ -202,7 +202,7 @@ export default function AdminEvents() {
             </div>
           </div>
 
-          <Input label="Google Meet Link" required placeholder="https://meet.google.com/abc-defg-hij" value={formData.googleMeetLink} onChange={(e: any) => setFormData({ ...formData, googleMeetLink: e.target.value })} />
+          <Input label="Zoom Link" required placeholder="https://zoom.us/j/123456789" value={formData.zoomLink} onChange={(e: any) => setFormData({ ...formData, zoomLink: e.target.value })} />
 
           <Button fullWidth className="h-14 !mt-8 font-black uppercase tracking-[0.2em]" disabled={isSubmitting}>
             {isSubmitting ? "Deploying Asset..." : "Schedule Event"}

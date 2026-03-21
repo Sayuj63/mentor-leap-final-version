@@ -28,7 +28,7 @@ export default function AdminEvents() {
     price: 0,
     speaker: "Mridu Bhandari",
     seats: 50,
-    googleMeetLink: "",
+    zoomLink: "",
     banner: "",
   });
 
@@ -103,7 +103,7 @@ export default function AdminEvents() {
       price: event.price || 0,
       speaker: event.speaker || "Mridu Bhandari",
       seats: event.seats || 50,
-      googleMeetLink: event.googleMeetLink || "",
+      zoomLink: event.zoomLink || "",
       ...({ banner: event.banner } as any)
     });
     setIsModalOpen(true);
@@ -121,7 +121,7 @@ export default function AdminEvents() {
   };
 
   const resetForm = () => {
-    setFormData({ title: "", description: "", type: "webinar", date: "", price: 0, speaker: "Mridu Bhandari", seats: 50, googleMeetLink: "", banner: "" });
+    setFormData({ title: "", description: "", type: "webinar", date: "", price: 0, speaker: "Mridu Bhandari", seats: 50, zoomLink: "", banner: "" });
     setBannerFile(null);
     setIsEditMode(false);
     setEditingEventId(null);
@@ -187,7 +187,7 @@ export default function AdminEvents() {
                     <td className="px-8 py-6 border-b border-white/5 font-mono text-[#00e5ff] font-bold">₹{event.price || 0}</td>
                     <td className="px-8 py-6 border-b border-white/5 text-right">
                       <div className="flex justify-end gap-2">
-                        <Button variant="outline" size="sm" onClick={() => window.open(event.googleMeetLink, '_blank')}>Join</Button>
+                        <Button variant="outline" size="sm" onClick={() => window.open(event.zoomLink, '_blank')}>Join</Button>
                         <button onClick={() => handleEditClick(event)} className="p-2.5 rounded-xl bg-white/5 text-[#94a3b8] hover:text-[#00e5ff] hover:bg-[#00e5ff]/10 transition-all border border-transparent hover:border-[#00e5ff]/20">
                           <Edit2 size={16} />
                         </button>
@@ -252,7 +252,7 @@ export default function AdminEvents() {
             </div>
           </div>
 
-          <Input label="Google Meet Link" required placeholder="https://meet.google.com/abc-defg-hij" value={formData.googleMeetLink} onChange={(e: any) => setFormData({ ...formData, googleMeetLink: e.target.value })} />
+          <Input label="Zoom Link" required placeholder="https://zoom.us/j/123456789" value={formData.zoomLink} onChange={(e: any) => setFormData({ ...formData, zoomLink: e.target.value })} />
 
           <Button fullWidth className="h-14 !mt-8 font-black uppercase tracking-[0.2em]" disabled={isSubmitting}>
             {isSubmitting ? (isEditMode ? "Synchronizing..." : "Deploying Asset...") : (isEditMode ? "Update Event" : "Schedule Event")}

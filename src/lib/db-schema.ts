@@ -43,7 +43,7 @@ export interface Event {
     date: Timestamp;
     price: number;
     banner: string;
-    googleMeetLink?: string;
+    zoomLink?: string;
     attendees: string[];
     createdAt: Timestamp;
 }

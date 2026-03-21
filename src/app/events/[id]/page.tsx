@@ -389,7 +389,7 @@ export default function EventDetailsPage() {
                     </div>
                     <div className="flex items-center gap-3 text-sm text-[#cbd5f5]">
                       <span className="text-[#475569] font-black w-14 uppercase text-[9px] tracking-widest">Link</span>
-                      <span className="font-bold text-[#00e5ff]">Google Meet</span>
+                      <span className="font-bold text-[#00e5ff]">Zoom</span>
                     </div>
                   </div>
 

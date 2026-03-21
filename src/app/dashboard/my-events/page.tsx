@@ -231,9 +231,9 @@ export default function MyEventsPage() {
                                         )}
                                     </div>
 
-                                    {event.googleMeetLink && isUpcoming && (
+                                    {event.zoomLink && isUpcoming && (
                                         <a
-                                            href={event.googleMeetLink}
+                                            href={event.zoomLink}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
