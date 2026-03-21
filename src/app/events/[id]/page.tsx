@@ -368,8 +368,8 @@ export default function EventDetailsPage() {
               </div>
 
               {/* SIDEBAR */}
-              <div className="space-y-8">
-                <div className="bg-[#0f172a]/80 backdrop-blur-xl rounded-3xl p-10 border border-white/10 sticky top-32 shadow-[0_40px_100px_rgba(0,0,0,0.6)] relative overflow-hidden">
+              <div className="lg:sticky lg:top-32 h-fit space-y-8">
+                <div className="bg-[#0f172a]/80 backdrop-blur-xl rounded-3xl p-10 border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.6)] relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00e5ff] to-[#6366f1]"></div>
                   
                   <div className="text-4xl font-black mb-1 tracking-tight">
@@ -393,12 +393,6 @@ export default function EventDetailsPage() {
                       <span className="font-bold text-[#00e5ff]">Google Meet</span>
                     </div>
                   </div>
-
-                  {isSWI && (
-                    <div className="bg-[#ef4444]/5 p-4 rounded-xl border border-[#ef4444]/10 mb-6 text-center">
-                       <p className="text-[9px] font-black text-[#ef4444] uppercase tracking-widest animate-pulse">8 Seats Remaining for this Batch</p>
-                    </div>
-                  )}
 
                   <Button
                     fullWidth
