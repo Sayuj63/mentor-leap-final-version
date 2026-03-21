@@ -42,3 +42,5 @@ export const EventService = {
         await db.collection("events").doc(eventId).delete();
     },
 };
+
+

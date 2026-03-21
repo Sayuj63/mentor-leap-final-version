@@ -2,9 +2,10 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { User } from "@/models/User";
+import { ADMIN_CONFIG } from "@/lib/constants";
 
 interface AuthContextType {
     user: FirebaseUser | null;
@@ -33,9 +34,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         let unsubscribeDoc: (() => void) | undefined;
         let unsubscribeAuth: (() => void) | undefined;
 
-        // Prevent crash if Firebase environment variables are missing
         if (!auth || !auth.app) {
-            console.warn("Firebase Auth is not initialized. Please configure your Vercel Environment Variables (NEXT_PUBLIC_FIREBASE_API_KEY, etc).");
+            console.warn("Firebase Auth is not initialized.");
             setLoading(false);
             return;
         }
@@ -45,6 +45,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 setUser(currentUser);
 
                 if (currentUser) {
+                    // Set cookie for middleware
+                    currentUser.getIdToken().then(token => {
+                        document.cookie = `firebase-token=${token}; path=/; max-age=3600; SameSite=Lax`;
+                    });
+
                     // Real-time listener for user document
                     unsubscribeDoc = onSnapshot(doc(db, "users", currentUser.uid), (userDoc) => {
                         if (userDoc.exists()) {
@@ -58,6 +63,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                         setLoading(false);
                     });
                 } else {
+                    // Clear cookie
+                    document.cookie = "firebase-token=; path=/; max-age=0";
                     setUserData(null);
                     setLoading(false);
                     if (unsubscribeDoc) unsubscribeDoc();
@@ -75,10 +82,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }, []);
 
     const logout = async () => {
+        document.cookie = "firebase-token=; path=/; max-age=0";
         await auth.signOut();
     };
 
-    const isAdmin = userData?.role === "admin" || user?.email === "admin@mentorleap.com";
+    const isAdmin = !!(userData?.role === "admin" || (user?.email && ADMIN_CONFIG.superAdminEmails.includes(user.email.toLowerCase())));
 
     return (
         <AuthContext.Provider value={{ user, userData, loading, isAdmin, logout }}>

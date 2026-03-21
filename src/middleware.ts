@@ -1,29 +1,32 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// This is a simple middleware example. 
-// For production, you should ideally verify the Firebase Session Cookie.
-// Since we are using client-side tokens, we'll check for a basic session indicator
-// or implement a full session cookie verification if the backend supports it.
-
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+    const { pathname } = request.nextUrl;
+    
+    // 1. Get auth token from cookies
+    const sessionToken = request.cookies.get("firebase-token")?.value;
 
-  // Protect /admin routes
-  if (pathname.startsWith("/admin")) {
-    // In a real production app, check for a 'session' cookie
-    // const session = request.cookies.get("__session");
-    // if (!session) return NextResponse.redirect(new URL("/auth/login", request.url));
-  }
+    // 2. Protect Admin Routes
+    if (pathname.startsWith("/admin")) {
+        if (!sessionToken) {
+            return NextResponse.redirect(new URL("/auth/login?callback=" + pathname, request.url));
+        }
+    }
 
-  // Protect /dashboard routes
-  if (pathname.startsWith("/dashboard")) {
-    // Basic protection logic...
-  }
+    // 3. Protect Dashboard Routes
+    if (pathname.startsWith("/dashboard")) {
+        if (!sessionToken) {
+            return NextResponse.redirect(new URL("/auth/login?callback=" + pathname, request.url));
+        }
+    }
 
-  return NextResponse.next();
+    return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/dashboard/:path*"],
+    matcher: [
+        "/admin/:path*",
+        "/dashboard/:path*",
+    ],
 };

@@ -8,10 +8,24 @@ import { Toast } from "@/components/ui/Toast";
 import { AdminAPI } from "@/lib/admin-api";
 import { Course } from "@/models/Course";
 import { Loader } from "@/components/ui/Loader";
-import { Edit2, Trash2, History as HistoryIcon } from "lucide-react";
+import { Edit2, Trash2, History as HistoryIcon, BookOpen, Plus, Trash, ChevronDown, ChevronUp } from "lucide-react";
 
 const difficulties = ["Beginner", "Intermediate", "Advanced", "Expert"];
 const statuses = ["draft", "published", "archived"];
+
+interface Lesson {
+  id: string;
+  title: string;
+  videoUrl: string;
+  duration: number;
+}
+
+interface Module {
+  id: string;
+  title: string;
+  lessons: Lesson[];
+}
+
 
 export default function AdminCourses() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -20,14 +34,18 @@ export default function AdminCourses() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const [isContentModalOpen, setIsContentModalOpen] = useState(false);
   const [historyData, setHistoryData] = useState<any[]>([]);
   const [historyTarget, setHistoryTarget] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
+  const [managingCourse, setManagingCourse] = useState<Course | null>(null);
+  const [courseModules, setCourseModules] = useState<Module[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
 
   const [toast, setToast] = useState({ show: false, message: "", type: "success" as "success" | "error" });
+
 
   const [formData, setFormData] = useState<any>({
     title: "",
@@ -186,6 +204,81 @@ export default function AdminCourses() {
     setIsEditModalOpen(true);
   };
 
+  const openContentEditor = (course: Course) => {
+    setManagingCourse(course);
+    setCourseModules(course.modules || []);
+    setIsContentModalOpen(true);
+  };
+
+  const handleSaveContent = async () => {
+    if (!managingCourse) return;
+    try {
+      setIsSubmitting(true);
+      await AdminAPI.updateCourse(managingCourse.id!, { modules: courseModules });
+      showToast("Curriculum updated successfully", "success");
+      setIsContentModalOpen(false);
+      fetchInitialData();
+    } catch (error: any) {
+      showToast(error.message, "error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const addModule = () => {
+    const newModule: Module = {
+      id: `mod_${Date.now()}`,
+      title: "New Module",
+      lessons: []
+    };
+    setCourseModules([...courseModules, newModule]);
+  };
+
+  const updateModuleTitle = (modId: string, title: string) => {
+    setCourseModules(courseModules.map(m => m.id === modId ? { ...m, title } : m));
+  };
+
+  const removeModule = (modId: string) => {
+    setCourseModules(courseModules.filter(m => m.id !== modId));
+  };
+
+  const addLesson = (modId: string) => {
+    setCourseModules(courseModules.map(m => {
+      if (m.id === modId) {
+        const newLesson: Lesson = {
+          id: `les_${Date.now()}`,
+          title: "New Lesson",
+          videoUrl: "",
+          duration: 10
+        };
+        return { ...m, lessons: [...m.lessons, newLesson] };
+      }
+      return m;
+    }));
+  };
+
+  const updateLesson = (modId: string, lessonId: string, data: Partial<Lesson>) => {
+    setCourseModules(courseModules.map(m => {
+      if (m.id === modId) {
+        return {
+          ...m,
+          lessons: m.lessons.map(l => l.id === lessonId ? { ...l, ...data } : l)
+        };
+      }
+      return m;
+    }));
+  };
+
+  const removeLesson = (modId: string, lessonId: string) => {
+    setCourseModules(courseModules.map(m => {
+      if (m.id === modId) {
+        return { ...m, lessons: m.lessons.filter(l => l.id !== lessonId) };
+      }
+      return m;
+    }));
+  };
+
+
   const filteredCourses = courses.filter(c => {
     const matchesSearch = c.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filterCategory === "all" || c.category === filterCategory;
@@ -276,12 +369,16 @@ export default function AdminCourses() {
                         <button onClick={() => fetchHistory(course.id!, course.title)} className="p-2.5 rounded-xl bg-white/5 text-[#94a3b8] hover:text-[#00e5ff] hover:bg-[#00e5ff]/10 transition-all border border-transparent hover:border-[#00e5ff]/20" title="Revision History">
                           <HistoryIcon size={16} />
                         </button>
-                        <button onClick={() => openEdit(course)} className="p-2.5 rounded-xl bg-white/5 text-[#94a3b8] hover:text-[#00e5ff] hover:bg-[#00e5ff]/10 transition-all border border-transparent hover:border-[#00e5ff]/20">
+                        <button onClick={() => openContentEditor(course)} className="p-2.5 rounded-xl bg-white/5 text-[#94a3b8] hover:text-[#00e5ff] hover:bg-[#00e5ff]/10 transition-all border border-transparent hover:border-[#00e5ff]/20" title="Manage Curriculum">
+                          <BookOpen size={16} />
+                        </button>
+                        <button onClick={() => openEdit(course)} className="p-2.5 rounded-xl bg-white/5 text-[#94a3b8] hover:text-[#00e5ff] hover:bg-[#00e5ff]/10 transition-all border border-transparent hover:border-[#00e5ff]/20" title="Edit Properties">
                           <Edit2 size={16} />
                         </button>
-                        <button onClick={() => handleDeleteCourse(course.id!, course.title)} className="p-2.5 rounded-xl bg-white/5 text-[#94a3b8] hover:text-red-400 hover:bg-red-500/10 transition-all border border-transparent hover:border-red-500/20">
+                        <button onClick={() => handleDeleteCourse(course.id!, course.title)} className="p-2.5 rounded-xl bg-white/5 text-[#94a3b8] hover:text-red-400 hover:bg-red-500/10 transition-all border border-transparent hover:border-red-500/20" title="Delete Course">
                           <Trash2 size={16} />
                         </button>
+
                       </div>
                     </td>
                   </tr>
@@ -433,6 +530,86 @@ export default function AdminCourses() {
           </Button>
         </form>
       </Modal>
+
+      {/* CURRICULUM EDITOR MODAL */}
+      <Modal isOpen={isContentModalOpen} onClose={() => !isSubmitting && setIsContentModalOpen(false)} title={`Manage Curriculum: ${managingCourse?.title}`}>
+        <div className="space-y-8 pt-4 max-h-[70vh] overflow-y-auto px-1 custom-scrollbar">
+          {courseModules.length === 0 && (
+            <div className="text-center py-10 border-2 border-dashed border-white/5 rounded-3xl">
+              <p className="text-[#475569] text-sm mb-4 italic">No modules initialized for this course.</p>
+              <Button variant="outline" onClick={addModule}>+ Initialize First Module</Button>
+            </div>
+          )}
+
+          {courseModules.map((mod, modIdx) => (
+            <div key={mod.id} className="p-6 rounded-3xl bg-white/[0.03] border border-white/5 space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-[10px] font-black">{modIdx + 1}</div>
+                <input
+                  className="flex-1 bg-transparent border-none text-white font-bold text-lg outline-none focus:text-[#00e5ff]"
+                  value={mod.title}
+                  onChange={(e) => updateModuleTitle(mod.id, e.target.value)}
+                  placeholder="Module Title..."
+                />
+                <button onClick={() => removeModule(mod.id)} className="p-2 text-[#475569] hover:text-red-400 transition-colors">
+                  <Trash size={16} />
+                </button>
+              </div>
+
+              <div className="pl-12 space-y-3">
+                {mod.lessons.map((lesson, lesIdx) => (
+                  <div key={lesson.id} className="flex flex-col gap-3 p-4 rounded-2xl bg-black/20 border border-white/5 group">
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] font-bold text-[#475569]">{lesIdx + 1}.</span>
+                      <input
+                        className="flex-1 bg-transparent border-none text-white text-sm font-semibold outline-none focus:text-[#00e5ff]"
+                        value={lesson.title}
+                        onChange={(e) => updateLesson(mod.id, lesson.id, { title: e.target.value })}
+                        placeholder="Lesson Title..."
+                      />
+                      <button onClick={() => removeLesson(mod.id, lesson.id)} className="opacity-0 group-hover:opacity-100 p-1 text-[#475569] hover:text-red-400 transition-all">
+                        <Trash size={14} />
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-[1fr_100px] gap-3">
+                      <input
+                        className="bg-white/5 border border-white/5 rounded-lg px-3 py-1.5 text-xs text-[#cbd5f5] outline-none focus:border-[#00e5ff]/30"
+                        value={lesson.videoUrl}
+                        onChange={(e) => updateLesson(mod.id, lesson.id, { videoUrl: e.target.value })}
+                        placeholder="Video URL (Cloudinary index or Direct Link)"
+                      />
+                      <div className="relative">
+                         <input
+                           type="number"
+                           className="w-full bg-white/5 border border-white/5 rounded-lg px-3 py-1.5 text-xs text-[#cbd5f5] outline-none focus:border-[#00e5ff]/30 pr-8"
+                           value={lesson.duration}
+                           onChange={(e) => updateLesson(mod.id, lesson.id, { duration: parseInt(e.target.value) || 0 })}
+                         />
+                         <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[#475569] font-bold">m</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  onClick={() => addLesson(mod.id)}
+                  className="w-full py-3 rounded-2xl border border-dashed border-white/10 text-[10px] font-black uppercase tracking-widest text-[#475569] hover:text-[#00e5ff] hover:border-[#00e5ff]/30 transition-all"
+                >
+                  + Add Lesson to Module
+                </button>
+              </div>
+            </div>
+          ))}
+
+          {courseModules.length > 0 && (
+            <Button fullWidth variant="outline" onClick={addModule}>+ Add New Module</Button>
+          )}
+
+          <Button fullWidth className="h-14 !mt-12 font-black uppercase tracking-[0.2em]" disabled={isSubmitting} onClick={handleSaveContent}>
+            {isSubmitting ? "Deploying Curriculum..." : "Commit Curriculum Changes"}
+          </Button>
+        </div>
+      </Modal>
+
 
       <Toast isVisible={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
     </div>

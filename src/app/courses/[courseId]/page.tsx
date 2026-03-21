@@ -21,11 +21,16 @@ import {
   User,
   BarChart
 } from "lucide-react";
+import PaymentDetailsModal, { UserDetails } from "@/components/layout/PaymentDetailsModal";
 
 export default function CourseDetailPage() {
   const { courseId } = useParams();
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [enrolling, setEnrolling] = useState(false);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -41,7 +46,95 @@ export default function CourseDetailPage() {
       }
     };
     if (courseId) fetchCourse();
+
+    // Check auth status
+    const checkAuth = async () => {
+      const { auth } = await import('@/lib/firebase');
+      auth.onAuthStateChanged((user: any) => {
+        setUser(user);
+        // If coming back from login with checkout intent
+        const params = new URLSearchParams(window.location.search);
+        if (user && params.get('checkout') === 'true') {
+          setShowDetailsModal(true);
+        }
+      });
+    };
+    checkAuth();
   }, [courseId]);
+
+  const handleEnrollInitiation = () => {
+    if (!user) {
+      return window.location.href = `/auth/login?redirect=/courses/${courseId}?checkout=true`;
+    }
+    setShowDetailsModal(true);
+  };
+
+  const processPayment = async (details: UserDetails) => {
+    try {
+      setEnrolling(true);
+      setShowDetailsModal(false);
+      const { auth } = await import('@/lib/firebase');
+      const token = await auth.currentUser?.getIdToken();
+      
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ 
+          itemId: courseId,
+          userDetails: details
+        })
+      });
+      
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Checkout failed");
+
+      if (data.type === "redirect") {
+        window.location.href = data.url;
+      } else if (data.type === "free") {
+        window.location.href = `/course-player/${courseId}`;
+      } else if (data.type === "paid") {
+        const options = {
+          key: data.key,
+          amount: data.amount,
+          currency: "INR",
+          name: "MentorLeap",
+          description: `Enrollment for ${course.title}`,
+          order_id: data.orderId,
+          handler: async (response: any) => {
+            const verifyRes = await fetch("/api/checkout/verify", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+              },
+              body: JSON.stringify({
+                ...response,
+                itemId: courseId,
+                itemType: "course"
+              })
+            });
+            if (verifyRes.ok) window.location.href = `/course-player/${courseId}`;
+            else alert("Payment verification failed. Please contact support.");
+          },
+          prefill: {
+            name: details.fullName,
+            email: user?.email,
+            contact: details.phone
+          },
+          theme: { color: "#00e5ff" }
+        };
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+      }
+    } catch (e: any) {
+      alert(e.message);
+    } finally {
+      setEnrolling(false);
+    }
+  };
 
   if (loading) return <div className="h-screen flex items-center justify-center bg-[#020617]"><Loader /></div>;
   if (!course) return <div className="h-screen flex items-center justify-center bg-[#020617] text-white">Course not found</div>;
@@ -49,6 +142,7 @@ export default function CourseDetailPage() {
   return (
     <PageWrapper>
       {/* HERO SECTION */}
+      {/* ... (Hero section code remains same) ... */}
       <section className="relative px-5 pt-[160px] pb-[100px] overflow-hidden">
         <div className="absolute top-0 right-0 w-full h-[600px] bg-gradient-to-b from-[#00e5ff0d] to-transparent pointer-events-none"></div>
         <div className="max-w-[1200px] mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
@@ -62,8 +156,8 @@ export default function CourseDetailPage() {
               </div>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] mb-6">
-              {course.title.split(":")[0]} <br />
-              <GradientText>{course.title.split(":")[1] || "Masterclass"}</GradientText>
+              {course.title?.split(":")[0]} <br />
+              <GradientText>{course.title?.split(":")[1] || "Masterclass"}</GradientText>
             </h1>
             <Paragraph className="text-lg text-[#94a3b8] mb-10 max-w-[550px]">
               {course.description}
@@ -108,10 +202,14 @@ export default function CourseDetailPage() {
                 alt="Course Preview"
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                <button className="w-20 h-20 rounded-full bg-[#00e5ff] text-[#020617] flex items-center justify-center shadow-[0_0_30px_#00e5ff] hover:scale-110 transition-transform">
+                <button 
+                  onClick={() => setShowTrailer(true)}
+                  className="w-20 h-20 rounded-full bg-[#00e5ff] text-[#020617] flex items-center justify-center shadow-[0_0_30px_#00e5ff] hover:scale-110 transition-transform"
+                >
                   <PlayCircle size={32} />
                 </button>
               </div>
+
               <div className="absolute bottom-6 left-6 right-6 p-4 bg-black/60 backdrop-blur-md rounded-2xl border border-white/5 items-center justify-between hidden md:flex">
                 <p className="text-xs font-bold text-white">Watch Course Trailer</p>
                 <span className="text-[10px] font-black text-[#00e5ff] uppercase">2:45 min</span>
@@ -263,51 +361,19 @@ export default function CourseDetailPage() {
                 ))}
               </div>
 
-              {(!course.price || course.price === 0 || (course.id === "speak-with-impact-bootcamp" && (course.enrollmentCount || 0) < 10)) ? (
-                <Button
-                  fullWidth size="lg"
-                  className="h-14 font-black uppercase tracking-[0.2em] shadow-[0_10px_25px_#00e5ff30]"
-                  onClick={async () => {
-                    try {
-                      const { auth } = await import('@/lib/firebase');
-                      const token = await auth.currentUser?.getIdToken();
-                      if (!token) {
-                        alert("Please log in to enroll.");
-                        return window.location.href = `/auth/login?redirect=/courses/${course.id}`;
-                      }
+              <Button
+                fullWidth size="lg"
+                disabled={enrolling}
+                className="h-14 font-black uppercase tracking-[0.2em] shadow-[0_10px_25px_#00e5ff30]"
+                onClick={handleEnrollInitiation}
+              >
+                {enrolling ? "Processing..." : course.price === 0 ? "Enroll for Free" : "Secure Your Seat"}
+              </Button>
 
-                      const res = await fetch('/api/enroll/free', {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ courseId: course.id })
-                      });
-                      if (res.ok) {
-                        window.location.href = `/course-player/${course.id}`;
-                      } else {
-                        const error = await res.json();
-                        alert(error.error || "Failed to enroll");
-                      }
-                    } catch (e) {
-                      console.error(e);
-                    }
-                  }}
-                >
-                  {course.id === "speak-with-impact-bootcamp" ? `Claim Free Seat (${10 - (course.enrollmentCount || 0)} left!)` : "Enroll for Free"}
-                </Button>
-              ) : (course.id === "speak-with-impact-bootcamp" ? (
-                <a href="https://pages.razorpay.com/SWIbootcamp" className="block w-full">
-                  <Button fullWidth size="lg" className="h-14 font-black uppercase tracking-[0.2em] shadow-[0_10px_25px_#6366f130] bg-gradient-to-r from-[#00e5ff] to-[#6366f1] text-[#020617] border-none">
-                    Secure Your Seat
-                  </Button>
-                </a>
-              ) : (
-                <Button fullWidth size="lg" disabled className="h-14 font-black uppercase tracking-[0.2em] bg-white/10 text-white/50 border-none">
-                  Enroll (Paid - Coming Soon)
-                </Button>
-              ))}
+
+              {/* Razorpay Script Import */}
+              <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
+
 
               <p className="text-[9px] text-center text-[#475569] font-black uppercase tracking-widest mt-6">
                 🔒 Secure 256-bit SSL Enrollment
@@ -322,6 +388,36 @@ export default function CourseDetailPage() {
           </Reveal>
         </div>
       </section>
+      
+      {/* DETAILS FORM MODAL */}
+      <PaymentDetailsModal
+        isOpen={showDetailsModal}
+        onClose={() => setShowDetailsModal(false)}
+        onSubmit={processPayment}
+        initialEmail={user?.email}
+        courseTitle={course.title}
+      />
+
+      {/* Video Modal */}
+      {showTrailer && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-5">
+            <div className="absolute inset-0 bg-[#020617]/90 backdrop-blur-xl" onClick={() => setShowTrailer(false)}></div>
+            <div className="relative w-full max-w-5xl aspect-video bg-black rounded-3xl overflow-hidden border border-white/10 shadow-3xl">
+                <button 
+                  onClick={() => setShowTrailer(false)}
+                  className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                >
+                    ✕
+                </button>
+                <iframe 
+                    src={course.trailerUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ"} 
+                    className="w-full h-full"
+                    allowFullScreen
+                ></iframe>
+            </div>
+        </div>
+      )}
     </PageWrapper>
+
   );
 }

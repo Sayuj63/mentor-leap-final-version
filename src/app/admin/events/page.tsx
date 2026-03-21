@@ -7,13 +7,18 @@ import { Input, Textarea } from "@/components/ui/Input";
 import { Toast } from "@/components/ui/Toast";
 import { AdminAPI } from "@/lib/admin-api";
 import { Loader } from "@/components/ui/Loader";
+import { Edit2, Trash2 } from "lucide-react";
+
 
 export default function AdminEvents() {
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editingEventId, setEditingEventId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState({ show: false, message: "", type: "success" as "success" | "error" });
+
 
   const [formData, setFormData] = useState({
     title: "",
@@ -24,7 +29,9 @@ export default function AdminEvents() {
     speaker: "Mridu Bhandari",
     seats: 50,
     googleMeetLink: "",
+    banner: "",
   });
+
   const [bannerFile, setBannerFile] = useState<File | null>(null);
 
   useEffect(() => {
@@ -48,24 +55,28 @@ export default function AdminEvents() {
     setToast({ show: true, message, type });
   };
 
-  const handleCreateEvent = async (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setIsSubmitting(true);
 
-      let bannerUrl = "";
+      let bannerUrl = formData.banner || "";
       if (bannerFile) {
         showToast("Uploading banner...", "success");
         const uploadRes = await AdminAPI.uploadMedia(bannerFile, "mentorleap/events");
         bannerUrl = uploadRes.url;
       }
 
-      await AdminAPI.createEvent({ ...formData, banner: bannerUrl });
+      if (isEditMode && editingEventId) {
+        await AdminAPI.updateEvent(editingEventId, { ...formData, banner: bannerUrl });
+        showToast("Event updated successfully!", "success");
+      } else {
+        await AdminAPI.createEvent({ ...formData, banner: bannerUrl });
+        showToast("Event created successfully!", "success");
+      }
 
-      showToast("Event created successfully!", "success");
       setIsModalOpen(false);
-      setFormData({ title: "", description: "", type: "webinar", date: "", price: 0, speaker: "Mridu Bhandari", seats: 50, googleMeetLink: "" });
-      setBannerFile(null);
+      resetForm();
       fetchEvents();
     } catch (error: any) {
       showToast(error.message, "error");
@@ -73,6 +84,50 @@ export default function AdminEvents() {
       setIsSubmitting(false);
     }
   };
+
+  const handleEditClick = (event: any) => {
+    setIsEditMode(true);
+    setEditingEventId(event.id);
+    // Format date for the input field (expects YYYY-MM-DD)
+    let formattedDate = "";
+    if (event.date) {
+      const d = event.date._seconds ? new Date(event.date._seconds * 1000) : new Date(event.date);
+      formattedDate = d.toISOString().split('T')[0];
+    }
+
+    setFormData({
+      title: event.title || "",
+      description: event.description || "",
+      type: event.type || "webinar",
+      date: formattedDate,
+      price: event.price || 0,
+      speaker: event.speaker || "Mridu Bhandari",
+      seats: event.seats || 50,
+      googleMeetLink: event.googleMeetLink || "",
+      ...({ banner: event.banner } as any)
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteEvent = async (id: string, title: string) => {
+    if (!confirm(`Are you sure you want to delete "${title}"?`)) return;
+    try {
+        await AdminAPI.deleteEvent(id);
+        showToast("Event deleted", "success");
+        fetchEvents();
+    } catch (error: any) {
+        showToast(error.message, "error");
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({ title: "", description: "", type: "webinar", date: "", price: 0, speaker: "Mridu Bhandari", seats: 50, googleMeetLink: "", banner: "" });
+    setBannerFile(null);
+    setIsEditMode(false);
+    setEditingEventId(null);
+  };
+
+
 
   const formatDate = (date: any) => {
     if (!date) return "N/A";
@@ -87,8 +142,9 @@ export default function AdminEvents() {
           <h1 className="text-3xl font-bold mb-2 tracking-tight">Live Events Manager</h1>
           <p className="text-[#94a3b8] text-sm uppercase font-bold tracking-widest">Schedule webinars, masterclasses, and bootcamps</p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)}>+ Schedule New Event</Button>
+        <Button onClick={() => { resetForm(); setIsModalOpen(true); }}>+ Schedule New Event</Button>
       </div>
+
 
       {loading ? (
         <div className="flex justify-center p-20"><Loader /></div>
@@ -130,8 +186,17 @@ export default function AdminEvents() {
                     <td className="px-8 py-6 border-b border-white/5 text-[#cbd5f5] font-medium">{formatDate(event.date)}</td>
                     <td className="px-8 py-6 border-b border-white/5 font-mono text-[#00e5ff] font-bold">₹{event.price || 0}</td>
                     <td className="px-8 py-6 border-b border-white/5 text-right">
-                      <Button variant="outline" onClick={() => window.open(event.googleMeetLink, '_blank')}>Join Link</Button>
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" size="sm" onClick={() => window.open(event.googleMeetLink, '_blank')}>Join</Button>
+                        <button onClick={() => handleEditClick(event)} className="p-2.5 rounded-xl bg-white/5 text-[#94a3b8] hover:text-[#00e5ff] hover:bg-[#00e5ff]/10 transition-all border border-transparent hover:border-[#00e5ff]/20">
+                          <Edit2 size={16} />
+                        </button>
+                        <button onClick={() => handleDeleteEvent(event.id, event.title)} className="p-2.5 rounded-xl bg-white/5 text-[#94a3b8] hover:text-red-400 hover:bg-red-500/10 transition-all border border-transparent hover:border-red-500/20">
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </td>
+
                   </tr>
                 ))
               )}
@@ -140,8 +205,9 @@ export default function AdminEvents() {
         </Card>
       )}
 
-      <Modal isOpen={isModalOpen} onClose={() => !isSubmitting && setIsModalOpen(false)} title="Initialize New Event">
-        <form onSubmit={handleCreateEvent} className="space-y-6 pt-4 max-h-[70vh] overflow-y-auto px-1 custom-scrollbar">
+      <Modal isOpen={isModalOpen} onClose={() => !isSubmitting && setIsModalOpen(false)} title={isEditMode ? "Update Platform Event" : "Initialize New Event"}>
+        <form onSubmit={handleFormSubmit} className="space-y-6 pt-4 max-h-[70vh] overflow-y-auto px-1 custom-scrollbar">
+
           <Input label="Strategic Event Title" required placeholder="e.g. Mastering Executive Presence" value={formData.title} onChange={(e: any) => setFormData({ ...formData, title: e.target.value })} />
           <Textarea label="Event Briefing / Description" required placeholder="e.g. A comprehensive 90-minute session on high-stakes communication and storytelling..." value={formData.description} onChange={(e: any) => setFormData({ ...formData, description: e.target.value })} />
 
@@ -189,8 +255,9 @@ export default function AdminEvents() {
           <Input label="Google Meet Link" required placeholder="https://meet.google.com/abc-defg-hij" value={formData.googleMeetLink} onChange={(e: any) => setFormData({ ...formData, googleMeetLink: e.target.value })} />
 
           <Button fullWidth className="h-14 !mt-8 font-black uppercase tracking-[0.2em]" disabled={isSubmitting}>
-            {isSubmitting ? "Deploying Asset..." : "Schedule Event"}
+            {isSubmitting ? (isEditMode ? "Synchronizing..." : "Deploying Asset...") : (isEditMode ? "Update Event" : "Schedule Event")}
           </Button>
+
         </form>
       </Modal>
 

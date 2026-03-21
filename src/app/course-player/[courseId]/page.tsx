@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Loader } from "@/components/ui/Loader";
+import { Toast } from "@/components/ui/Toast";
+
 import {
   Play,
   CheckCircle2,
@@ -21,7 +23,50 @@ export default function CoursePlayerPage() {
   const { user, loading, userData } = useAuth();
   const router = useRouter();
   const [activeLessonId, setActiveLessonId] = useState<string | null>(null);
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const [progress, setProgress] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" as "success" | "error" });
+
+  useEffect(() => {
+    if (userData?.completedLessons?.[courseId as string]) {
+      setCompletedLessons(userData.completedLessons[courseId as string]);
+    }
+    fetchProgress();
+  }, [userData, courseId]);
+
+  const fetchProgress = async () => {
+    try {
+      const res = await fetch(`/api/courses/progress?courseId=${courseId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setProgress(data.progress);
+      }
+    } catch (error) {
+       console.error("Failed to fetch progress");
+    }
+  };
+
+  const handleMarkComplete = async () => {
+    if (!activeLessonId) return;
+    try {
+        const res = await fetch("/api/courses/progress", {
+            method: "POST",
+            body: JSON.stringify({ courseId, lessonId: activeLessonId })
+        });
+        if (!res.ok) throw new Error("Mark complete failed");
+        
+        setCompletedLessons(prev => [...new Set([...prev, activeLessonId as string])]);
+        fetchProgress();
+        setToast({ show: true, message: "Lesson marked as complete!", type: "success" });
+        if (progress === 100) {
+            setToast({ show: true, message: "Congratulations! You've earned a certificate.", type: "success" });
+        }
+    } catch (error: any) {
+        setToast({ show: true, message: error.message, type: "error" });
+    }
+  };
+
 
   const { data: course, isLoading } = useQuery({
     queryKey: ["course", courseId],
@@ -39,7 +84,17 @@ export default function CoursePlayerPage() {
     }
   }, [course]);
 
+  useEffect(() => {
+    if (courseId) {
+      fetch("/api/courses/access", {
+        method: "POST",
+        body: JSON.stringify({ courseId })
+      });
+    }
+  }, [courseId]);
+
   if (loading || isLoading) return <div className="h-screen flex items-center justify-center bg-[#020617]"><Loader /></div>;
+
   if (!course) return <div className="h-screen flex items-center justify-center bg-[#020617]"><div className="text-white text-xl">Course not found</div></div>;
 
   // Access Control: Redirection if not enrolled or admin
@@ -98,9 +153,12 @@ export default function CoursePlayerPage() {
                         : 'hover:bg-white/5 border border-transparent'
                         }`}
                     >
-                      <div className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${isActive ? 'bg-[#00e5ff]/20 text-[#00e5ff]' : 'bg-white/5 text-[#475569]'
-                        }`}>
-                        {isActive ? <Play size={10} fill="currentColor" /> : <div className="w-1 h-1 bg-current rounded-full" />}
+                      <div className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        isActive ? 'bg-[#00e5ff]/20 text-[#00e5ff]' : 
+                        completedLessons.includes(lesson.id) ? 'bg-green-500/20 text-green-400' :
+                        'bg-white/5 text-[#475569]'
+                         }`}>
+                        {completedLessons.includes(lesson.id) ? <CheckCircle2 size={10} /> : isActive ? <Play size={10} fill="currentColor" /> : <div className="w-1 h-1 bg-current rounded-full" />}
                       </div>
                       <div className="flex-1">
                         <h4 className={`text-sm font-semibold mb-0.5 ${isActive ? 'text-[#00e5ff]' : 'text-[#cbd5f5] group-hover:text-white'}`}>
@@ -109,6 +167,7 @@ export default function CoursePlayerPage() {
                         <span className="text-[10px] text-[#475569] font-medium">{lesson.duration}m</span>
                       </div>
                     </button>
+
                   );
                 })}
               </div>
@@ -119,12 +178,13 @@ export default function CoursePlayerPage() {
         <div className="p-6 border-t border-white/5 bg-black/40">
           <div className="flex justify-between items-center mb-3">
             <span className="text-xs font-bold text-[#475569] uppercase">Course Progress</span>
-            <span className="text-xs font-bold text-[#00e5ff]">25%</span>
+            <span className="text-xs font-bold text-[#00e5ff]">{progress}%</span>
           </div>
           <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-[#00e5ff] to-[#6366f1] w-[25%]" />
+            <div className={`h-full bg-gradient-to-r from-[#00e5ff] to-[#6366f1] transition-all`} style={{ width: `${progress}%` }} />
           </div>
         </div>
+
       </aside>
 
       {/* Main Content */}
@@ -167,10 +227,19 @@ export default function CoursePlayerPage() {
               <button className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-sm font-bold text-[#cbd5f5] hover:bg-white/10 transition-all">
                 <FileText size={18} /> Notes
               </button>
-              <button className="flex items-center gap-2 px-8 py-3 rounded-2xl bg-[#00e5ff] text-black text-sm font-black shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:scale-105 active:scale-95 transition-all">
-                Mark as Completed <CheckCircle2 size={18} />
+              <button 
+                onClick={handleMarkComplete}
+                disabled={activeLessonId ? completedLessons.includes(activeLessonId) : true}
+                className={`flex items-center gap-2 px-8 py-3 rounded-2xl text-sm font-black transition-all ${
+                    activeLessonId && completedLessons.includes(activeLessonId)
+                        ? 'bg-green-500/20 text-green-400 border border-green-500/20 opacity-50 cursor-not-allowed'
+                        : 'bg-[#00e5ff] text-black shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:scale-105 active:scale-95'
+                }`}
+              >
+                {activeLessonId && completedLessons.includes(activeLessonId) ? 'Lesson Completed' : 'Mark as Completed'} <CheckCircle2 size={18} />
               </button>
             </div>
+
           </div>
 
           <div className="grid lg:grid-cols-1 gap-12 text-[#94a3b8] leading-relaxed">
@@ -201,6 +270,8 @@ export default function CoursePlayerPage() {
           </div>
         </div>
       </main>
+      <Toast isVisible={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />
     </div>
+
   );
 }

@@ -1,5 +1,6 @@
 import { auth, db } from "./firebaseAdmin";
 import { NextRequest } from "next/server";
+import { ADMIN_CONFIG } from "./constants";
 
 export async function verifyAdmin(req: NextRequest) {
     const authHeader = req.headers.get("Authorization");
@@ -15,9 +16,9 @@ export async function verifyAdmin(req: NextRequest) {
         // 1. Check custom claims
         if (decodedToken.role === "admin") return decodedToken;
 
-        // 2. Fallback: Check hardcoded super-admin email
-        const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "admin@mentorleap.com";
-        if (decodedToken.email?.toLowerCase() === adminEmail.toLowerCase()) {
+        // 2. Fallback: Check hardcoded super-admin list
+        const superAdmins = ADMIN_CONFIG.superAdminEmails;
+        if (decodedToken.email && superAdmins.includes(decodedToken.email.toLowerCase())) {
             // Upgrade them to admin role in custom claims for future requests
             await auth.setCustomUserClaims(decodedToken.uid, { role: "admin" });
             return decodedToken;

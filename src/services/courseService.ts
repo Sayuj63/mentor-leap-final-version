@@ -3,16 +3,21 @@ import { Course, Module, Lesson } from "@/models/Course";
 
 export const CourseService = {
     async createCourse(data: Omit<Course, "id" | "createdAt" | "updatedAt">) {
-        const courseRef = db.collection("courses").doc();
-        const now = admin.firestore.FieldValue.serverTimestamp();
-        const courseData = {
-            ...data,
-            id: courseRef.id,
-            createdAt: now,
-            updatedAt: now,
-        };
-        await courseRef.set(courseData);
-        return courseData;
+        try {
+            const courseRef = db.collection("courses").doc();
+            const now = admin.firestore.FieldValue.serverTimestamp();
+            const courseData = {
+                ...data,
+                id: courseRef.id,
+                createdAt: now,
+                updatedAt: now,
+            };
+            await courseRef.set(courseData);
+            return courseData;
+        } catch (e) {
+            console.warn("Firebase not available, createCourse failed.");
+            throw e;
+        }
     },
 
     async updateCourse(courseId: string, data: Partial<Course>) {
@@ -35,7 +40,7 @@ export const CourseService = {
         const snapshot = await db.collection("courses").get();
         const courses = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }) as Course);
 
-        // In-memory sort to prevent dropping courses without a createdAt field
+        // In-memory sort
         return courses.sort((a: any, b: any) => {
             const timeA = a.createdAt?._seconds || a.createdAt?.toMillis?.() || 0;
             const timeB = b.createdAt?._seconds || b.createdAt?.toMillis?.() || 0;
@@ -51,21 +56,25 @@ export const CourseService = {
     },
 
     async addLesson(courseId: string, moduleId: string, lesson: Lesson) {
-        // Warning: This still requires a fetch to update the correct module within the array.
-        // For production, consider moving modules to a sub-collection if lessons are added frequently.
-        const course = await this.getCourse(courseId);
-        if (!course) throw new Error("Course not found");
+        await db.runTransaction(async (transaction: any) => {
+            const courseRef = db.collection("courses").doc(courseId);
+            const courseDoc = await transaction.get(courseRef);
+            
+            if (!courseDoc.exists) throw new Error("Course not found");
+            
+            const course = courseDoc.data() as Course;
+            const updatedModules = (course.modules || []).map((mod: Module) => {
+                if (mod.id === moduleId) {
+                    return { ...mod, lessons: [...(mod.lessons || []), lesson] };
+                }
+                return mod;
+            });
 
-        const updatedModules = course.modules.map((mod: Module) => {
-            if (mod.id === moduleId) {
-                return { ...mod, lessons: [...mod.lessons, lesson] };
-            }
-            return mod;
-        });
-
-        await db.collection("courses").doc(courseId).update({ 
-            modules: updatedModules,
-            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+            transaction.update(courseRef, { 
+                modules: updatedModules,
+                updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+            });
         });
     },
 };
+

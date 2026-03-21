@@ -8,7 +8,12 @@ export interface User {
     enrolledCourses: string[]; // Array of course IDs
     registeredEvents: string[]; // Array of event IDs
     certificates: string[]; // Array of certificate IDs
+    completedLessons?: Record<string, string[]>; // courseId -> [lessonId1, lessonId2]
+    courseProgress?: Record<string, number>; // courseId -> percentage (0-100)
+    lastCourseId?: string;
     profileCompleted?: boolean;
+
+
     dateOfBirth?: string;
     gender?: string;
     contactNumber?: string;

@@ -1,31 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db, admin } from "@/lib/firebaseAdmin";
 import { verifyUser } from "@/lib/auth-server";
+import { z } from "zod";
+import { MailService } from "@/lib/mail";
 
 export const dynamic = "force-dynamic";
+
+const enrollmentSchema = z.object({
+    courseId: z.string().optional(),
+    courseIds: z.array(z.string()).optional(),
+}).refine(data => data.courseId || (data.courseIds && data.courseIds.length > 0), {
+    message: "Either courseId or courseIds must be provided",
+});
 
 export async function POST(req: NextRequest) {
     try {
         const decodedToken = await verifyUser(req);
         const uid = decodedToken.uid;
+        const userEmail = decodedToken.email;
+        const userName = decodedToken.name || decodedToken.email?.split("@")[0] || "Student";
 
         const body = await req.json();
-        let courseIds: string[] = [];
-
-        // Support both single and multiple course enrollments
-        if (body.courseIds && Array.isArray(body.courseIds)) {
-            courseIds = body.courseIds;
-        } else if (body.courseId) {
-            courseIds = [body.courseId];
+        const validation = enrollmentSchema.safeParse(body);
+        
+        if (!validation.success) {
+            return NextResponse.json({ error: validation.error.format() }, { status: 400 });
         }
 
-        if (courseIds.length === 0) {
-            return NextResponse.json({ error: "courseId or courseIds array is required" }, { status: 400 });
-        }
+        const { courseId, courseIds: bodyCourseIds } = validation.data;
+        const courseIds = bodyCourseIds || (courseId ? [courseId] : []);
 
         // 1. Verify all courses exist and are free
         const coursesRef = db.collection("courses");
         const validCourseIds: string[] = [];
+        const validCourseTitles: string[] = [];
 
         for (const cId of courseIds) {
             const courseDoc = await coursesRef.doc(cId).get();
@@ -35,6 +43,7 @@ export async function POST(req: NextRequest) {
 
             const courseData = courseDoc.data() || {};
             const price = courseData.price || 0;
+            const title = courseData.title || cId;
 
             if (price > 0) {
                 // Special check for "First 10 people free" logic
@@ -54,17 +63,16 @@ export async function POST(req: NextRequest) {
             }
 
             validCourseIds.push(cId);
+            validCourseTitles.push(title);
         }
 
         // 2. Add to user's enrolledCourses
         const userRef = db.collection("users").doc(uid);
-
-        // arrayUnion takes multiple arguments
         await userRef.update({
             enrolledCourses: admin.firestore.FieldValue.arrayUnion(...validCourseIds)
         });
 
-        // 3. Create transaction records for "free" enrollments
+        // 3. Create transaction records
         const batch = db.batch();
         const transactionsRef = db.collection("transactions");
 
@@ -83,8 +91,22 @@ export async function POST(req: NextRequest) {
 
         await batch.commit();
 
-        return NextResponse.json({ success: true, message: "Enrolled successfully in " + validCourseIds.length + " course(s)" });
+        // 4. Send Confirmation Email (Async - don't block response)
+        if (userEmail) {
+            const courseTitle = validCourseTitles.length > 1 
+                ? `${validCourseTitles[0]} (+${validCourseTitles.length - 1} more)`
+                : validCourseTitles[0];
+            
+            MailService.sendBookingConfirmation(userEmail, userName, courseTitle)
+                .catch(err => console.error("Post-enrollment email failed:", err));
+        }
+
+        return NextResponse.json({ 
+            success: true, 
+            message: `Enrolled successfully in ${validCourseIds.length} course(s)` 
+        });
     } catch (error: any) {
+        console.error("Enrollment Error:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

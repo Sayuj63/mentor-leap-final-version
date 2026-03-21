@@ -22,7 +22,9 @@ const navItems = [
     { label: 'Blog CMS', href: '/admin/blog', icon: BookOpen },
     { label: 'Curriculum', href: '/admin/courses', icon: BookOpen },
     { label: 'Events & Live', href: '/admin/events', icon: Calendar },
+    { label: 'Coaching Requests', href: '/admin/coaching', icon: Users },
     { label: 'Products', href: '/admin/products', icon: Package },
+
     { label: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
     { label: 'Settings', href: '/admin/settings', icon: Settings },
 ];

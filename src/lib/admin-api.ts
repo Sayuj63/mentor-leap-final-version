@@ -6,7 +6,8 @@ import { getIdToken } from "firebase/auth";
  * Helpers for calling protected API routes.
  */
 
-async function getHeaders(): Promise<Record<string, string>> {
+export async function getHeaders(): Promise<Record<string, string>> {
+
     const user = auth.currentUser;
     if (!user) return {};
     const token = await getIdToken(user);
@@ -266,4 +267,27 @@ export const AdminAPI = {
         }
         return res.json();
     },
+    
+    // COACHING REQUESTS
+    async getCoachingRequests() {
+        const headers = await getHeaders();
+        const res = await fetch("/api/admin/coaching-requests", { headers });
+        if (!res.ok) throw new Error("Failed to fetch coaching requests");
+        return res.json();
+    },
+
+    async updateCoachingRequestStatus(id: string, status: string) {
+        const headers = await getHeaders();
+        const res = await fetch(`/api/admin/coaching-requests/${id}`, {
+            method: "PATCH",
+            headers,
+            body: JSON.stringify({ status }),
+        });
+        if (!res.ok) throw new Error("Failed to update status");
+        return res.json();
+    },
+
+    getHeaders,
 };
+
+

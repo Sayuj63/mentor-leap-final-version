@@ -10,13 +10,22 @@ import { useState } from "react";
 
 export default function CoachingPage() {
   const [status, setStatus] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    date: "",
+    goal: ""
+  });
   
   const submitForm = async (e: any) => {
     e.preventDefault();
     setStatus("submitting");
-    await submitCoachingRequest({});
+    await submitCoachingRequest(formData);
     setStatus("success");
   }
+
+
 
   return (
     <PageWrapper>
@@ -93,27 +102,28 @@ export default function CoachingPage() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-sm text-[#cbd5f5] font-medium">Full Name</label>
-                    <Input required placeholder="John Doe" />
+                    <Input required placeholder="John Doe" value={formData.name} onChange={(e: any) => setFormData({ ...formData, name: e.target.value })} />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm text-[#cbd5f5] font-medium">Email Address</label>
-                    <Input required type="email" placeholder="john@company.com" />
+                    <Input required type="email" placeholder="john@company.com" value={formData.email} onChange={(e: any) => setFormData({ ...formData, email: e.target.value })} />
                   </div>
                 </div>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-sm text-[#cbd5f5] font-medium">Phone Number</label>
-                    <Input required placeholder="+1 (555) 000-0000" />
+                    <Input required placeholder="+1 (555) 000-0000" value={formData.phone} onChange={(e: any) => setFormData({ ...formData, phone: e.target.value })} />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm text-[#cbd5f5] font-medium">Preferred Date</label>
-                    <Input required type="date" />
+                    <Input required type="date" value={formData.date} onChange={(e: any) => setFormData({ ...formData, date: e.target.value })} />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm text-[#cbd5f5] font-medium">What is your primary coaching goal?</label>
-                  <Textarea required placeholder="E.g. I want to improve my board-level presentations..." />
+                  <Textarea required placeholder="E.g. I want to improve my board-level presentations..." value={formData.goal} onChange={(e: any) => setFormData({ ...formData, goal: e.target.value })} />
                 </div>
+
                 <Button fullWidth disabled={status === "submitting"}>
                   {status === "submitting" ? "Submitting..." : "Submit Request"}
                 </Button>

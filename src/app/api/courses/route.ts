@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
         const courses = await CourseService.getAllCourses();
         return NextResponse.json(courses);
     } catch (error: any) {
+        console.error("Error fetching courses:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
