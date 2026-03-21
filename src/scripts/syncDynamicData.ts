@@ -3,33 +3,18 @@ import { db, admin } from "../lib/firebaseAdmin";
 async function syncDynamicData() {
   console.log("--- Starting Dynamic Data Sync ---");
 
-  // 1. COURSES (Only Speak with Impact Bootcamp)
+  // 1. COURSES
   console.log("Syncing Courses...");
   // Clear old courses
   const coursesSnapshot = await db.collection("courses").get();
-  for (const doc of coursesSnapshot.docs) await doc.ref.delete();
+  for (const doc of coursesSnapshot.docs) {
+    // Ensure SWI bootcamp is NOT in the courses collection
+    if (doc.id === "speak-with-impact-bootcamp") {
+      await doc.ref.delete();
+      continue;
+    }
+  }
 
-  const bootcampCourseId = "speak-with-impact-bootcamp";
-  await db.collection("courses").doc(bootcampCourseId).set({
-    title: "Speak with Impact Bootcamp",
-    description: "Transform the way you speak. Influence the way you lead. A two-day immersive learning experience designed to help professionals develop confident communication and structured thinking for the modern workplace. This bootcamp is designed for one outcome: To help you speak with clarity, confidence, and authority—every single time.",
-    date: "Saturday, 28th March & Sunday, 29th March 2026",
-    time: "7:00 PM – 9:00 PM IST on both days",
-    price: 7999,
-    highlights: [
-      "Speak with Confidence in High-Stakes Moments",
-      "Structure Your Thoughts Like a Leader",
-      "Master Voice, Presence & Delivery",
-      "Tell Stories That Influence & Inspire",
-      "Build Executive Presence (Even on Zoom)",
-      "Speak with Impact Power Phrases Guide",
-      "“Own the Screen” Cheatsheet",
-      "Eye Contact Mastery Guide",
-      "Access to Mentorleap Resources"
-    ],
-    instructor: "Mridu Bhandari",
-    updatedAt: new Date()
-  }, { merge: true });
 
   // 2. EVENTS (Specific Cleanup & Seeding)
   console.log("Syncing Events...");

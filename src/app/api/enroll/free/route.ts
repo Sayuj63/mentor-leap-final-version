@@ -36,9 +36,12 @@ export async function POST(req: NextRequest) {
         const validCourseTitles: string[] = [];
 
         for (const cId of courseIds) {
-            const courseDoc = await coursesRef.doc(cId).get();
+            const isSWI = cId === "speak-with-impact-bootcamp";
+            const collectionName = isSWI ? "events" : "courses";
+            
+            const courseDoc = await db.collection(collectionName).doc(cId).get();
             if (!courseDoc.exists) {
-                return NextResponse.json({ error: `Course not found: ${cId}` }, { status: 404 });
+                return NextResponse.json({ error: `${isSWI ? "Event" : "Course"} not found: ${cId}` }, { status: 404 });
             }
 
             const courseData = courseDoc.data() || {};
@@ -47,7 +50,7 @@ export async function POST(req: NextRequest) {
 
             if (price > 0) {
                 // Special check for "First 10 people free" logic
-                if (cId === "speak-with-impact-bootcamp") {
+                if (isSWI) {
                     const txSnapshot = await db.collection("transactions")
                         .where("itemId", "==", cId)
                         .where("paymentStatus", "==", "success")
@@ -55,7 +58,7 @@ export async function POST(req: NextRequest) {
                         .get();
                     
                     if (txSnapshot.data().count >= 10) {
-                        return NextResponse.json({ error: "Free spots are fully claimed. Please pay to enroll." }, { status: 403 });
+                        return NextResponse.json({ error: "Free spots for this bootcamp are fully claimed. Please pay to enroll." }, { status: 403 });
                     }
                 } else {
                     return NextResponse.json({ error: `Course requires payment: ${cId}` }, { status: 403 });
@@ -66,22 +69,29 @@ export async function POST(req: NextRequest) {
             validCourseTitles.push(title);
         }
 
-        // 2. Add to user's enrolledCourses
+        // 2. Add to user's enrolledCourses / registeredEvents
         const userRef = db.collection("users").doc(uid);
-        await userRef.update({
-            enrolledCourses: admin.firestore.FieldValue.arrayUnion(...validCourseIds)
-        });
+        const batch = db.batch();
+
+        for (const cId of validCourseIds) {
+            const isSWI = cId === "speak-with-impact-bootcamp";
+            const fieldName = isSWI ? "registeredEvents" : "enrolledCourses";
+            
+            batch.update(userRef, {
+                [fieldName]: admin.firestore.FieldValue.arrayUnion(cId)
+            });
+        }
 
         // 3. Create transaction records
-        const batch = db.batch();
         const transactionsRef = db.collection("transactions");
 
         for (const cId of validCourseIds) {
+            const isSWI = cId === "speak-with-impact-bootcamp";
             const newTxRef = transactionsRef.doc();
             batch.set(newTxRef, {
                 userId: uid,
                 itemId: cId,
-                itemType: "course",
+                itemType: isSWI ? "event" : "course",
                 amount: 0,
                 paymentStatus: "success",
                 paymentGateway: "free",

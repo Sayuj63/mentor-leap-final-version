@@ -58,7 +58,7 @@ export default function HeroSection() {
                     }`}
                 >
                     <Link
-                        href="/courses/speak-with-impact-bootcamp"
+                        href="/events/speak-with-impact-bootcamp"
                         className="cta-primary text-white no-underline text-sm rounded-full px-6 py-3 font-bold"
                     >
                         Secure Your Seat

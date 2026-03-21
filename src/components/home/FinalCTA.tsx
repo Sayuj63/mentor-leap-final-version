@@ -250,7 +250,7 @@ export default function FinalCTA() {
             }}
           >
             <Link
-              href="/courses/speak-with-impact-bootcamp"
+              href="/events/speak-with-impact-bootcamp"
               className="px-10 py-4 bg-[#00e5ff] text-[#020617] font-bold rounded-full hover:shadow-[0_0_30px_rgba(0,229,255,0.4)] transition-all no-underline"
             >
               Secure Your Seat

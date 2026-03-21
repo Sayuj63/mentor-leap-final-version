@@ -459,7 +459,7 @@ export default function EventDetailsPage() {
         isOpen={showSuccessOverlay}
         onClose={() => setShowSuccessOverlay(false)}
         title="Congratulations!"
-        message="Congratulations! You have just been one of the first 10 people to enroll in the course. You will be getting the course for free!"
+        message="Congratulations! You have just been one of the first 10 people to enroll in this event. You will be getting your seat for free!"
         ctaText="View My Events"
         onCtaClick={() => router.push("/dashboard/my-events")}
       />
