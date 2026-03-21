@@ -188,8 +188,7 @@ export default function EventDetailsPage() {
 
   return (
     <PageWrapper>
-      <section className="px-5 py-[120px] max-w-[1200px] mx-auto overflow-hidden">
-        <Reveal>
+      <section className="px-5 py-[120px] max-w-[1200px] mx-auto">
           <div>
             <div className="relative aspect-[21/9] w-full rounded-3xl bg-[#0f172a] border border-white/10 mb-10 overflow-hidden flex items-center justify-center shadow-2xl group">
               {event.imageUrl ? (
@@ -423,7 +422,6 @@ export default function EventDetailsPage() {
               </div>
             </div>
           </div>
-        </Reveal>
       </section>
 
       {/* RAZORPAY SCRIPT */}
