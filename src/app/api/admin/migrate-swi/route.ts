@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
             date: new Date("2026-03-27T19:00:00Z"), // Official start
             displayDate: "Friday, 27th March & Saturday, 28th March",
             time: "7:00 PM - 9:00 PM IST",
+            zoomLink: "https://zoom.us/j/mentorleap", // Placeholder
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
 

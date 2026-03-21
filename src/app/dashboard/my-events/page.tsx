@@ -236,18 +236,23 @@ export default function MyEventsPage() {
                                         )}
                                     </div>
 
-                                    {event.zoomLink && isUpcoming && (
+                                    {event.zoomLink && isUpcoming ? (
                                         <a
                                             href={event.zoomLink}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            <button className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#00e5ff]/10 hover:bg-[#00e5ff]/20 border border-[#00e5ff]/20 text-[#00e5ff] text-sm font-bold transition-all">
+                                            <button className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#00e5ff] text-black text-sm font-bold transition-all hover:bg-white hover:scale-[1.02] shadow-[0_0_20px_rgba(0,229,255,0.2)]">
                                                 <ExternalLink size={14} />
                                                 Join Event
                                             </button>
                                         </a>
-                                    )}
+                                    ) : isUpcoming ? (
+                                        <button className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#00e5ff]/10 border border-[#00e5ff]/20 text-[#00e5ff] text-sm font-bold transition-all cursor-default">
+                                            <Calendar size={14} />
+                                            {event.id === "speak-with-impact-bootcamp" ? "Starting on 27th and 28th March" : "Starts Soon"}
+                                        </button>
+                                    ) : null}
                                 </div>
                             </Card>
                         );
