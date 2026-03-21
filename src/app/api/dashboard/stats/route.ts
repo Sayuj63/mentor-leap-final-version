@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
             userData = userDoc.data() || {};
         }
 
-        const enrolledCourseIds: string[] = userData.enrolledCourses || [];
+        const enrolledCourseIds: string[] = (userData.enrolledCourses || []).filter((id: string) => id !== "speak-with-impact-bootcamp");
         const registeredEventIds: string[] = userData.registeredEvents || [];
         const certificateIds: string[] = userData.certificates || [];
 

@@ -17,7 +17,8 @@ export default function ExploreCoursesPage() {
             try {
                 const res = await fetch("/api/courses");
                 const data = await res.json();
-                setCourses(Array.isArray(data) ? data : []);
+                const filteredData = (Array.isArray(data) ? data : []).filter(c => c.id !== "speak-with-impact-bootcamp");
+                setCourses(filteredData);
             } catch (error) {
                 console.error("Failed to fetch courses:", error);
             } finally {

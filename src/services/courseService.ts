@@ -32,13 +32,16 @@ export const CourseService = {
     },
 
     async getCourse(courseId: string) {
+        if (courseId === "speak-with-impact-bootcamp") return null; // Now an Event
         const doc = await db.collection("courses").doc(courseId).get();
         return doc.exists ? ({ id: doc.id, ...doc.data() } as Course) : null;
     },
 
     async getAllCourses() {
         const snapshot = await db.collection("courses").get();
-        const courses = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }) as Course);
+        const courses = snapshot.docs
+            .map((doc: any) => ({ id: doc.id, ...doc.data() }) as Course)
+            .filter((c: any) => c.id !== "speak-with-impact-bootcamp");
 
         // In-memory sort
         return courses.sort((a: any, b: any) => {

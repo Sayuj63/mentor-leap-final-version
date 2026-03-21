@@ -102,9 +102,24 @@ export default function CoursesListingPage() {
                         <p className="mt-6 text-[#475569] text-xs font-black uppercase tracking-widest animate-pulse">Syncing Library...</p>
                     </div>
                 ) : filteredCourses.length === 0 ? (
-                    <div className="text-center py-40 border border-dashed border-white/10 rounded-3xl">
-                        <p className="text-[#94a3b8] italic">No courses found matching your criteria.</p>
-                        <Button variant="outline" className="mt-6" onClick={() => { setSearchQuery(""); setSelectedCategory("All"); }}>Reset Filters</Button>
+                    <div className="text-center py-40 border border-dashed border-white/10 rounded-3xl backdrop-blur-sm bg-white/[0.02]">
+                        <Reveal>
+                            <div className="w-20 h-20 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-8 text-[#475569]">
+                                <BookOpen size={40} />
+                            </div>
+                            <h3 className="text-2xl font-bold text-white mb-4">Our Full Curriculum is Coming Soon</h3>
+                            <Paragraph className="max-w-[500px] mx-auto text-[#94a3b8] mb-10">
+                                We are currently finalizing our premium self-paced programs. In the meantime, join our live sessions or explore our specialized communication frameworks.
+                            </Paragraph>
+                            <div className="flex flex-wrap justify-center gap-4">
+                                <Link href="/events/speak-with-impact-bootcamp">
+                                    <Button className="bg-[#00e5ff] text-black hover:bg-white transition-all">Join Live Bootcamp</Button>
+                                </Link>
+                                <Link href="/">
+                                    <Button variant="outline">Back to Home</Button>
+                                </Link>
+                            </div>
+                        </Reveal>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

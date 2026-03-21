@@ -93,7 +93,7 @@ export default function MyCoursesPage() {
             }
 
             const userData = userDoc.data();
-            const enrolledCourseIds: string[] = userData.enrolledCourses || [];
+            const enrolledCourseIds: string[] = (userData.enrolledCourses || []).filter((id: string) => id !== "speak-with-impact-bootcamp");
             const courseProgress: Record<string, number> = userData.courseProgress || {};
 
             if (enrolledCourseIds.length === 0) {
@@ -297,6 +297,7 @@ export default function MyCoursesPage() {
                             ) : (
                                 <div className="grid md:grid-cols-2 gap-4">
                                     {allCatalogCourses
+                                        .filter(c => c.id !== "speak-with-impact-bootcamp") // SWI is an event
                                         .filter(c => !courses.find(myCourse => myCourse.id === c.id)) // Filter enrolled
                                         .filter(c => c.title.toLowerCase().includes(searchQuery.toLowerCase()) || c.description.toLowerCase().includes(searchQuery.toLowerCase()))
                                         .map(course => {
