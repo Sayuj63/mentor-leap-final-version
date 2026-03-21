@@ -33,6 +33,7 @@ import {
   Globe 
 } from "lucide-react";
 import PaymentDetailsModal, { UserDetails } from "@/components/layout/PaymentDetailsModal";
+import SuccessOverlay from "@/components/ui/SuccessOverlay";
 
 // --- Specialized Content for SWI Bootcamp Event ---
 const SWI_EVENT_CONTENT = {
@@ -86,6 +87,7 @@ export default function EventDetailsPage() {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [registering, setRegistering] = useState(false);
   const [isFreeSuccess, setIsFreeSuccess] = useState(false);
+  const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
 
   const isSWI = id === "speak-with-impact-bootcamp";
 
@@ -131,23 +133,15 @@ export default function EventDetailsPage() {
       });
       
       const data = await res.json();
-      console.log("[Checkout] API Response:", data);
       if (!res.ok) throw new Error(data.error || "Checkout failed");
 
       if (data.type === "redirect") {
-        console.log("[Checkout] Redirecting to:", data.url);
         window.location.href = data.url;
       } else if (data.type === "free") {
-        console.log("[Checkout] Free registration success");
         setIsFreeSuccess(true);
-        setToast({ 
-          show: true, 
-          message: "Congratulations! You are one of the first 10 people to enroll. Your seat is confirmed for free!", 
-          type: "success" 
-        });
+        setShowSuccessOverlay(true);
         queryClient.invalidateQueries({ queryKey: ["event", id] });
       } else if (data.type === "paid") {
-        console.log("[Checkout] Opening Razorpay modal with key:", data.key);
         if (!data.key) throw new Error("Razorpay Key ID is missing. Please check environment variables.");
         
         if (typeof (window as any).Razorpay === 'undefined') {
@@ -162,7 +156,6 @@ export default function EventDetailsPage() {
           description: `Registration for ${event.title}`,
           order_id: data.orderId,
           handler: async (response: any) => {
-            console.log("[Checkout] Payment success, verifying...", response);
             const verifyRes = await fetch("/api/checkout/verify", {
               method: "POST",
               headers: {
@@ -176,11 +169,9 @@ export default function EventDetailsPage() {
               })
             });
             if (verifyRes.ok) {
-              console.log("[Checkout] Verification success");
               setToast({ show: true, message: "Successfully registered and paid!", type: "success" });
               queryClient.invalidateQueries({ queryKey: ["event", id] });
             } else {
-              console.error("[Checkout] Verification failed");
               setToast({ show: true, message: "Payment verification failed. Please contact support.", type: "error" });
             }
           },
@@ -463,6 +454,15 @@ export default function EventDetailsPage() {
         onSubmit={processRegistration}
         initialEmail={user?.email || undefined}
         courseTitle={event?.title}
+      />
+
+      <SuccessOverlay
+        isOpen={showSuccessOverlay}
+        onClose={() => setShowSuccessOverlay(false)}
+        title="Congratulations!"
+        message="You are one of the first 10 participants to secure a free seat. Welcome to MentorLeap!"
+        ctaText="View My Events"
+        onCtaClick={() => router.push("/dashboard/my-events")}
       />
 
       <Toast

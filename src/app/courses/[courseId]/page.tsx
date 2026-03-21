@@ -2,7 +2,7 @@
 export const dynamic = "force-dynamic";
 import React, { useState, useEffect } from "react";
 import Script from "next/script";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { Reveal, FadeIn } from "@/components/ui/Animation";
 import { SectionHeading, GradientText, Paragraph } from "@/components/ui/Typography";
@@ -23,13 +23,16 @@ import {
   BarChart
 } from "lucide-react";
 import PaymentDetailsModal, { UserDetails } from "@/components/layout/PaymentDetailsModal";
+import SuccessOverlay from "@/components/ui/SuccessOverlay";
 
 export default function CourseDetailPage() {
   const { courseId } = useParams();
+  const router = useRouter();
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
   const [isFreeSuccess, setIsFreeSuccess] = useState(false);
+  const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [user, setUser] = useState<any>(null);
@@ -90,21 +93,17 @@ export default function CourseDetailPage() {
       });
       
       const data = await res.json();
-      console.log("[Checkout] API Response:", data);
       if (!res.ok) throw new Error(data.error || "Checkout failed");
 
       if (data.type === "redirect") {
-        console.log("[Checkout] Redirecting to:", data.url);
         window.location.href = data.url;
       } else if (data.type === "free") {
-        console.log("[Checkout] Free enrollment success");
         setIsFreeSuccess(true);
-        alert("Congratulations! You are one of the first 10 people to enroll. You will be getting this course for free!");
+        setShowSuccessOverlay(true);
         setTimeout(() => {
-          window.location.href = `/course-player/${courseId}`;
-        }, 1500);
+          if (!showSuccessOverlay) window.location.href = `/course-player/${courseId}`;
+        }, 5000);
       } else if (data.type === "paid") {
-        console.log("[Checkout] Opening Razorpay modal with key:", data.key);
         if (!data.key) throw new Error("Razorpay Key ID is missing. Please check environment variables.");
 
         if (typeof (window as any).Razorpay === 'undefined') {
@@ -119,7 +118,6 @@ export default function CourseDetailPage() {
           description: `Enrollment for ${course.title}`,
           order_id: data.orderId,
           handler: async (response: any) => {
-            console.log("[Checkout] Payment success, verifying...", response);
             const verifyRes = await fetch("/api/checkout/verify", {
               method: "POST",
               headers: {
@@ -133,10 +131,8 @@ export default function CourseDetailPage() {
               })
             });
             if (verifyRes.ok) {
-              console.log("[Checkout] Verification success");
               window.location.href = `/course-player/${courseId}`;
             } else {
-              console.error("[Checkout] Verification failed");
               alert("Payment verification failed. Please contact support.");
             }
           },
@@ -412,13 +408,24 @@ export default function CourseDetailPage() {
         </div>
       </section>
       
-      {/* DETAILS FORM MODAL */}
       <PaymentDetailsModal
         isOpen={showDetailsModal}
         onClose={() => setShowDetailsModal(false)}
         onSubmit={processPayment}
         initialEmail={user?.email}
         courseTitle={course.title}
+      />
+
+      <SuccessOverlay
+        isOpen={showSuccessOverlay}
+        onClose={() => {
+          setShowSuccessOverlay(false);
+          window.location.href = `/course-player/${courseId}`;
+        }}
+        title="Congratulations!"
+        message="You are one of the first 10 participants to secure a free seat. Enjoy your learning journey!"
+        ctaText="Start Learning"
+        onCtaClick={() => window.location.href = `/course-player/${courseId}`}
       />
 
       {/* Video Modal */}
