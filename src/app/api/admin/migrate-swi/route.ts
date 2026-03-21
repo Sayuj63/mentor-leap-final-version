@@ -16,11 +16,19 @@ export async function GET(req: NextRequest) {
         console.log("--- Starting Production SWI Migration ---");
         const bootcampId = "speak-with-impact-bootcamp";
         
-        // 1. Clean up Courses Collection
+        // 1. Clean up Courses Collection and Init/Sync SWI Event
         const swiInCourses = await db.collection("courses").doc(bootcampId).get();
         if (swiInCourses.exists) {
             await db.collection("courses").doc(bootcampId).delete();
         }
+
+        // Ensure Event Metadata is correct in production
+        await db.collection("events").doc(bootcampId).set({
+            date: new Date("2026-03-27T19:00:00Z"), // Official start
+            displayDate: "Friday, 27th March & Saturday, 28th March",
+            time: "7:00 PM - 9:00 PM IST",
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
 
         // 2. Migrate User Documents
         const usersSnapshot = await db.collection("users").get();

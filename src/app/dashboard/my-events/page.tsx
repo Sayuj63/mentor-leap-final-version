@@ -206,7 +206,12 @@ export default function MyEventsPage() {
                                     <p className="text-sm text-[#94a3b8] mb-4 line-clamp-2">{event.description}</p>
 
                                     <div className="space-y-2 mb-5">
-                                        {event.eventDate && (
+                                        {event.displayDate ? (
+                                            <div className="flex items-center gap-2 text-xs text-[#cbd5f5]">
+                                                <Calendar size={12} className="text-[#00e5ff]" />
+                                                {event.displayDate}
+                                            </div>
+                                        ) : event.eventDate ? (
                                             <div className="flex items-center gap-2 text-xs text-[#cbd5f5]">
                                                 <Calendar size={12} className="text-[#00e5ff]" />
                                                 {event.eventDate.toLocaleDateString("en-IN", {
@@ -216,7 +221,7 @@ export default function MyEventsPage() {
                                                     day: "numeric",
                                                 })}
                                             </div>
-                                        )}
+                                        ) : null}
                                         {event.speaker && (
                                             <div className="flex items-center gap-2 text-xs text-[#cbd5f5]">
                                                 <Users size={12} className="text-[#6366f1]" />
