@@ -55,17 +55,19 @@ export const MailService = {
             return;
         }
 
+        const timestamp = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+
         const mailOptions = {
             from: `"${BRAND.name}" <${process.env.EMAIL_USER}>`,
             to: adminEmail,
             subject: `New Interest: ${courseTitle}`,
             html: `
                 <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee;">
-                    <h2 style="color: #6366f1;">New Course Interest Tagged!</h2>
+                    <h2 style="color: #6366f1;">New Course Interest!</h2>
                     <p>A user has shown interest in <strong>${courseTitle}</strong> and filled out the enrollment form.</p>
                     
                     <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid #e2e8f0;">
-                        <h3 style="margin-top: 0; color: #1e293b; font-size: 16px;">User Details:</h3>
+                        <h3 style="margin-top: 0; color: #1e293b; font-size: 16px;">Details:</h3>
                         <table style="width: 100%; border-collapse: collapse;">
                             <tr>
                                 <td style="padding: 8px 0; color: #64748b; width: 120px;"><strong>Name:</strong></td>
@@ -83,6 +85,10 @@ export const MailService = {
                                 <td style="padding: 8px 0; color: #64748b;"><strong>Company:</strong></td>
                                 <td style="padding: 8px 0; color: #1e293b;">${userDetails.company}</td>
                             </tr>
+                            <tr>
+                                <td style="padding: 8px 0; color: #64748b;"><strong>Submitted at:</strong></td>
+                                <td style="padding: 8px 0; color: #1e293b; font-style: italic;">${timestamp}</td>
+                            </tr>
                             ${userDetails.linkedin ? `
                             <tr>
                                 <td style="padding: 8px 0; color: #64748b;"><strong>LinkedIn:</strong></td>
@@ -91,12 +97,13 @@ export const MailService = {
                         </table>
                     </div>
                     
-                    <p style="color: #ef4444; font-weight: bold;">Action Required: Check if the payment was successful through the Razorpay Dashboard.</p>
+                    <p style="color: #ef4444; font-weight: bold;">Action Required: Please check if the payment was successful in the Razorpay dashboard for this user.</p>
                     <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
                     <p style="font-size: 12px; color: #888;">MentorLeap Automated Notification System</p>
                 </div>
             `,
         };
+
 
         try {
             return await transporter.sendMail(mailOptions);

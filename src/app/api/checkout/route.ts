@@ -19,21 +19,19 @@ export async function POST(req: NextRequest) {
         const itemData = itemDoc.data()!;
         let price = itemData.price || 0;
 
+        // --- NEW: General Interest Notification ---
+        // We notify admin as soon as the form is submitted (intent created)
+        try {
+            console.log(`[Checkout] Attempting to send interest notification for ${itemData.title}...`);
+            await MailService.sendAdminInterestNotification("ianutkarsh@gmail.com", userDetails, itemData.title);
+            console.log("[Checkout] Admin notification sent successfully.");
+        } catch (mailError: any) {
+            console.error("[Checkout] Failed to send admin notification:", mailError.message);
+            // Non-blocking but logged
+        }
+
         // 2. Handle Specialized SWI Bootcamp Logic
         if (itemId === "speak-with-impact-bootcamp") {
-            console.log(`[Checkout] Processing SWI Bootcamp for user: ${decodedToken.uid}`);
-            console.log(`[Checkout] User Details captured:`, JSON.stringify(userDetails));
-
-            // Send Notification Email to Admin
-            try {
-                console.log("[Checkout] Attempting to send admin notification email...");
-                const mailSent = await MailService.sendAdminInterestNotification("ianutkarsh@gmail.com", userDetails, itemData.title);
-                console.log("[Checkout] Mail Service Result:", mailSent ? "Success" : "Failed (No credentials?)");
-            } catch (mailError: any) {
-                console.error("[Checkout] Mail Sending Failed:", mailError.message);
-                // We proceed with redirect even if mail fails, but log it
-            }
-            
             // Return Redirect type
             console.log("[Checkout] Returning redirect URL for SWI Bootcamp");
             return NextResponse.json({ 
