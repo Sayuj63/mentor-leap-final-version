@@ -29,6 +29,7 @@ export default function CourseDetailPage() {
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
+  const [isFreeSuccess, setIsFreeSuccess] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [user, setUser] = useState<any>(null);
@@ -97,7 +98,11 @@ export default function CourseDetailPage() {
         window.location.href = data.url;
       } else if (data.type === "free") {
         console.log("[Checkout] Free enrollment success");
-        window.location.href = `/course-player/${courseId}`;
+        setIsFreeSuccess(true);
+        alert("Congratulations! You are one of the first 10 people to enroll. You will be getting this course for free!");
+        setTimeout(() => {
+          window.location.href = `/course-player/${courseId}`;
+        }, 1500);
       } else if (data.type === "paid") {
         console.log("[Checkout] Opening Razorpay modal with key:", data.key);
         if (!data.key) throw new Error("Razorpay Key ID is missing. Please check environment variables.");
@@ -381,11 +386,11 @@ export default function CourseDetailPage() {
 
               <Button
                 fullWidth size="lg"
-                disabled={enrolling}
-                className="h-14 font-black uppercase tracking-[0.2em] shadow-[0_10px_25px_#00e5ff30]"
+                disabled={enrolling || isFreeSuccess}
+                className={`h-14 font-black uppercase tracking-[0.2em] shadow-[0_10px_25px_#00e5ff30] transition-all duration-300 ${isFreeSuccess ? 'bg-emerald-500 hover:bg-emerald-600' : ''}`}
                 onClick={handleEnrollInitiation}
               >
-                {enrolling ? "Processing..." : course.price === 0 ? "Enroll for Free" : "Secure Your Seat"}
+                {enrolling ? "Processing..." : isFreeSuccess ? "Access Confirmed" : course.price === 0 ? "Enroll for Free" : "Secure Your Seat"}
               </Button>
 
               <Script 

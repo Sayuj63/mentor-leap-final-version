@@ -85,6 +85,7 @@ export default function EventDetailsPage() {
   const [toast, setToast] = useState({ show: false, message: "", type: "success" as "success" | "error" });
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [registering, setRegistering] = useState(false);
+  const [isFreeSuccess, setIsFreeSuccess] = useState(false);
 
   const isSWI = id === "speak-with-impact-bootcamp";
 
@@ -138,7 +139,12 @@ export default function EventDetailsPage() {
         window.location.href = data.url;
       } else if (data.type === "free") {
         console.log("[Checkout] Free registration success");
-        setToast({ show: true, message: "Successfully registered!", type: "success" });
+        setIsFreeSuccess(true);
+        setToast({ 
+          show: true, 
+          message: "Congratulations! You are one of the first 10 people to enroll. Your seat is confirmed for free!", 
+          type: "success" 
+        });
         queryClient.invalidateQueries({ queryKey: ["event", id] });
       } else if (data.type === "paid") {
         console.log("[Checkout] Opening Razorpay modal with key:", data.key);
@@ -415,11 +421,11 @@ export default function EventDetailsPage() {
 
                   <Button
                     fullWidth
-                    disabled={registering || isRegistered}
+                    disabled={registering || isRegistered || isFreeSuccess}
                     onClick={handleRegisterInitiation}
-                    className={isRegistered ? "bg-emerald-500 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] h-14 font-black uppercase tracking-widest" : "h-14 font-black uppercase tracking-widest shadow-[0_10px_25px_#00e5ff30]"}
+                    className={(isRegistered || isFreeSuccess) ? "bg-emerald-500 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] h-14 font-black uppercase tracking-widest" : "h-14 font-black uppercase tracking-widest shadow-[0_10px_25px_#00e5ff30]"}
                   >
-                    {registering ? "Processing..." : isRegistered ? "Already Registered" : isSWI ? "Secure Your Seat" : "Complete Registration"}
+                    {registering ? "Processing..." : (isRegistered || isFreeSuccess) ? "Seat Confirmed" : isSWI ? "Secure Your Seat" : "Complete Registration"}
                   </Button>
 
                   {!user && (
