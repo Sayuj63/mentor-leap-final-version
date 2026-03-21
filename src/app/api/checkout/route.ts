@@ -21,10 +21,21 @@ export async function POST(req: NextRequest) {
 
         // 2. Handle Specialized SWI Bootcamp Logic
         if (itemId === "speak-with-impact-bootcamp") {
+            console.log(`[Checkout] Processing SWI Bootcamp for user: ${decodedToken.uid}`);
+            console.log(`[Checkout] User Details captured:`, JSON.stringify(userDetails));
+
             // Send Notification Email to Admin
-            await MailService.sendAdminInterestNotification("ianutkarsh@gmail.com", userDetails, itemData.title);
+            try {
+                console.log("[Checkout] Attempting to send admin notification email...");
+                const mailSent = await MailService.sendAdminInterestNotification("ianutkarsh@gmail.com", userDetails, itemData.title);
+                console.log("[Checkout] Mail Service Result:", mailSent ? "Success" : "Failed (No credentials?)");
+            } catch (mailError: any) {
+                console.error("[Checkout] Mail Sending Failed:", mailError.message);
+                // We proceed with redirect even if mail fails, but log it
+            }
             
             // Return Redirect type
+            console.log("[Checkout] Returning redirect URL for SWI Bootcamp");
             return NextResponse.json({ 
                 success: true, 
                 type: "redirect", 
