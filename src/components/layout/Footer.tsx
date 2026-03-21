@@ -10,7 +10,7 @@ const navLinks = [
   { label: "About", href: "/about" },
   { label: "Courses", href: "/courses" },
   { label: "Services", href: "/services" },
-  { label: "Hire Mridu", href: "/hire-anchor" },
+  { label: "Hire Mridu", href: "/hire-mridu-anchor" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -187,7 +187,7 @@ export default function Footer() {
             <ul className="space-y-4 p-0 list-none">
               <li><Link href="/about" className="footer-nav-link">About</Link></li>
               <li><Link href="/events" className="footer-nav-link">Programs</Link></li>
-              <li><Link href="/corporate" className="footer-nav-link">Corporate Training</Link></li>
+              <li><Link href="/executive-coaching" className="footer-nav-link">Corporate Training</Link></li>
               <li><Link href="/courses" className="footer-nav-link">Recorded Courses</Link></li>
             </ul>
           </div>
@@ -198,9 +198,9 @@ export default function Footer() {
               Resources
             </h4>
             <ul className="space-y-4 p-0 list-none">
-              <li><Link href="/studio" className="footer-nav-link">MentorLeap Studio</Link></li>
-              <li><Link href="/privacy" className="footer-nav-link">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="footer-nav-link">Terms of Service</Link></li>
+              <li><Link href="/mentorleap-studio" className="footer-nav-link">MentorLeap Studio</Link></li>
+              <li><Link href="/legal/privacy-policy" className="footer-nav-link">Privacy Policy</Link></li>
+              <li><Link href="/legal/terms-conditions" className="footer-nav-link">Terms of Service</Link></li>
             </ul>
           </div>
 

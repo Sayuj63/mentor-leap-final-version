@@ -70,7 +70,7 @@ export default function HeroSection() {
                         Explore Bootcamp Details
                     </Link>
                     <Link
-                        href="/hire-anchor"
+                        href="/hire-mridu-anchor"
                         className="cta-secondary no-underline text-sm rounded-full px-6 py-3 border border-[#00e5ff] text-[#00e5ff]"
                     >
                         Hire Mridu as Anchor

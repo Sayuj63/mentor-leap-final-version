@@ -262,7 +262,7 @@ export default function FinalCTA() {
               Explore Bootcamp Details
             </Link>
             <Link
-              href="/hire-anchor"
+              href="/hire-mridu-anchor"
               className="px-10 py-4 border border-[#00e5ff] text-[#00e5ff] font-bold rounded-full hover:bg-[#00e5ff]/5 transition-all no-underline"
             >
               Hire Mridu as Anchor
