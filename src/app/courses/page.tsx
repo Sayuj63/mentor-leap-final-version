@@ -34,6 +34,7 @@ export default function CoursesListingPage() {
     const categories = ["All", ...Array.from(new Set(courses.map(c => c.category)))];
 
     const filteredCourses = courses.filter(course => {
+        if (course.id === "speak-with-impact-bootcamp") return false; // SWI is now a Live Event Only
         const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             course.description.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = selectedCategory === "All" || course.category === selectedCategory;
