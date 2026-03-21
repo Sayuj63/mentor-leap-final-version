@@ -30,16 +30,6 @@ export async function POST(req: NextRequest) {
             // Non-blocking but logged
         }
 
-        // 2. Handle Specialized SWI Bootcamp Logic
-        if (itemId === "speak-with-impact-bootcamp") {
-            // Return Redirect type
-            console.log("[Checkout] Returning redirect URL for SWI Bootcamp");
-            return NextResponse.json({ 
-                success: true, 
-                type: "redirect", 
-                url: "https://pages.razorpay.com/SWIbootcamp" 
-            });
-        }
 
         // 3. Handle Discounts / Free Logic
         const enrollCount = itemData.enrollmentCount || 0;
