@@ -177,7 +177,6 @@ export default function EventDetailsPage() {
           },
           modal: {
             ondismiss: function() {
-              console.log("[Checkout] Modal closed by user");
               setRegistering(false);
             }
           },

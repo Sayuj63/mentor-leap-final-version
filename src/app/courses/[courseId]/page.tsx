@@ -138,7 +138,6 @@ export default function CourseDetailPage() {
           },
           modal: {
             ondismiss: function() {
-              console.log("[Checkout] Modal closed by user");
               setEnrolling(false);
             }
           },
