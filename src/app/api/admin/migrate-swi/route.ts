@@ -28,6 +28,9 @@ export async function GET(req: NextRequest) {
             displayDate: "Friday, 27th March & Saturday, 28th March",
             time: "7:00 PM - 9:00 PM IST",
             zoomLink: "https://zoom.us/j/mentorleap", // Placeholder
+            banner: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=800&q=80",
+            thumbnail: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=800&q=80",
+            imageUrl: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=1000&q=80",
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
 
