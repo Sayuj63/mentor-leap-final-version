@@ -14,7 +14,7 @@ export interface CoachingRequest {
 export const CoachingService = {
     async getAllRequests() {
         const snapshot = await db.collection("coachingRequests").orderBy("createdAt", "desc").get();
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as CoachingRequest));
+        return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() } as CoachingRequest));
     },
 
     async updateStatus(id: string, status: string) {

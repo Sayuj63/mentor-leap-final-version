@@ -6,7 +6,7 @@ export const ProgressService = {
     async markLessonComplete(userId: string, courseId: string, lessonId: string) {
         const userRef = db.collection("users").doc(userId);
         
-        await db.runTransaction(async (transaction) => {
+        await db.runTransaction(async (transaction: any) => {
             const userDoc = await transaction.get(userRef);
             if (!userDoc.exists) throw new Error("User not found");
             
