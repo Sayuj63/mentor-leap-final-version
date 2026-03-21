@@ -1,6 +1,7 @@
 "use client";
 export const dynamic = "force-dynamic";
 import React, { useState, useEffect } from "react";
+import Script from "next/script";
 import { useParams } from "next/navigation";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { Reveal, FadeIn } from "@/components/ui/Animation";
@@ -88,13 +89,23 @@ export default function CourseDetailPage() {
       });
       
       const data = await res.json();
+      console.log("[Checkout] API Response:", data);
       if (!res.ok) throw new Error(data.error || "Checkout failed");
 
       if (data.type === "redirect") {
+        console.log("[Checkout] Redirecting to:", data.url);
         window.location.href = data.url;
       } else if (data.type === "free") {
+        console.log("[Checkout] Free enrollment success");
         window.location.href = `/course-player/${courseId}`;
       } else if (data.type === "paid") {
+        console.log("[Checkout] Opening Razorpay modal with key:", data.key);
+        if (!data.key) throw new Error("Razorpay Key ID is missing. Please check environment variables.");
+
+        if (typeof (window as any).Razorpay === 'undefined') {
+          throw new Error("Razorpay SDK failed to load. Please check your internet connection.");
+        }
+
         const options = {
           key: data.key,
           amount: data.amount,
@@ -103,6 +114,7 @@ export default function CourseDetailPage() {
           description: `Enrollment for ${course.title}`,
           order_id: data.orderId,
           handler: async (response: any) => {
+            console.log("[Checkout] Payment success, verifying...", response);
             const verifyRes = await fetch("/api/checkout/verify", {
               method: "POST",
               headers: {
@@ -115,8 +127,19 @@ export default function CourseDetailPage() {
                 itemType: "course"
               })
             });
-            if (verifyRes.ok) window.location.href = `/course-player/${courseId}`;
-            else alert("Payment verification failed. Please contact support.");
+            if (verifyRes.ok) {
+              console.log("[Checkout] Verification success");
+              window.location.href = `/course-player/${courseId}`;
+            } else {
+              console.error("[Checkout] Verification failed");
+              alert("Payment verification failed. Please contact support.");
+            }
+          },
+          modal: {
+            ondismiss: function() {
+              console.log("[Checkout] Modal closed by user");
+              setEnrolling(false);
+            }
           },
           prefill: {
             name: details.fullName,
@@ -365,7 +388,10 @@ export default function CourseDetailPage() {
                 {enrolling ? "Processing..." : course.price === 0 ? "Enroll for Free" : "Secure Your Seat"}
               </Button>
 
-              <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
+              <Script 
+                src="https://checkout.razorpay.com/v1/checkout.js" 
+                strategy="lazyOnload"
+              />
 
               <p className="text-[9px] text-center text-[#475569] font-black uppercase tracking-widest mt-6">
                 🔒 Secure 256-bit SSL Enrollment

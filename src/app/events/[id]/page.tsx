@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Script from "next/script";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { Reveal } from "@/components/ui/Animation";
 import { Button } from "@/components/ui/Button";
@@ -129,14 +130,24 @@ export default function EventDetailsPage() {
       });
       
       const data = await res.json();
+      console.log("[Checkout] API Response:", data);
       if (!res.ok) throw new Error(data.error || "Checkout failed");
 
       if (data.type === "redirect") {
+        console.log("[Checkout] Redirecting to:", data.url);
         window.location.href = data.url;
       } else if (data.type === "free") {
+        console.log("[Checkout] Free registration success");
         setToast({ show: true, message: "Successfully registered!", type: "success" });
         queryClient.invalidateQueries({ queryKey: ["event", id] });
       } else if (data.type === "paid") {
+        console.log("[Checkout] Opening Razorpay modal with key:", data.key);
+        if (!data.key) throw new Error("Razorpay Key ID is missing. Please check environment variables.");
+        
+        if (typeof (window as any).Razorpay === 'undefined') {
+          throw new Error("Razorpay SDK failed to load. Please check your internet connection.");
+        }
+
         const options = {
           key: data.key,
           amount: data.amount,
@@ -145,6 +156,7 @@ export default function EventDetailsPage() {
           description: `Registration for ${event.title}`,
           order_id: data.orderId,
           handler: async (response: any) => {
+            console.log("[Checkout] Payment success, verifying...", response);
             const verifyRes = await fetch("/api/checkout/verify", {
               method: "POST",
               headers: {
@@ -158,10 +170,18 @@ export default function EventDetailsPage() {
               })
             });
             if (verifyRes.ok) {
+              console.log("[Checkout] Verification success");
               setToast({ show: true, message: "Successfully registered and paid!", type: "success" });
               queryClient.invalidateQueries({ queryKey: ["event", id] });
             } else {
+              console.error("[Checkout] Verification failed");
               setToast({ show: true, message: "Payment verification failed. Please contact support.", type: "error" });
+            }
+          },
+          modal: {
+            ondismiss: function() {
+              console.log("[Checkout] Modal closed by user");
+              setRegistering(false);
             }
           },
           prefill: {
@@ -425,7 +445,10 @@ export default function EventDetailsPage() {
       </section>
 
       {/* RAZORPAY SCRIPT */}
-      <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
+      <Script 
+        src="https://checkout.razorpay.com/v1/checkout.js" 
+        strategy="lazyOnload"
+      />
 
       {/* DETAILS FORM MODAL */}
       <PaymentDetailsModal
