@@ -9,10 +9,21 @@ const offerText =
 export default function OfferBanner() {
   const [mounted, setMounted] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [attendees, setAttendees] = useState<string[]>([]);
 
   useEffect(() => {
     setMounted(true);
+    fetch("/api/events/speak-with-impact-bootcamp")
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.attendees) {
+          setAttendees(data.attendees);
+        }
+      })
+      .catch(err => console.error("Error fetching event data:", err));
   }, []);
+
+  const freeSeatsLeft = Math.max(0, 10 - attendees.length);
 
   return (
     <>
@@ -181,7 +192,15 @@ export default function OfferBanner() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 ml-8">
+          <div className="flex items-center gap-4 ml-8 relative">
+            {freeSeatsLeft > 0 && (
+              <div className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                <span className="text-[#00e5ff] text-[10px] font-black tracking-widest animate-bounce flex items-center gap-1.5 bg-[#00e5ff]/10 px-3 py-1 rounded-full border border-[#00e5ff]/20">
+                  <span className="w-1 h-1 rounded-full bg-[#00e5ff] animate-pulse" />
+                  {freeSeatsLeft} FREE SEATS LEFT
+                </span>
+              </div>
+            )}
             <Link
               href="/events/speak-with-impact-bootcamp"
               className="px-4 py-1.5 bg-[#00e5ff] text-[#020617] text-xs font-bold rounded-full hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] transition-all no-underline"

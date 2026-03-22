@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "MentorLeap",
   description: "Transforming professionals into confident communicators and strategic leaders.",
+  verification: {
+    google: "YwhLDLrnsBrguQBbhtemBTKCpTr4NJRvsLVtaxhqI_Y",
+  },
 };
 
 export default function RootLayout({

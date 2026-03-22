@@ -1,3 +1,5 @@
+import { config } from "dotenv";
+config({ path: ".env.local" });
 import { db, admin } from "../lib/firebaseAdmin";
 
 async function syncDynamicData() {
@@ -47,8 +49,8 @@ async function syncDynamicData() {
     ],
     offer: "10 participants will receive FREE access to the Bootcamp. The next 50 participants will receive 50 percent discount on the Bootcamp fee.",
     category: "Communication",
-    thumbnail: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=800&q=80",
-    banner: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=800&q=80",
+    thumbnail: "/events/speak-with-impact.png",
+    banner: "/events/speak-with-impact.png",
     updatedAt: new Date()
   }, { merge: true });
 

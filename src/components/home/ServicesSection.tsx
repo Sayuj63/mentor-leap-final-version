@@ -44,7 +44,8 @@ export default function ServicesSection() {
         .service-card-link {
           color: #00e5ff;
           text-decoration: none;
-          font-size: 13px;
+          font-size: 14px;
+          font-weight: bold;
           position: relative;
           display: inline-block;
           transition: letter-spacing 0.2s ease;
@@ -64,7 +65,7 @@ export default function ServicesSection() {
           letter-spacing: 0.3px;
         }
         .service-icon-wrap {
-          font-size: 42px;
+          font-size: 48px;
           margin-bottom: 15px;
           display: inline-block;
           transition: transform 0.3s ease;
@@ -110,7 +111,7 @@ export default function ServicesSection() {
           </p>
 
           <div
-            className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
             suppressHydrationWarning
           >
             {[
@@ -128,7 +129,7 @@ export default function ServicesSection() {
                 onMouseLeave={() => setHovered(null)}
                 style={{
                   background: "rgba(2,6,23,0.9)",
-                  padding: "20px",
+                  padding: "45px 35px",
                   display: "flex",
                   flexDirection: "column",
                   aspectRatio: "1/1",
@@ -150,14 +151,14 @@ export default function ServicesSection() {
                   transition: `opacity 0.5s ease ${0.2 + i * 0.08}s, transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease`,
                 }}
               >
-                <div className="service-icon-wrap mb-2" style={{ fontSize: "36px" }}>{s.icon}</div>
+                <div className="service-icon-wrap mb-2" style={{ fontSize: "48px" }}>{s.icon}</div>
                 <h3
                   className="text-white font-semibold mb-2 leading-tight"
-                  style={{ fontSize: "15px" }}
+                  style={{ fontSize: "20px" }}
                 >
                   {s.title}
                 </h3>
-                <p className="mb-4 line-clamp-3" style={{ color: "#94a3b8", fontSize: "12px", flexGrow: 1 }}>
+                <p className="mb-4 line-clamp-3" style={{ color: "#94a3b8", fontSize: "14px", flexGrow: 1 }}>
                   {s.desc}
                 </p>
                 <Link href="/contact" className="service-card-link">

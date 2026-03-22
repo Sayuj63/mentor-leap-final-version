@@ -207,11 +207,22 @@ export default function EventDetailsPage() {
       <section className="px-5 py-[120px] max-w-[1200px] mx-auto">
           <div>
             <div className="relative aspect-[21/9] w-full rounded-3xl bg-[#0f172a] border border-white/10 mb-10 overflow-hidden flex items-center justify-center shadow-2xl group">
-              {event.imageUrl ? (
-                <img src={event.imageUrl} className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000" alt={event.title} />
-              ) : (
-                <div className="text-5xl font-bold opacity-10 uppercase tracking-tighter italic">MentorLeap Masterclass</div>
-              )}
+              {(() => {
+                const bannerUrl = event.banner || event.thumbnail || event.imageUrl;
+                const fallbackUrl = isSWI ? "/events/speak-with-impact.png" : null;
+                const finalUrl = bannerUrl || fallbackUrl;
+                
+                if (finalUrl) {
+                  return <img src={finalUrl} className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000" alt={event.title} />;
+                }
+                return (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a]">
+                    <div className="text-5xl md:text-7xl font-black opacity-10 uppercase tracking-tighter italic text-center px-10 select-none">
+                      {event.title || "MentorLeap Masterclass"}
+                    </div>
+                  </div>
+                );
+              })()}
               <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent"></div>
             </div>
 
