@@ -17,7 +17,7 @@ const navLinks = [
 const socialLinks = [
   {
     label: "LinkedIn",
-    href: "https://linkedin.com",
+    href: "https://linkedin.com/company/mentorleap",
     icon: (
       <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
         <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
@@ -27,7 +27,7 @@ const socialLinks = [
   },
   {
     label: "YouTube",
-    href: "https://youtube.com",
+    href: "https://youtube.com/@mentorleap",
     icon: (
       <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
         <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z" />
@@ -37,7 +37,7 @@ const socialLinks = [
   },
   {
     label: "Instagram",
-    href: "https://instagram.com",
+    href: "https://instagram.com/mentorleap",
     icon: (
       <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
@@ -48,7 +48,7 @@ const socialLinks = [
   },
   {
     label: "X (Twitter)",
-    href: "https://x.com",
+    href: "https://x.com/mentorleap",
     icon: (
       <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
