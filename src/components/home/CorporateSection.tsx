@@ -172,8 +172,7 @@ export default function CorporateSection() {
 
           {/* GRID */}
           <div
-            className="grid gap-12 text-left"
-            style={{ gridTemplateColumns: "repeat(2, 1fr)" }}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 text-left"
             suppressHydrationWarning
           >
 

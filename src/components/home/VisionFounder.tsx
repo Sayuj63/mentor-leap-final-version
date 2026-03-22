@@ -153,15 +153,12 @@ export default function VisionFounder() {
 
           {/* TOP: IMAGE + CONTENT */}
           <div
-            className="flex items-center flex-wrap mb-16"
-            style={{ gap: "70px" }}
+            className="flex flex-col lg:flex-row items-center gap-10 lg:gap-[70px] mb-16"
           >
             {/* IMAGE */}
             <div
-              className="relative"
+              className="relative w-full lg:w-[40%] max-w-[500px]"
               style={{
-                width: "40%",
-                minWidth: "280px",
                 flex: "1",
                 opacity: visible ? 1 : 0,
                 transform: visible ? "translateX(0)" : "translateX(-40px)",
@@ -181,9 +178,8 @@ export default function VisionFounder() {
 
             {/* CONTENT */}
             <div
+              className="w-full lg:w-[60%]"
               style={{
-                width: "60%",
-                minWidth: "280px",
                 flex: "1",
                 opacity: visible ? 1 : 0,
                 transform: visible ? "translateX(0)" : "translateX(40px)",
@@ -191,8 +187,7 @@ export default function VisionFounder() {
               }}
             >
               <h2
-                className="text-white font-bold mb-4"
-                style={{ fontSize: "46px", lineHeight: "1.2" }}
+                className="text-white font-bold mb-4 text-3xl md:text-[46px] leading-[1.2]"
               >
                 Meet the Founder
               </h2>
@@ -223,8 +218,7 @@ export default function VisionFounder() {
 
               {/* STATS */}
               <div
-                className="flex flex-wrap mt-8"
-                style={{ gap: "25px" }}
+                className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8"
               >
                 {(info.stats || []).map((stat: any, i: number) => (
                   <div

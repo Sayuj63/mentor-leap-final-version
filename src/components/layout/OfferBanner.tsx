@@ -192,27 +192,29 @@ export default function OfferBanner() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 ml-8 relative">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 gap-y-12 ml-6 md:ml-8 relative py-4">
             {freeSeatsLeft > 0 && (
-              <div className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                <span className="text-[#00e5ff] text-[10px] font-black tracking-widest animate-bounce flex items-center gap-1.5 bg-[#00e5ff]/10 px-3 py-1 rounded-full border border-[#00e5ff]/20">
+              <div className="absolute -top-3 md:-top-10 left-1/2 -translate-x-1/2 whitespace-nowrap z-50">
+                <span className="text-[#00e5ff] text-[10px] font-black tracking-widest animate-bounce flex items-center gap-1.5 bg-[#020617] md:bg-[#00e5ff]/10 px-3 py-1 rounded-full border border-[#00e5ff]/20 shadow-[0_0_15px_rgba(0,229,255,0.2)]">
                   <span className="w-1 h-1 rounded-full bg-[#00e5ff] animate-pulse" />
                   {freeSeatsLeft} FREE SEATS LEFT
                 </span>
               </div>
             )}
-            <Link
-              href="/events/speak-with-impact-bootcamp"
-              className="px-4 py-1.5 bg-[#00e5ff] text-[#020617] text-xs font-bold rounded-full hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] transition-all no-underline"
-            >
-              Secure Your Seat
-            </Link>
-            <Link
-              href="/events/speak-with-impact-bootcamp"
-              className="px-4 py-1.5 bg-white/10 text-white text-xs font-bold rounded-full border border-white/20 hover:bg-white/20 transition-all no-underline"
-            >
-              View Bootcamp Details
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link
+                href="/events/speak-with-impact-bootcamp"
+                className="px-4 py-1.5 bg-[#00e5ff] text-[#020617] text-[11px] md:text-xs font-bold rounded-full hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] transition-all no-underline whitespace-nowrap"
+              >
+                Secure Your Seat
+              </Link>
+              <Link
+                href="/events/speak-with-impact-bootcamp"
+                className="px-4 py-1.5 bg-white/10 text-white text-[11px] md:text-xs font-bold rounded-full border border-white/20 hover:bg-white/20 transition-all no-underline whitespace-nowrap"
+              >
+                View Details
+              </Link>
+            </div>
           </div>
         </div>
       </div>

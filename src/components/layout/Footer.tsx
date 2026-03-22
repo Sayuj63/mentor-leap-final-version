@@ -152,16 +152,8 @@ export default function Footer() {
 
         {/* MAIN ROW */}
         <div
-          className="footer-inner"
+          className="footer-inner max-w-[1350px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-20 px-5 pt-20 pb-12"
           suppressHydrationWarning
-          style={{
-            maxWidth: "1350px",
-            margin: "auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(12, 1fr)",
-            gap: "40px",
-            padding: "80px 20px 60px",
-          }}
         >
           {/* BRAND */}
           <div className="md:col-span-3">
