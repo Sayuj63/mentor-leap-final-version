@@ -13,11 +13,13 @@ import {
     LogOut,
     Shield,
     Search,
-    X
+    X,
+    Home
 } from "lucide-react";
 import { useAuth } from "@/components/providers/AuthProvider";
 
 const navItems = [
+    { label: 'Back to Home', href: '/', icon: Home },
     { label: 'Overview', href: '/dashboard/overview', icon: LayoutDashboard },
     { label: 'Explore Courses', href: '/dashboard/explore', icon: Search },
     { label: 'My Courses', href: '/dashboard/my-courses', icon: BookOpen },

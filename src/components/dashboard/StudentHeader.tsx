@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { Bell, Search, BookOpen, Calendar, MessageSquare, User, LogOut, TrendingUp, Menu } from "lucide-react";
+import { Bell, Search, BookOpen, Calendar, MessageSquare, User, LogOut, TrendingUp, Menu, Home } from "lucide-react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 
@@ -29,6 +29,9 @@ export default function StudentHeader({ onToggleSidebar }: StudentHeaderProps) {
             >
                 <Menu size={24} />
             </button>
+            <Link href="/" className="p-2 mr-4 text-[#94a3b8] hover:text-[#00e5ff] transition-colors" title="Go to Website Home">
+                <Home size={22} strokeWidth={2.5} />
+            </Link>
 
             {/* Search Bar */}
             <div className="flex-1 max-w-md hidden md:block">
