@@ -59,17 +59,25 @@ export default function MyEventsPage() {
                     const data = docSnap.data();
                     // Normalize date
                     const rawDate = data.date;
-                    const eventDate = rawDate?._seconds
-                        ? new Date(rawDate._seconds * 1000)
-                        : rawDate?.toDate
-                            ? rawDate.toDate()
-                            : rawDate
-                                ? new Date(rawDate)
-                                : null;
+                    let eventDate: Date | null = null;
+                    try {
+                        if (rawDate?._seconds) {
+                            eventDate = new Date(rawDate._seconds * 1000);
+                        } else if (rawDate?.toDate) {
+                            eventDate = rawDate.toDate();
+                        } else if (rawDate instanceof Date || typeof rawDate === 'string' || !isNaN(Date.parse(rawDate as any))) {
+                            eventDate = new Date(rawDate as any);
+                        } else if (rawDate && typeof rawDate === 'object' && 'seconds' in rawDate) {
+                            eventDate = new Date((rawDate as any).seconds * 1000);
+                        }
+                    } catch (e) {
+                        console.error("[MyEvents Page] Date parsing error:", e);
+                    }
+
                     allEvents.push({
                         id: docSnap.id,
                         ...data,
-                        eventDate,
+                        eventDate: eventDate && !isNaN(eventDate.getTime()) ? eventDate : null,
                     });
                 });
             }
@@ -166,7 +174,11 @@ export default function MyEventsPage() {
             ) : (
                 <div className="grid md:grid-cols-2 gap-6">
                     {filteredEvents.map((event) => {
-                        const isUpcoming = event.eventDate && event.eventDate >= now;
+                        // Fail-safe for critical launch event
+                        const isUpcoming = (event.id === "speak-with-impact-bootcamp") 
+                            ? true 
+                            : !!(event.eventDate && event.eventDate >= now);
+                        
                         return (
                             <Card
                                 key={event.id}

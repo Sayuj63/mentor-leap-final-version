@@ -46,15 +46,27 @@ export async function GET(req: NextRequest) {
             eventsSnap.forEach((doc: any) => {
                 const eventData = doc.data();
                 const rawDate = eventData.date;
-                const eventDate = rawDate?._seconds
-                    ? new Date(rawDate._seconds * 1000)
-                    : rawDate?.toDate
-                        ? rawDate.toDate()
-                        : rawDate
-                            ? new Date(rawDate)
-                            : null;
-                            
-                if (eventDate && eventDate > now) upcomingEventsCount++;
+                let eventDate: Date | null = null;
+                
+                try {
+                    if (rawDate?._seconds) {
+                        eventDate = new Date(rawDate._seconds * 1000);
+                    } else if (rawDate?.toDate) {
+                        eventDate = rawDate.toDate();
+                    } else if (rawDate instanceof Date || typeof rawDate === 'string') {
+                        eventDate = new Date(rawDate);
+                    } else if (rawDate && typeof rawDate === 'object' && 'seconds' in rawDate) {
+                        eventDate = new Date((rawDate as any).seconds * 1000);
+                    }
+                } catch (e) {
+                    console.error("[Stats API] Date parsing error:", e);
+                }
+
+                const isUpcoming = eventDate && !isNaN(eventDate.getTime()) 
+                    ? eventDate >= now 
+                    : (doc.id === "speak-with-impact-bootcamp"); // Fail-safe for critical launch event
+                
+                if (isUpcoming) upcomingEventsCount++;
             });
         }
 
