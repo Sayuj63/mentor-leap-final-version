@@ -44,7 +44,25 @@ export default function EventsPage() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <div className="text-[#00e5ff] text-[10px] font-black uppercase tracking-[0.2em] mb-2">
-                      {ev.date?._seconds ? new Date(ev.date._seconds * 1000).toLocaleDateString() : new Date(ev.date).toLocaleDateString()}
+                      {(() => {
+                        const rawDate = ev.date;
+                        if (ev.id === "speak-with-impact-bootcamp") return "Mar 27 & 28, 2026";
+                        try {
+                          let d: Date | null = null;
+                          if (rawDate?._seconds) d = new Date(rawDate._seconds * 1000);
+                          else if (rawDate?.toDate) d = rawDate.toDate();
+                          else if (rawDate) d = new Date(rawDate);
+                          
+                          if (d && !isNaN(d.getTime())) {
+                            return d.toLocaleDateString("en-IN", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric"
+                            });
+                          }
+                        } catch (e) {}
+                        return "Date TBA";
+                      })()}
                     </div>
                     <h3 className="text-2xl font-black tracking-tight">{ev.title}</h3>
                   </div>

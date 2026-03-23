@@ -183,8 +183,26 @@ export default function ProgramsSection() {
                   {event.description}
                 </p>
                 <div className="mb-4" style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-                <p className="font-semibold mb-3" style={{ color: "#00e5ff", fontSize: "14px" }}>
-                  📅 {event.date?._seconds ? new Date(event.date._seconds * 1000).toLocaleDateString() : new Date(event.date).toLocaleDateString()}
+                <p className="font-semibold mb-3 text-white italic" style={{ fontSize: "14px" }}>
+                  📅 {(() => {
+                    const rawDate = event.date;
+                    if (event.id === "speak-with-impact-bootcamp") return "Friday, 27th March & Saturday, 28th March";
+                    try {
+                      let d: Date | null = null;
+                      if (rawDate?._seconds) d = new Date(rawDate._seconds * 1000);
+                      else if (rawDate?.toDate) d = rawDate.toDate();
+                      else if (rawDate) d = new Date(rawDate);
+                      
+                      if (d && !isNaN(d.getTime())) {
+                        return d.toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric"
+                        });
+                      }
+                    } catch (e) {}
+                    return "Date TBA";
+                  })()}
                 </p>
                 <p className="font-bold mb-6" style={{ color: "white", fontSize: "20px" }}>
                   {event.price === 0 ? "FREE" : `₹${event.price}`}
