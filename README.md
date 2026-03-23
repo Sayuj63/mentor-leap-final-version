@@ -35,4 +35,34 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-# MentorLeap-
+# MentorLeap
+
+MentorLeap is an AI-powered learning platform designed to help professionals develop clear communication and leadership skills.
+
+## ✨ Dashboard Features
+
+### 1. Unified Student Experience
+- **Dashboard Overview**: A central hub for tracking course progress, upcoming events, and quick stats.
+- **My Courses**: Easy access to all enrolled programs with detailed progress tracking.
+- **Explore Courses**: A comprehensive catalog of premium communication and leadership training.
+
+### 2. Live Interaction & Support
+- **Live Events**: Stay updated with high-impact bootcamps like 'Speak with Impact'.
+- **AI Assistant (MISHA)**: A personal AI mentor available 24/7 to answer questions and provide career guidance.
+
+### 3. Personalization & Growth
+- **Certificates**: View and download your earned certifications.
+- **Profile Management**: Customize your student profile and track your learning journey.
+
+## 📱 Mobile-First Design
+- **Responsive Layout**: Seamless experience across mobile, tablet, and desktop.
+- **Smart Components**: Adaptive sidebar, hamburger menu, and optimized typography for small screens.
+
+---
+
+## Technical Stack
+- **Framework**: Next.js (App Router)
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Authentication**: Firebase Auth
+- **Database**: Firestore
