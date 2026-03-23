@@ -50,8 +50,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             )}
 
             <aside className={`
-                fixed inset-y-0 left-0 z-50 w-[280px] bg-[#020617] border-r border-white/5 flex flex-col h-screen sticky top-0
-                transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:flex-shrink-0
+                fixed inset-y-0 left-0 z-50 w-[280px] bg-[#020617] border-r border-white/5 flex flex-col h-screen
+                transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:flex-shrink-0
                 ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
             `}>
                 {/* Logo Section */}

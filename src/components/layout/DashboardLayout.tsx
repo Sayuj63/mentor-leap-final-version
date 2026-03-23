@@ -39,7 +39,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* DASHBOARD CONTENT AREA */}
-      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden w-full">
         {/* TOP DASHBOARD HEADER */}
         <StudentHeader onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 
