@@ -22,11 +22,8 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   const isDashboardPath = pathname.startsWith("/dashboard");
   const isCoursePath = pathname.startsWith("/courses") || pathname.startsWith("/course-player");
 
-  useEffect(() => {
-    if (!loading && user && pathname === "/") {
-      router.replace(isAdmin ? "/admin" : "/dashboard");
-    }
-  }, [user, isAdmin, loading, pathname, router]);
+  // Removed automatic redirect to dashboard for logged-in users
+  // to allow them to view the marketing landing page.
 
   // Routes that should NOT have marketing header/footer
   const isExcludedPath = isAdminPath || isDashboardPath || isAuthPath || pathname.startsWith("/course-player");

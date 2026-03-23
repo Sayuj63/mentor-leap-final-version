@@ -225,9 +225,14 @@ export default function Header() {
                 </>
               )}
               {user && (
-                <Link href="/events" className="ml-cta-btn">
-                  Explore Events
-                </Link>
+                <div className="flex items-center gap-4">
+                  <Link href="/courses" className="ml-auth-link">
+                    Explore Courses
+                  </Link>
+                  <Link href="/dashboard" className="ml-cta-btn">
+                    Dashboard
+                  </Link>
+                </div>
               )}
             </div>
 
@@ -299,14 +304,24 @@ export default function Header() {
                 </>
               )}
               {user && (
-                <Link 
-                  href="/events" 
-                  className="ml-cta-btn" 
-                  onClick={() => setMenuOpen(false)}
-                  style={{ textAlign: "center" }}
-                >
-                  Explore Events
-                </Link>
+                <>
+                  <Link 
+                    href="/dashboard" 
+                    className="ml-cta-btn" 
+                    onClick={() => setMenuOpen(false)}
+                    style={{ textAlign: "center" }}
+                  >
+                    Dashboard
+                  </Link>
+                  <Link 
+                    href="/courses" 
+                    className="ml-auth-link" 
+                    onClick={() => setMenuOpen(false)}
+                    style={{ textAlign: "center", padding: "10px" }}
+                  >
+                    Explore Courses
+                  </Link>
+                </>
               )}
             </div>
           </div>
