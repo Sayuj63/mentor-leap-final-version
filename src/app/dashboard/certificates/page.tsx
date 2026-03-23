@@ -62,9 +62,9 @@ export default function CertificatesPage() {
     if (loading) return <div className="p-20 flex justify-center"><Loader /></div>;
 
     return (
-        <div className="max-w-6xl mx-auto pb-20 p-10">
+        <div className="max-w-6xl mx-auto pb-20 px-4 py-8 md:p-10">
             <div className="mb-8">
-                <h1 className="text-3xl font-black tracking-tight text-white">My Certificates</h1>
+                <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">My Certificates</h1>
                 <p className="text-[#94a3b8] text-sm mt-1">
                     {certificates.length > 0
                         ? `${certificates.length} certificate${certificates.length !== 1 ? "s" : ""} earned`

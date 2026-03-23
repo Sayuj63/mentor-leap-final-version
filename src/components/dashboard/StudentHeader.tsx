@@ -1,11 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { Bell, Search, BookOpen, Calendar, MessageSquare, User, LogOut, TrendingUp } from "lucide-react";
+import { Bell, Search, BookOpen, Calendar, MessageSquare, User, LogOut, TrendingUp, Menu } from "lucide-react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 
-export default function StudentHeader() {
+interface StudentHeaderProps {
+    onToggleSidebar: () => void;
+}
+
+export default function StudentHeader({ onToggleSidebar }: StudentHeaderProps) {
     const { userData, user, logout } = useAuth();
     const router = useRouter();
     const [profileOpen, setProfileOpen] = useState(false);
@@ -17,7 +21,15 @@ export default function StudentHeader() {
     };
 
     return (
-        <header className="h-[72px] border-b border-white/5 bg-[#020617]/80 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-40">
+        <header className="h-[72px] border-b border-white/5 bg-[#020617]/80 backdrop-blur-md flex items-center justify-between px-4 md:px-8 sticky top-0 z-40">
+            {/* Mobile Menu Toggle */}
+            <button 
+                onClick={onToggleSidebar}
+                className="p-2 mr-2 text-[#94a3b8] hover:text-white md:hidden"
+            >
+                <Menu size={24} />
+            </button>
+
             {/* Search Bar */}
             <div className="flex-1 max-w-md hidden md:block">
                 <div className="relative group">

@@ -31,10 +31,10 @@ export default function DashboardOverview() {
   if (loading) return <div className="h-full flex items-center justify-center p-20"><Loader /></div>;
 
   return (
-    <div className="p-10 max-w-6xl mx-auto">
+    <div className="px-4 py-8 md:p-10 max-w-6xl mx-auto">
       <Reveal>
-        <h1 className="text-3xl font-bold mb-2">Welcome Back, {stats?.name || 'Student'}!</h1>
-        <p className="text-[#94a3b8] mb-10">Here's an overview of your progress and upcoming activities.</p>
+        <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome Back, {stats?.name || 'Student'}!</h1>
+        <p className="text-[#94a3b8] mb-6 md:mb-10 text-sm md:text-base">Here's an overview of your progress and upcoming activities.</p>
 
         <div className="grid md:grid-cols-3 gap-6 mb-10">
           <Card className="!p-6 text-center">

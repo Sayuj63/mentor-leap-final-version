@@ -145,10 +145,10 @@ export default function ProfilePage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto pb-20 p-10">
+        <div className="max-w-4xl mx-auto pb-20 px-4 py-8 md:p-10">
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-white">My Profile</h1>
+                    <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">My Profile</h1>
                     <p className="text-[#94a3b8] text-sm mt-1">Your personal account information</p>
                 </div>
                 {!isEditing && (
@@ -168,7 +168,7 @@ export default function ProfilePage() {
             {isEditing ? (
                 /* EDIT MODE */
                 <form onSubmit={handleSave}>
-                    <Card className="!p-8 bg-white/[0.03] border-white/10 relative overflow-hidden mb-8">
+                    <Card className="!p-4 md:!p-8 bg-white/[0.03] border-white/10 relative overflow-hidden mb-8">
                         <div className="relative z-10 space-y-8">
                             {/* Avatar Section */}
                             <div className="flex flex-col md:flex-row items-center gap-6 pb-8 border-b border-white/5">
@@ -324,7 +324,7 @@ export default function ProfilePage() {
                 /* VIEW MODE */
                 <>
                     {/* Profile Header */}
-                    <Card className="!p-8 bg-white/[0.03] border-white/10 mb-6">
+                    <Card className="!p-6 md:!p-8 bg-white/[0.03] border-white/10 mb-6">
                         <div className="flex items-start gap-6 flex-wrap">
                             {/* Avatar */}
                             <div className="w-20 h-20 rounded-2xl bg-[#00e5ff]/10 border border-[#00e5ff]/20 flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -338,7 +338,7 @@ export default function ProfilePage() {
                             <div className="flex-1">
                                 <div className="flex items-start justify-between gap-4">
                                     <div>
-                                        <h2 className="text-2xl font-black text-white">{userData.name || user.displayName}</h2>
+                                        <h2 className="text-xl md:text-2xl font-black text-white">{userData.name || user.displayName}</h2>
                                         <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded mt-1 inline-block ${userData.role === "admin"
                                             ? "bg-purple-500/10 text-purple-400 border border-purple-500/20"
                                             : "bg-[#00e5ff]/10 text-[#00e5ff] border border-[#00e5ff]/20"
@@ -369,7 +369,7 @@ export default function ProfilePage() {
                     </Card>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-3 gap-6 mb-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-6">
                         <Card className="!p-6 text-center bg-white/[0.03] border-white/10 hover:border-[#00e5ff]/30 transition-all">
                             <div className="w-10 h-10 rounded-xl bg-[#00e5ff]/10 text-[#00e5ff] flex items-center justify-center mx-auto mb-3">
                                 <BookOpen size={18} />

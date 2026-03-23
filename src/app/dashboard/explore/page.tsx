@@ -38,11 +38,11 @@ export default function ExploreCoursesPage() {
     });
 
     return (
-        <div className="max-w-7xl mx-auto pb-20 p-6 md:p-10">
+        <div className="max-w-7xl mx-auto pb-20 px-4 py-8 md:p-10">
             {/* Header section */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-white">Explore Courses</h1>
+                    <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">Explore Courses</h1>
                     <p className="text-[#94a3b8] text-sm mt-1">Discover new skills and accelerate your career</p>
                 </div>
 

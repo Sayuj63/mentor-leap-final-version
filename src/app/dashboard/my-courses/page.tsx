@@ -131,10 +131,10 @@ export default function MyCoursesPage() {
     if (loading) return <div className="p-20 flex justify-center"><Loader /></div>;
 
     return (
-        <div className="max-w-6xl mx-auto pb-20 p-10">
+        <div className="max-w-6xl mx-auto pb-20 px-4 py-8 md:p-10">
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-white">My Learning Path</h1>
+                    <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">My Learning Path</h1>
                     <p className="text-[#94a3b8] text-sm mt-1">
                         {courses.length > 0
                             ? `${courses.length} course${courses.length !== 1 ? "s" : ""} enrolled`
@@ -262,8 +262,8 @@ export default function MyCoursesPage() {
                         {/* Header */}
                         <div className="flex items-center justify-between p-6 border-b border-white/5 bg-white/[0.02] shrink-0">
                             <div>
-                                <h2 className="text-xl font-bold text-white">Add New Courses</h2>
-                                <p className="text-sm text-[#94a3b8] mt-1">Select multiple courses to enroll simultaneously</p>
+                                <h2 className="text-lg md:text-xl font-bold text-white">Add New Courses</h2>
+                                <p className="text-xs md:text-sm text-[#94a3b8] mt-1">Select multiple courses to enroll simultaneously</p>
                             </div>
                             <button onClick={() => setIsAddModalOpen(false)} className="p-2 text-[#94a3b8] hover:text-white rounded-lg hover:bg-white/5 transition-colors shrink-0">
                                 <X size={20} />
@@ -316,9 +316,9 @@ export default function MyCoursesPage() {
                                                         )}
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <h4 className="font-bold text-white text-sm truncate">{course.title}</h4>
-                                                        <p className="text-[10px] text-[#475569] font-bold uppercase mt-1">{course.category || "General"}</p>
-                                                        <p className="text-xs text-[#94a3b8] mt-2 line-clamp-2">{course.description}</p>
+                                                        <h4 className="font-bold text-white text-xs md:text-sm truncate">{course.title}</h4>
+                                                        <p className="text-[9px] md:text-[10px] text-[#475569] font-bold uppercase mt-1">{course.category || "General"}</p>
+                                                        <p className="text-[10px] md:text-xs text-[#94a3b8] mt-2 line-clamp-2 md:line-clamp-none leading-relaxed">{course.description}</p>
                                                     </div>
                                                     <div className="flex items-center justify-center shrink-0">
                                                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${isSelected ? 'border-[#00e5ff] bg-[#00e5ff]' : 'border-white/20'}`}>

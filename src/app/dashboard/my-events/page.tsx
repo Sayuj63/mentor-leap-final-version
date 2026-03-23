@@ -100,10 +100,10 @@ export default function MyEventsPage() {
     if (loading) return <div className="p-20 flex justify-center"><Loader /></div>;
 
     return (
-        <div className="max-w-6xl mx-auto pb-20 p-10">
+        <div className="max-w-6xl mx-auto pb-20 px-4 py-8 md:p-10">
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-white">My Events</h1>
+                    <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">My Events</h1>
                     <p className="text-[#94a3b8] text-sm mt-1">
                         {events.length > 0
                             ? `${events.length} event${events.length !== 1 ? "s" : ""} registered`
@@ -111,12 +111,12 @@ export default function MyEventsPage() {
                     </p>
                 </div>
                 {events.length > 0 && (
-                    <div className="flex gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
+                    <div className="flex gap-1 bg-white/5 p-1 rounded-xl border border-white/10 overflow-x-auto no-scrollbar max-w-[50%] xs:max-w-none">
                         {(["all", "upcoming", "past"] as const).map((f) => (
                             <button
                                 key={f}
                                 onClick={() => setFilter(f)}
-                                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${filter === f
+                                className={`px-3 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap ${filter === f
                                     ? "bg-[#00e5ff] text-black"
                                     : "text-[#94a3b8] hover:text-white"
                                     }`}

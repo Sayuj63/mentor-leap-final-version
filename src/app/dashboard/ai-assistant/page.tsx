@@ -62,13 +62,13 @@ export default function AiAssistantPage() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto pb-20 p-10 h-full flex flex-col min-h-[85vh]">
+        <div className="max-w-4xl mx-auto pb-20 px-4 py-8 md:p-10 h-full flex flex-col min-h-[85vh]">
             <div className="mb-8 flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#00e5ff] to-[#6366f1] flex items-center justify-center shadow-[0_0_20px_rgba(0,229,255,0.3)]">
                     <Sparkles size={24} className="text-white" />
                 </div>
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-white">MISHA</h1>
+                    <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">MISHA</h1>
                     <p className="text-[#00e5ff] font-bold text-[10px] uppercase tracking-[0.2em]">Your Personal AI Mentor</p>
                 </div>
             </div>
@@ -79,9 +79,9 @@ export default function AiAssistantPage() {
                 
                 <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar relative z-10 w-full">
                     {messages.map((m, i) => (
-                        <div key={i} className={`flex gap-4 max-w-[85%] ${m.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"}`}>
-                            <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-white/5 border border-white/10 mt-1">
-                                {m.role === "bot" ? <Bot size={16} className="text-[#00e5ff]" /> : <User size={16} className="text-[#cbd5f5]" />}
+                        <div key={i} className={`flex gap-3 md:gap-4 max-w-[95%] md:max-w-[85%] ${m.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"}`}>
+                            <div className="flex-shrink-0 w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center bg-white/5 border border-white/10 mt-1">
+                                {m.role === "bot" ? <Bot size={14} className="text-[#00e5ff]" /> : <User size={14} className="text-[#cbd5f5]" />}
                             </div>
                             <div className={`p-4 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
                                 m.role === "bot" 
@@ -112,8 +112,8 @@ export default function AiAssistantPage() {
                         <input
                             autoFocus
                             type="text"
-                            placeholder="Ask MISHA about coaching, pricing, or leadership advice..."
-                            className="w-full bg-[#020617] border border-white/10 rounded-xl py-4 pl-6 pr-14 text-sm text-white focus:outline-none focus:border-[#00e5ff]/50 focus:bg-white/[0.02] transition-colors"
+                            placeholder="Ask MISHA anything..."
+                            className="w-full bg-[#020617] border border-white/10 rounded-xl py-3.5 md:py-4 pl-4 md:pl-6 pr-14 text-sm text-white focus:outline-none focus:border-[#00e5ff]/50 focus:bg-white/[0.02] transition-colors"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             disabled={isTyping}

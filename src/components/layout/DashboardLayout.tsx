@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/providers/AuthProvider";
 import Sidebar from "@/components/dashboard/Sidebar";
@@ -11,6 +11,7 @@ import { isProfileComplete } from "@/utils/profileValidation";
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, userData, loading } = useAuth();
   const router = useRouter();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -35,12 +36,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen flex bg-[#020617] text-white">
       {/* PROFESSIONAL SIDEBAR */}
-      <Sidebar />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* DASHBOARD CONTENT AREA */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* TOP DASHBOARD HEADER */}
-        <StudentHeader />
+        <StudentHeader onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 
         {/* DYNAMIC PAGE CONTENT */}
         <main className="flex-1 overflow-y-auto bg-[#04091a] relative custom-scrollbar">
@@ -48,7 +49,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#00e5ff10] blur-[150px] rounded-full pointer-events-none"></div>
           <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#6366f108] blur-[150px] rounded-full pointer-events-none"></div>
 
-          <div className="p-8 relative z-10">
+          <div className="p-4 md:p-8 relative z-10">
             {children}
           </div>
         </main>
