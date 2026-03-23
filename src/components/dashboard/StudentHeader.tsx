@@ -29,9 +29,6 @@ export default function StudentHeader({ onToggleSidebar }: StudentHeaderProps) {
             >
                 <Menu size={24} />
             </button>
-            <Link href="/" className="p-2 mr-4 text-[#94a3b8] hover:text-[#00e5ff] transition-colors" title="Go to Website Home">
-                <Home size={22} strokeWidth={2.5} />
-            </Link>
 
             {/* Search Bar */}
             <div className="flex-1 max-w-md hidden md:block">
