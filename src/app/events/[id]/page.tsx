@@ -142,6 +142,14 @@ export default function EventDetailsPage() {
         setShowSuccessOverlay(true);
         queryClient.invalidateQueries({ queryKey: ["event", id] });
       } else if (data.type === "paid") {
+        // --- RAZORPAY TEST LOGGING ---
+        console.log("--- [TEST] Razorpay Order Details ---");
+        console.log("Order ID:", data.orderId);
+        console.log("Key ID:", data.key);
+        console.log("Amount (paise):", data.amount);
+        console.log("Currency: INR");
+        console.log("-------------------------------------");
+
         if (!data.key) throw new Error("Razorpay Key ID is missing. Please check environment variables.");
         
         if (typeof (window as any).Razorpay === 'undefined') {
@@ -156,6 +164,12 @@ export default function EventDetailsPage() {
           description: `Registration for ${event.title}`,
           order_id: data.orderId,
           handler: async (response: any) => {
+            console.log("--- [TEST] Razorpay Payment Success ---");
+            console.log("Payment ID:", response.razorpay_payment_id);
+            console.log("Order ID:", response.razorpay_order_id);
+            console.log("Signature:", response.razorpay_signature);
+            console.log("---------------------------------------");
+            
             const verifyRes = await fetch("/api/checkout/verify", {
               method: "POST",
               headers: {
@@ -188,6 +202,15 @@ export default function EventDetailsPage() {
           theme: { color: "#00e5ff" }
         };
         const rzp = new (window as any).Razorpay(options);
+        rzp.on('payment.failed', function (response: any) {
+          console.error("--- [TEST] Razorpay Payment Failed ---");
+          console.error("Error Code:", response.error.code);
+          console.error("Error Description:", response.error.description);
+          console.error("Error Source:", response.error.source);
+          console.error("Error Step:", response.error.step);
+          console.error("Error Reason:", response.error.reason);
+          console.error("---------------------------------------");
+        });
         rzp.open();
       }
     } catch (e: any) {
@@ -422,14 +445,32 @@ export default function EventDetailsPage() {
                     </div>
                   </div>
 
-                  <Button
-                    fullWidth
-                    disabled={registering || isRegistered || isFreeSuccess}
-                    onClick={handleRegisterInitiation}
-                    className={(isRegistered || isFreeSuccess) ? "bg-emerald-500 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] h-14 font-black uppercase tracking-widest" : "h-14 font-black uppercase tracking-widest shadow-[0_10px_25px_#00e5ff30]"}
-                  >
-                    {registering ? "Processing..." : (isRegistered || isFreeSuccess) ? "Seat Confirmed" : isSWI ? "Secure Your Seat" : "Complete Registration"}
-                  </Button>
+                  <div className="mb-4">
+                    <Button
+                      fullWidth
+                      disabled={registering || isRegistered || isFreeSuccess}
+                      onClick={handleRegisterInitiation}
+                      className={(isRegistered || isFreeSuccess) ? "bg-emerald-500 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] h-14 font-black uppercase tracking-widest" : "h-14 font-black uppercase tracking-widest shadow-[0_10px_25px_#00e5ff30]"}
+                    >
+                      {registering ? "Processing..." : (isRegistered || isFreeSuccess) ? "Seat Confirmed" : isSWI ? "Secure Your Seat" : "Complete Registration"}
+                    </Button>
+                  </div>
+
+                  {isSWI && !isRegistered && !isFreeSuccess && (
+                    <div className="flex items-center justify-center gap-2 mb-6">
+                      <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-red-400">
+                        {(() => {
+                          const enrollmentCount = event.enrollmentCount || 0;
+                          const freeSeatsLeft = Math.max(0, 10 - enrollmentCount);
+                          if (freeSeatsLeft > 0) {
+                            return `${freeSeatsLeft} FREE SEATS REMAINING`;
+                          }
+                          return "FREE SEATS FULL • PAID REGISTRATION ONLY";
+                        })()}
+                      </p>
+                    </div>
+                  )}
 
                   {!user && (
                     <p className="text-[9px] text-center text-[#475569] mt-6 font-black uppercase tracking-[0.2em]">Login required to access link</p>

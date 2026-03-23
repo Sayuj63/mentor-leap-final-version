@@ -65,6 +65,11 @@ export async function GET(req: NextRequest) {
             }
         }
 
+        // Finalize enrollment count for the event
+        await db.collection("events").doc(bootcampId).update({
+            enrollmentCount: migratedCount
+        });
+
         if (batchSize > 0) {
             await batch.commit();
         }
