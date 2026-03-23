@@ -45,10 +45,16 @@ export async function GET(req: NextRequest) {
                 .get();
             eventsSnap.forEach((doc: any) => {
                 const eventData = doc.data();
-                const eventDate = eventData.date?._seconds
-                    ? new Date(eventData.date._seconds * 1000)
-                    : new Date(eventData.date);
-                if (eventDate > now) upcomingEventsCount++;
+                const rawDate = eventData.date;
+                const eventDate = rawDate?._seconds
+                    ? new Date(rawDate._seconds * 1000)
+                    : rawDate?.toDate
+                        ? rawDate.toDate()
+                        : rawDate
+                            ? new Date(rawDate)
+                            : null;
+                            
+                if (eventDate && eventDate > now) upcomingEventsCount++;
             });
         }
 

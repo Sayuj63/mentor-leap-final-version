@@ -76,9 +76,9 @@ export default function MyEventsPage() {
 
             // Sort by date ascending
             allEvents.sort((a, b) => {
-                if (!a.eventDate) return 1;
-                if (!b.eventDate) return -1;
-                return a.eventDate - b.eventDate;
+                const dateA = a.eventDate?.getTime() || 0;
+                const dateB = b.eventDate?.getTime() || 0;
+                return dateA - dateB;
             });
 
             setEvents(allEvents);
