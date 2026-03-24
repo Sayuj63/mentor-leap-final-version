@@ -24,7 +24,7 @@ export default function HeroSection() {
         className="w-full px-5 py-[140px] md:px-10"
     >
         <div
-            className="mx-auto flex items-center gap-20 flex-wrap max-w-[1300px]"
+            className="mx-auto flex flex-col-reverse md:flex-row items-center gap-10 md:gap-20 max-w-[1300px]"
             suppressHydrationWarning
         >
             {/* LEFT CONTENT */}
