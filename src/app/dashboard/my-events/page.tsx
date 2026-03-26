@@ -218,7 +218,12 @@ export default function MyEventsPage() {
                                     <p className="text-sm text-[#94a3b8] mb-4 line-clamp-2">{event.description}</p>
 
                                     <div className="space-y-2 mb-5">
-                                        {event.displayDate ? (
+                                        {event.id === "speak-with-impact-bootcamp" ? (
+                                            <div className="flex items-center gap-2 text-xs text-[#cbd5f5]">
+                                                <Calendar size={12} className="text-[#00e5ff]" />
+                                                Saturday, 28th March & Sunday, 29th March
+                                            </div>
+                                        ) : event.displayDate ? (
                                             <div className="flex items-center gap-2 text-xs text-[#cbd5f5]">
                                                 <Calendar size={12} className="text-[#00e5ff]" />
                                                 {event.displayDate}
@@ -248,22 +253,26 @@ export default function MyEventsPage() {
                                         )}
                                     </div>
 
-                                    {event.zoomLink && isUpcoming ? (
-                                        <a
-                                            href={event.zoomLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <button className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#00e5ff] text-black text-sm font-bold transition-all hover:bg-white hover:scale-[1.02] shadow-[0_0_20px_rgba(0,229,255,0.2)]">
-                                                <ExternalLink size={14} />
-                                                Join Event
-                                            </button>
-                                        </a>
-                                    ) : isUpcoming ? (
-                                        <button className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#00e5ff]/10 border border-[#00e5ff]/20 text-[#00e5ff] text-sm font-bold transition-all cursor-default">
-                                            <Calendar size={14} />
-                                            {event.id === "speak-with-impact-bootcamp" ? "Starting on 28th and 29th March" : "Starts Soon"}
-                                        </button>
+                                    {isUpcoming ? (
+                                        <div className="space-y-3">
+                                            <a
+                                                href={event.id === "speak-with-impact-bootcamp" ? "https://us05web.zoom.us/j/85625593374?pwd=VqabWHfa5B5Uf4lkBXCsjtPLOLPw6C.1" : (event.zoomLink || "#")}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="block"
+                                            >
+                                                <button className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#00e5ff] text-black text-sm font-bold transition-all hover:bg-white hover:scale-[1.02] shadow-[0_0_20px_rgba(0,229,255,0.2)]">
+                                                    <ExternalLink size={14} />
+                                                    Join Event
+                                                </button>
+                                            </a>
+                                            {event.id === "speak-with-impact-bootcamp" && (
+                                                <div className="p-3 bg-white/5 rounded-xl border border-white/10 space-y-1">
+                                                    <p className="text-[10px] text-[#475569] font-black uppercase tracking-widest">Meeting ID: <span className="text-white ml-2">856 2559 3374</span></p>
+                                                    <p className="text-[10px] text-[#475569] font-black uppercase tracking-widest">Passcode: <span className="text-white ml-2">2VZXAJ</span></p>
+                                                </div>
+                                            )}
+                                        </div>
                                     ) : null}
                                 </div>
                             </Card>
