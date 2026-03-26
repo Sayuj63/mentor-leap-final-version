@@ -42,7 +42,7 @@ const SWI_EVENT_CONTENT = {
   category: "High-Intensity Live Bootcamp",
   description: "Transform how you communicate in high-stakes situations. A practice-driven 2-day live training designed for executive presence and instant impact.",
   price: 7999,
-  date: "Mar 27, 2026",
+  date: "Mar 28, 2026",
   duration: "2 Days (7 PM - 9 PM IST)",
   imageUrl: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=1000&q=80",
   audience: [
@@ -52,8 +52,8 @@ const SWI_EVENT_CONTENT = {
     { label: "Students", desc: "Build industry-ready confidence", icon: <Users size={20} /> }
   ],
   agenda: [
-    { day: "Day 1: Foundations & Confidence", time: "7:00 PM - 9:00 PM", topics: ["Overcoming Stage Fear", "First Impressions", "Executive Presence"] },
-    { day: "Day 2: Structure & Storytelling", time: "7:00 PM - 9:00 PM", topics: ["The Rule of Three", "Persuasive Narrative", "Handling Q&A Like a Pro"] }
+    { day: "Day 1: Saturday (Foundations)", time: "7:00 PM - 9:00 PM", topics: ["Overcoming Stage Fear", "First Impressions", "Executive Presence"] },
+    { day: "Day 2: Sunday (Mastery)", time: "7:00 PM - 9:00 PM", topics: ["The Rule of Three", "Persuasive Narrative", "Handling Q&A Like a Pro"] }
   ],
   modules: [
     { title: "Speak Confidently Under Pressure", desc: "Overcome fear, think clearly in real-time, and stay composed." },
@@ -432,7 +432,7 @@ export default function EventDetailsPage() {
                     <div className="flex items-center gap-3 text-sm text-[#cbd5f5]">
                       <span className="text-[#475569] font-black w-14 uppercase text-[9px] tracking-widest">Date</span>
                       <span className="font-bold text-white italic">
-                        {event.displayDate || (isSWI ? "27th & 28th March '26" : (event.date ? new Date(event.date).toLocaleDateString() : "TBA"))}
+                        {event.displayDate || (isSWI ? "28th & 29th March '26" : (event.date ? new Date(event.date).toLocaleDateString() : "TBA"))}
                       </span>
                     </div>
                     <div className="flex items-center gap-3 text-sm text-[#cbd5f5]">

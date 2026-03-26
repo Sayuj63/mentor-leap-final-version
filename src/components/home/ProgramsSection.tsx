@@ -186,7 +186,7 @@ export default function ProgramsSection() {
                 <p className="font-semibold mb-3 text-white italic" style={{ fontSize: "14px" }}>
                   📅 {(() => {
                     const rawDate = event.date;
-                    if (event.id === "speak-with-impact-bootcamp") return "Friday, 27th March & Saturday, 28th March";
+                    if (event.id === "speak-with-impact-bootcamp") return "Saturday, 28th March & Sunday, 29th March";
                     try {
                       let d: Date | null = null;
                       if (rawDate?._seconds) d = new Date(rawDate._seconds * 1000);

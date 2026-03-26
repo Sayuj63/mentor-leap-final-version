@@ -262,7 +262,7 @@ export default function MyEventsPage() {
                                     ) : isUpcoming ? (
                                         <button className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#00e5ff]/10 border border-[#00e5ff]/20 text-[#00e5ff] text-sm font-bold transition-all cursor-default">
                                             <Calendar size={14} />
-                                            {event.id === "speak-with-impact-bootcamp" ? "Starting on 27th and 28th March" : "Starts Soon"}
+                                            {event.id === "speak-with-impact-bootcamp" ? "Starting on 28th and 29th March" : "Starts Soon"}
                                         </button>
                                     ) : null}
                                 </div>

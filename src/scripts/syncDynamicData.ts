@@ -32,7 +32,7 @@ async function syncDynamicData() {
     title: "Speak with Impact Bootcamp",
     description: "Transform the way you speak. Influence the way you lead. A two-day immersive learning experience designed to help professionals develop confident communication and structured thinking for the modern workplace. This bootcamp is designed for one outcome: To help you speak with clarity, confidence, and authority—every single time.",
     price: 7999,
-    date: "Friday, 27th March & Saturday, 28th March 2026",
+    date: "Saturday, 28th March & Sunday, 29th March 2026",
     time: "7:00 PM – 9:00 PM IST on both days",
     speaker: "Mridu Bhandari",
     seats: 50,

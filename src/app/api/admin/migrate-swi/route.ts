@@ -24,8 +24,8 @@ export async function GET(req: NextRequest) {
 
         // Ensure Event Metadata is correct in production
         await db.collection("events").doc(bootcampId).set({
-            date: new Date("2026-03-27T19:00:00Z"), // Official start
-            displayDate: "Friday, 27th March & Saturday, 28th March",
+            date: new Date("2026-03-28T19:00:00Z"), // Official start
+            displayDate: "Saturday, 28th March & Sunday, 29th March",
             time: "7:00 PM - 9:00 PM IST",
             zoomLink: "https://zoom.us/j/mentorleap", // Placeholder
             banner: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=800&q=80",
