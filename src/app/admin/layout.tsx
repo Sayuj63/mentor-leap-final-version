@@ -9,6 +9,7 @@ import { Loader } from "@/components/ui/Loader";
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { isAdmin, loading } = useAuth();
   const router = useRouter();
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   useEffect(() => {
     if (!loading && !isAdmin) {
@@ -27,15 +28,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (!isAdmin) return null;
 
   return (
-    <div className="min-h-screen flex bg-[#020617] text-white">
-      <AdminSidebar />
+    <div className="min-h-screen flex bg-[#020617] text-white overflow-hidden">
+      <AdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        <AdminHeader />
-        <main className="flex-1 overflow-y-auto bg-[#04091a] p-10 custom-scrollbar relative">
+        <AdminHeader onMenuClick={() => setIsSidebarOpen(true)} />
+        <main className="flex-1 overflow-y-auto bg-[#04091a] p-4 md:p-10 custom-scrollbar relative">
           {/* Subtle admin-themed glow */}
           <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-[#00e5ff08] blur-[150px] rounded-full pointer-events-none"></div>
 
-          <div className="relative z-10">
+          <div className="relative z-10 w-full max-w-7xl mx-auto">
             {children}
           </div>
         </main>

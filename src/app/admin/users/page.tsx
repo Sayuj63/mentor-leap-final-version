@@ -58,34 +58,35 @@ export default function AdminUsers() {
   );
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="flex justify-between items-end mb-12">
+    <div className="w-full">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center"><Shield size={18} /></div>
-            <h1 className="text-3xl font-black tracking-tight">User Directory</h1>
+            <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center flex-shrink-0"><Shield size={18} /></div>
+            <h1 className="text-2xl md:text-3xl font-black tracking-tight">User Directory</h1>
           </div>
-          <p className="text-[#475569] font-bold text-xs uppercase tracking-[0.2em] ml-11">Total Records: {users.length}</p>
+          <p className="text-[#475569] font-bold text-[10px] md:text-xs uppercase tracking-[0.2em] ml-0 md:ml-11">Total Records: {users.length}</p>
         </div>
-        <div className="flex gap-4">
-          <div className="relative group">
+        <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+          <div className="relative group flex-1 md:flex-none">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#475569] group-focus-within:text-[#00e5ff] transition-colors" size={16} />
             <input
               placeholder="Search registry..."
-              className="bg-white/5 border border-white/10 rounded-xl pl-11 pr-6 py-3 text-sm text-white focus:outline-none focus:border-[#00e5ff]/50 focus:bg-white/[0.08] transition-all w-64"
+              className="bg-white/5 border border-white/10 rounded-xl pl-11 pr-6 py-3 text-sm text-white focus:outline-none focus:border-[#00e5ff]/50 focus:bg-white/[0.08] transition-all w-full md:w-64"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button variant="outline" className="h-[46px] px-6 border-white/10 hover:bg-white/5 text-xs font-bold uppercase tracking-widest transition-all">Export JSON</Button>
+          <Button variant="outline" className="h-[46px] px-6 border-white/10 hover:bg-white/5 text-xs font-bold uppercase tracking-widest transition-all w-full sm:w-auto">Export JSON</Button>
         </div>
       </div>
 
       {loading ? (
         <div className="flex justify-center p-20"><Loader /></div>
       ) : (
-        <Card className="!p-0 overflow-hidden bg-white/[0.02] border-white/5 shadow-2xl" hoverable={false}>
-          <table className="w-full text-left">
+        <Card className="!p-0 bg-white/[0.02] border-white/5 shadow-2xl relative overflow-hidden" hoverable={false}>
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left min-w-[800px]">
             <thead className="bg-[#0f172a] text-[#475569] text-[10px] uppercase font-black tracking-[0.2em] border-b border-white/5">
               <tr>
                 <th className="px-8 py-5">Identity</th>
@@ -134,6 +135,7 @@ export default function AdminUsers() {
               )}
             </tbody>
           </table>
+          </div>
         </Card>
       )}
 

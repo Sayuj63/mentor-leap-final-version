@@ -64,14 +64,14 @@ export default function AdminOverview() {
     : "₹0";
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full">
       <div className="flex items-center gap-4 mb-10">
-        <div className="w-12 h-12 bg-[#00e5ff]/10 rounded-2xl flex items-center justify-center text-[#00e5ff]">
+        <div className="w-10 h-10 md:w-12 md:h-12 bg-[#00e5ff]/10 rounded-xl md:rounded-2xl flex items-center justify-center text-[#00e5ff] flex-shrink-0">
           <Shield size={24} />
         </div>
         <div>
-          <h1 className="text-3xl font-bold">Admin Command Center</h1>
-          <p className="text-[#94a3b8] text-sm">Real-time platform operations & metrics.</p>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Admin Command Center</h1>
+          <p className="text-[#94a3b8] text-xs md:text-sm">Real-time platform operations & metrics.</p>
         </div>
       </div>
 

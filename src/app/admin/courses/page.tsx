@@ -286,16 +286,16 @@ export default function AdminCourses() {
   });
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="flex justify-between items-end mb-10">
+    <div className="w-full">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-10">
         <div>
-          <h1 className="text-3xl font-black mb-2">Curriculum Control</h1>
-          <p className="text-[#94a3b8] text-sm uppercase font-bold tracking-widest">{courses.length} Courses across {dbCategories.length} Professional Categories</p>
+          <h1 className="text-2xl md:text-3xl font-black mb-2">Curriculum Control</h1>
+          <p className="text-[#94a3b8] text-[10px] md:text-sm uppercase font-bold tracking-widest">{courses.length} Courses across {dbCategories.length} Professional Categories</p>
         </div>
-        <div className="flex gap-4">
-          <div className="flex gap-2 bg-white/5 p-1 rounded-xl border border-white/10">
+        <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+          <div className="flex flex-col sm:flex-row gap-2 bg-white/5 p-2 sm:p-1 rounded-xl border border-white/10 flex-1 lg:flex-none">
             <select
-              className="bg-transparent text-xs text-[#cbd5f5] px-3 py-2 outline-none"
+              className="bg-transparent text-xs text-[#cbd5f5] px-3 py-2 outline-none border-b sm:border-b-0 sm:border-r border-white/10"
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
             >
@@ -304,20 +304,21 @@ export default function AdminCourses() {
             </select>
             <input
               placeholder="Search database..."
-              className="bg-white/5 border border-white/5 rounded-lg px-4 py-2 text-xs text-white outline-none focus:border-[#00e5ff]/50 transition-all"
+              className="bg-transparent rounded-lg px-4 py-2 text-xs text-white outline-none focus:text-[#00e5ff] transition-all w-full sm:w-48"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button onClick={() => { resetForm(); setIsModalOpen(true); }}>+ Initialize Course</Button>
+          <Button onClick={() => { resetForm(); setIsModalOpen(true); }} className="w-full sm:w-auto">+ Initialize Course</Button>
         </div>
       </div>
 
       {loading ? (
         <div className="flex justify-center p-20"><Loader /></div>
       ) : (
-        <Card className="!p-0 overflow-hidden bg-white/[0.02] border-white/5 shadow-2xl" hoverable={false}>
-          <table className="w-full text-left">
+        <Card className="!p-0 bg-white/[0.02] border-white/5 shadow-2xl relative overflow-hidden" hoverable={false}>
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left min-w-[900px]">
             <thead className="bg-[#0f172a] text-[#475569] text-[10px] uppercase font-black tracking-[0.2em] border-b border-white/5">
               <tr>
                 <th className="px-8 py-5">Course Detail</th>
@@ -386,6 +387,7 @@ export default function AdminCourses() {
               )}
             </tbody>
           </table>
+          </div>
         </Card>
       )}
 

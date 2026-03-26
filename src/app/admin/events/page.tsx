@@ -136,21 +136,22 @@ export default function AdminEvents() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-10">
+    <div className="w-full">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10">
         <div>
-          <h1 className="text-3xl font-bold mb-2 tracking-tight">Live Events Manager</h1>
-          <p className="text-[#94a3b8] text-sm uppercase font-bold tracking-widest">Schedule webinars, masterclasses, and bootcamps</p>
+          <h1 className="text-2xl md:text-3xl font-bold mb-2 tracking-tight">Live Events Manager</h1>
+          <p className="text-[#94a3b8] text-[10px] md:text-sm uppercase font-bold tracking-widest">Schedule webinars, masterclasses, and bootcamps</p>
         </div>
-        <Button onClick={() => { resetForm(); setIsModalOpen(true); }}>+ Schedule New Event</Button>
+        <Button onClick={() => { resetForm(); setIsModalOpen(true); }} className="w-full sm:w-auto">+ Schedule New Event</Button>
       </div>
 
 
       {loading ? (
         <div className="flex justify-center p-20"><Loader /></div>
       ) : (
-        <Card className="!p-0 overflow-hidden bg-white/[0.02] border-white/5" hoverable={false}>
-          <table className="w-full text-left">
+        <Card className="!p-0 bg-white/[0.02] border-white/5 relative overflow-hidden" hoverable={false}>
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left min-w-[900px]">
             <thead className="bg-[#0f172a] text-[#475569] text-[10px] uppercase font-black tracking-[0.2em] border-b border-white/5">
               <tr>
                 <th className="px-8 py-5">Event Detail</th>
@@ -202,6 +203,7 @@ export default function AdminEvents() {
               )}
             </tbody>
           </table>
+          </div>
         </Card>
       )}
 

@@ -74,13 +74,13 @@ export default function AdminCoaching() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-10">
+    <div className="w-full">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10">
         <div>
-          <h1 className="text-3xl font-bold mb-2 tracking-tight">Executive Coaching Leads</h1>
-          <p className="text-[#94a3b8] text-sm uppercase font-bold tracking-widest">Manage discovery calls and 1:1 mentorship requests</p>
+          <h1 className="text-2xl md:text-3xl font-bold mb-2 tracking-tight">Executive Coaching Leads</h1>
+          <p className="text-[#94a3b8] text-[10px] md:text-sm uppercase font-bold tracking-widest">Manage discovery calls and 1:1 mentorship requests</p>
         </div>
-        <Button onClick={fetchRequests} variant="outline" disabled={loading}>Refresh List</Button>
+        <Button onClick={fetchRequests} variant="outline" disabled={loading} className="w-full sm:w-auto">Refresh List</Button>
       </div>
 
       {loading ? (

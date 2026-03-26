@@ -130,23 +130,24 @@ export default function AdminBlog() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="flex justify-between items-end mb-10">
+    <div className="w-full">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-10">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center"><FileText size={18} /></div>
-            <h1 className="text-3xl font-black tracking-tight">Editorial Hub</h1>
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0"><FileText size={18} /></div>
+            <h1 className="text-2xl md:text-3xl font-black tracking-tight">Editorial Hub</h1>
           </div>
-          <p className="text-[#475569] font-bold text-xs uppercase tracking-[0.2em] ml-11">Article & Newsletter Management</p>
+          <p className="text-[#475569] font-bold text-[10px] md:text-xs uppercase tracking-[0.2em] ml-0 md:ml-11">Article & Newsletter Management</p>
         </div>
-        <Button onClick={() => { resetForm(); setIsModalOpen(true); }}>+ Draft New Post</Button>
+        <Button onClick={() => { resetForm(); setIsModalOpen(true); }} className="w-full sm:w-auto">+ Draft New Post</Button>
       </div>
 
       {loading ? (
         <div className="flex justify-center p-20"><Loader /></div>
       ) : (
-        <Card className="!p-0 overflow-hidden bg-white/[0.02] border-white/5 shadow-2xl" hoverable={false}>
-          <table className="w-full text-left">
+        <Card className="!p-0 bg-white/[0.02] border-white/5 shadow-2xl relative overflow-hidden" hoverable={false}>
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left min-w-[800px]">
             <thead className="bg-[#0f172a] text-[#475569] text-[10px] uppercase font-black tracking-[0.2em] border-b border-white/5">
               <tr>
                 <th className="px-8 py-5">Article Content</th>
@@ -197,6 +198,7 @@ export default function AdminBlog() {
               )}
             </tbody>
           </table>
+          </div>
         </Card>
       )}
 

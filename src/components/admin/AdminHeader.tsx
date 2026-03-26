@@ -1,11 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { Bell, Search, Settings, User, LogOut, FileText, PlusCircle, ShieldAlert } from "lucide-react";
+import { Bell, Search, Settings, User, LogOut, FileText, PlusCircle, ShieldAlert, Menu, X } from "lucide-react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 
-export default function AdminHeader() {
+interface AdminHeaderProps {
+    onMenuClick?: () => void;
+}
+
+export default function AdminHeader({ onMenuClick }: AdminHeaderProps) {
     const { userData, user, logout } = useAuth();
     const router = useRouter();
     const [profileOpen, setProfileOpen] = useState(false);
@@ -17,9 +21,17 @@ export default function AdminHeader() {
     };
 
     return (
-        <header className="h-[72px] border-b border-white/5 bg-[#020617]/95 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-40 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+        <header className="h-[72px] border-b border-white/5 bg-[#020617]/95 backdrop-blur-md flex items-center justify-between px-4 md:px-8 sticky top-0 z-40 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+            {/* Mobile Menu Toggle */}
+            <button 
+                onClick={onMenuClick}
+                className="lg:hidden p-2 text-[#94a3b8] hover:text-white transition-colors mr-2"
+            >
+                <Menu size={24} />
+            </button>
+
             {/* Search Bar */}
-            <div className="flex-1 max-w-md">
+            <div className="flex-1 max-w-md hidden sm:block">
                 <div className="relative group">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748b] group-focus-within:text-purple-400 transition-colors" size={18} />
                     <input
