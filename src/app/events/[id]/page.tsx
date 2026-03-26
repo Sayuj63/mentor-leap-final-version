@@ -421,8 +421,8 @@ export default function EventDetailsPage() {
                 <div className="bg-[#0f172a]/80 backdrop-blur-xl rounded-3xl p-10 border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.6)] relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00e5ff] to-[#6366f1]"></div>
                   
-                  <div className="text-4xl font-black mb-1 tracking-tight">
-                    {event.price === 0 ? <span className="text-[#00e5ff]">FREE</span> : `₹${event.price}`}
+                  <div className="text-4xl font-black mb-1 tracking-tight text-white">
+                    ₹{event.price || 7999}
                   </div>
                   {isSWI && <p className="text-[10px] font-black text-[#00e5ff] uppercase tracking-widest mb-10">Limited Time Early Bird Pricing</p>}
 
@@ -458,15 +458,14 @@ export default function EventDetailsPage() {
 
                   {isSWI && !isRegistered && !isFreeSuccess && (
                     <div className="flex items-center justify-center gap-2 mb-6">
-                      <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-red-400">
+                      <div className="w-2 h-2 rounded-full bg-[#00e5ff] animate-pulse"></div>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-[#00e5ff]">
                         {(() => {
                           const enrollmentCount = event.enrollmentCount || 0;
-                          const freeSeatsLeft = Math.max(0, 10 - enrollmentCount);
-                          if (freeSeatsLeft > 0) {
-                            return `${freeSeatsLeft} FREE SEATS REMAINING`;
+                          if (enrollmentCount < 10) {
+                            return "EARLY BIRD SLOTS AVAILABLE";
                           }
-                          return "FREE SEATS FULL • PAID REGISTRATION ONLY";
+                          return "STANDARD REGISTRATION OPEN";
                         })()}
                       </p>
                     </div>
@@ -512,8 +511,8 @@ export default function EventDetailsPage() {
       <SuccessOverlay
         isOpen={showSuccessOverlay}
         onClose={() => setShowSuccessOverlay(false)}
-        title="Congratulations!"
-        message="Congratulations! You have just been one of the first 10 people to enroll in this event. You will be getting your seat for free!"
+        title="Registration Successful!"
+        message="Congratulations! Your seat for the 'Speak With Impact' Bootcamp has been successfully secured. Check your email for more details."
         ctaText="View My Events"
         onCtaClick={() => router.push("/dashboard/my-events")}
       />

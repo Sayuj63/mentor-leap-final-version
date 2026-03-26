@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Phone, Building2, Linkedin, CheckCircle2 } from "lucide-react";
+import { X, Phone, Building2, Linkedin, CheckCircle2, Tag } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 interface PaymentDetailsModalProps {
@@ -18,6 +18,7 @@ export interface UserDetails {
   phone: string;
   company: string;
   linkedin?: string;
+  couponCode?: string;
 }
 
 export default function PaymentDetailsModal({ 
@@ -32,7 +33,8 @@ export default function PaymentDetailsModal({
     email: initialEmail || "",
     phone: "",
     company: "",
-    linkedin: ""
+    linkedin: "",
+    couponCode: ""
   });
 
   const [errors, setErrors] = useState<Partial<UserDetails>>({});
@@ -148,18 +150,33 @@ export default function PaymentDetailsModal({
                   </div>
                 </div>
 
-                {/* LinkedIn */}
-                <div>
-                  <label className="text-[10px] font-black text-[#475569] uppercase tracking-widest ml-1 mb-1.5 block">LinkedIn Profile (Optional)</label>
-                  <div className="relative group">
-                    <Linkedin size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#475569] group-focus-within:text-[#00e5ff] transition-colors" />
-                    <input
-                      type="url"
-                      placeholder="https://linkedin.com/in/..."
-                      value={formData.linkedin}
-                      onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
-                      className="w-full bg-white/[0.03] border border-white/10 rounded-2xl p-4 pl-10 text-sm text-white focus:border-[#00e5ff]/50 outline-none transition-all"
-                    />
+                {/* LinkedIn & Coupon Code */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-[10px] font-black text-[#475569] uppercase tracking-widest ml-1 mb-1.5 block">LinkedIn (Optional)</label>
+                    <div className="relative group">
+                      <Linkedin size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#475569] group-focus-within:text-[#00e5ff] transition-colors" />
+                      <input
+                        type="url"
+                        placeholder="https://linkedin.com/in/..."
+                        value={formData.linkedin}
+                        onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
+                        className="w-full bg-white/[0.03] border border-white/10 rounded-2xl p-4 pl-10 text-sm text-white focus:border-[#00e5ff]/50 outline-none transition-all"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-black text-[#00e5ff] uppercase tracking-widest ml-1 mb-1.5 block">Early Bird Coupon</label>
+                    <div className="relative group">
+                      <Tag size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#475569] group-focus-within:text-[#00e5ff] transition-colors" />
+                      <input
+                        type="text"
+                        placeholder="CODE"
+                        value={formData.couponCode}
+                        onChange={(e) => setFormData({ ...formData, couponCode: e.target.value.toUpperCase() })}
+                        className="w-full bg-[#00e5ff]/5 border border-[#00e5ff]/20 rounded-2xl p-4 pl-10 text-sm text-white focus:border-[#00e5ff]/50 outline-none transition-all placeholder:text-[#00e5ff]/20 uppercase font-black"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
