@@ -56,7 +56,8 @@ export async function POST(req: NextRequest) {
             paymentId: razorpay_payment_id,
             paymentStatus: "success",
             paymentGateway: "razorpay",
-            userDetails: userDetails, // Save details in transaction
+            amount: (order.amount as number) / 100, // Save amount in INR
+            userDetails: userDetails || {}, // Save details in transaction
             createdAt: admin.firestore.FieldValue.serverTimestamp()
         });
 

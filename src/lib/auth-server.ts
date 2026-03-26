@@ -57,3 +57,8 @@ export async function verifyUser(req: NextRequest, targetUid?: string) {
 
     return decodedToken;
 }
+export async function isAdmin(email: string) {
+    if (!email) return false;
+    const superAdmins = ADMIN_CONFIG.superAdminEmails || [];
+    return superAdmins.includes(email.toLowerCase());
+}

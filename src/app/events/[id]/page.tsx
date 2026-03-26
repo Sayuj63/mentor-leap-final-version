@@ -462,7 +462,7 @@ export default function EventDetailsPage() {
                       <p className="text-[10px] font-black uppercase tracking-widest text-[#00e5ff]">
                         {(() => {
                           const enrollmentCount = event.enrollmentCount || 0;
-                          if (enrollmentCount < 10) {
+                          if (enrollmentCount < 20) {
                             return "EARLY BIRD SLOTS AVAILABLE";
                           }
                           return "STANDARD REGISTRATION OPEN";

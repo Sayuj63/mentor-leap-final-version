@@ -287,6 +287,14 @@ export const AdminAPI = {
         return res.json();
     },
 
+    // REGISTRATIONS
+    async getRegistrations() {
+        const headers = await getHeaders();
+        const res = await fetch("/api/admin/registrations", { headers });
+        if (!res.ok) throw new Error("Failed to fetch registrations");
+        return res.json();
+    },
+
     getHeaders,
 };
 

@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
         const submittedCoupon = couponCode || userDetails?.couponCode;
 
         if (itemId === "speak-with-impact-bootcamp") {
-            if (submittedCoupon === "EARLYBIRD" && enrollCount < 10) {
+            if (submittedCoupon === "EARLYBIRD" && enrollCount < 20) {
                 price = 3999;
             } else {
                 price = 7999;
@@ -65,6 +65,19 @@ export async function POST(req: NextRequest) {
             // Increment enrollment count for the item
             batch.update(itemRef, {
                 enrollmentCount: admin.firestore.FieldValue.increment(1)
+            });
+
+            // Create a "FREE" transaction record for admin tracking
+            const txRef = db.collection("transactions").doc();
+            batch.set(txRef, {
+                userId: decodedToken.uid,
+                itemId,
+                itemType,
+                paymentStatus: "success",
+                paymentGateway: "free",
+                amount: 0,
+                userDetails: userDetails || {},
+                createdAt: admin.firestore.FieldValue.serverTimestamp()
             });
 
             await batch.commit();
