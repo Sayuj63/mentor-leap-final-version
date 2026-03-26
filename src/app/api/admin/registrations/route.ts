@@ -14,13 +14,41 @@ export async function GET(req: NextRequest) {
             .limit(100)
             .get();
 
-        const registrations = snapshot.docs.map((doc: any) => ({
+        const transactions = snapshot.docs.map((doc: any) => ({
             id: doc.id,
             ...doc.data(),
             createdAt: doc.data().createdAt?.toDate()?.toISOString()
         }));
 
-        return NextResponse.json(registrations);
+        // Enrich with user data if missing
+        const enrichedRegistrations = await Promise.all(transactions.map(async (reg: any) => {
+            if (reg.userDetails && reg.userDetails.fullName && reg.userDetails.email) {
+                return reg;
+            }
+
+            // If transaction doesn't have details, check the users collection
+            try {
+                const userDoc = await db.collection("users").doc(reg.userId).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data()!;
+                    const profile = userData.profileDetails || {};
+                    return {
+                        ...reg,
+                        userDetails: {
+                            fullName: profile.fullName || userData.displayName || "Unknown User",
+                            email: profile.email || userData.email || "No Email",
+                            phone: profile.phone || "No Phone",
+                            ...profile
+                        }
+                    };
+                }
+            } catch (err) {
+                console.error("Enrichment error:", err);
+            }
+            return reg;
+        }));
+
+        return NextResponse.json(enrichedRegistrations);
 
     } catch (error: any) {
         console.error("Fetch Registrations Error:", error);
