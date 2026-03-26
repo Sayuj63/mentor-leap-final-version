@@ -130,32 +130,52 @@ export default function AdminOverview() {
       {/* Secondary Section */}
       <div className="grid lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2 !p-0 overflow-hidden min-h-[400px]">
-          <div className="p-6 border-b border-white/5 flex justify-between items-center">
-            <h3 className="font-bold">System Audit Logs</h3>
-            <a href="/admin/analytics" className="text-[10px] font-bold uppercase text-[#00e5ff] tracking-widest hover:underline">View Analytics</a>
+          <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/[0.01]">
+            <h3 className="font-bold flex items-center gap-2">
+              <TrendingUp size={16} className="text-[#00e5ff]" />
+              Recent Event Activity
+            </h3>
+            <a href="/admin/registrations" className="text-[10px] font-black uppercase text-[#00e5ff] tracking-widest hover:underline">View All</a>
           </div>
-          <div className="p-10 flex flex-col items-center justify-center text-center text-[#475569]">
-            <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
-              <Shield size={32} />
-            </div>
-            <p className="text-sm font-medium">Platform Activity is Normal.</p>
-            <p className="text-[10px] uppercase font-bold tracking-widest mt-2">All backend services operational</p>
-
-            {/* Real-time stats summary */}
-            <div className="grid grid-cols-3 gap-4 mt-8 w-full max-w-sm">
-              <div className="p-3 rounded-xl bg-white/5 border border-white/5">
-                <div className="text-lg font-black text-white">{stats?.resources || 0}</div>
-                <div className="text-[9px] text-[#475569] uppercase tracking-widest font-bold mt-0.5">Resources</div>
+          
+          <div className="overflow-x-auto">
+            {!stats?.recentRegistrations || stats.recentRegistrations.length === 0 ? (
+              <div className="p-20 flex flex-col items-center justify-center text-center text-[#475569]">
+                <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
+                  <Shield size={32} />
+                </div>
+                <p className="text-sm font-medium">Platform Activity is Normal.</p>
+                <p className="text-[10px] uppercase font-bold tracking-widest mt-2">No recent registrations found</p>
               </div>
-              <div className="p-3 rounded-xl bg-white/5 border border-white/5">
-                <div className="text-lg font-black text-white">{stats?.events || 0}</div>
-                <div className="text-[9px] text-[#475569] uppercase tracking-widest font-bold mt-0.5">Events</div>
-              </div>
-              <div className="p-3 rounded-xl bg-white/5 border border-white/5">
-                <div className="text-lg font-black text-white">{stats?.pendingRegistrations || 0}</div>
-                <div className="text-[9px] text-[#475569] uppercase tracking-widest font-bold mt-0.5">Registered</div>
-              </div>
-            </div>
+            ) : (
+              <table className="w-full text-left min-w-[600px]">
+                <thead className="bg-[#0f172a] text-[#475569] text-[9px] uppercase font-black tracking-widest border-b border-white/5">
+                  <tr>
+                    <th className="px-6 py-4">Registrant</th>
+                    <th className="px-6 py-4">Event</th>
+                    <th className="px-6 py-4">Amount</th>
+                    <th className="px-6 py-4">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {stats.recentRegistrations.slice(0, 5).map((reg: any) => (
+                    <tr key={reg.id} className="hover:bg-white/[0.02] transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="font-bold text-white text-sm">{reg.userDetails?.fullName || "Guest"}</div>
+                        <div className="text-[10px] text-[#475569]">{reg.userDetails?.email || "No email"}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-xs font-medium text-[#cbd5f5] capitalize">{reg.itemId?.split('-').join(' ')}</div>
+                      </td>
+                      <td className="px-6 py-4 font-bold text-white text-sm">₹{reg.amount || 0}</td>
+                      <td className="px-6 py-4">
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[9px] font-black uppercase">Success</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </Card>
 
