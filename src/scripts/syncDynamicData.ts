@@ -49,8 +49,10 @@ async function syncDynamicData() {
     ],
     offer: "10 participants will receive FREE access to the Bootcamp. The next 50 participants will receive 50 percent discount on the Bootcamp fee.",
     category: "Communication",
-    thumbnail: "/events/speak-with-impact.png",
-    banner: "/events/speak-with-impact.png",
+    imageUrl: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=1000&q=80",
+    zoomLink: "https://us05web.zoom.us/j/85625593374?pwd=VqabWHfa5B5Uf4lkBXCsjtPLOLPw6C.1",
+    meetingId: "856 2559 3374",
+    passcode: "2VZXAJ",
     updatedAt: new Date()
   }, { merge: true });
 

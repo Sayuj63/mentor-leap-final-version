@@ -75,7 +75,10 @@ const SWI_EVENT_CONTENT = {
     { title: "Resources Access", desc: "Continued learning materials.", icon: <BookOpen size={20} /> }
   ],
   mentorBio: "Award-winning TV Journalist, Chevening Scholar, and Communication Coach with 20+ years of experience. Featured on CNBC-TV18, Forbes India, and CNN-News18. Trained leaders across 13+ countries.",
-  outcome: ["Speak confidently in meetings", "Present ideas clearly", "Influence people through communication", "Handle pressure situations smoothly"]
+  outcome: ["Speak confidently in meetings", "Present ideas clearly", "Influence people through communication", "Handle pressure situations smoothly"],
+  zoomLink: "https://us05web.zoom.us/j/85625593374?pwd=VqabWHfa5B5Uf4lkBXCsjtPLOLPw6C.1",
+  meetingId: "856 2559 3374",
+  passcode: "2VZXAJ"
 };
 
 export default function EventDetailsPage() {
@@ -441,8 +444,18 @@ export default function EventDetailsPage() {
                     </div>
                     <div className="flex items-center gap-3 text-sm text-[#cbd5f5]">
                       <span className="text-[#475569] font-black w-14 uppercase text-[9px] tracking-widest">Link</span>
-                      <span className="font-bold text-[#00e5ff]">Zoom</span>
+                      <span className="font-bold text-white">
+                        {isRegistered || isFreeSuccess ? (
+                          <a href={event.zoomLink || "#"} target="_blank" className="text-[#00e5ff] hover:underline underline-offset-4 decoration-[#00e5ff]/30">Click to Join Zoom</a>
+                        ) : "Zoom (Locked)"}
+                      </span>
                     </div>
+                    {(isRegistered || isFreeSuccess) && event.meetingId && (
+                      <div className="pt-2 pl-17 space-y-1">
+                        <p className="text-[10px] text-[#475569] font-black uppercase tracking-widest">Meeting ID: <span className="text-white ml-2">{event.meetingId}</span></p>
+                        <p className="text-[10px] text-[#475569] font-black uppercase tracking-widest">Passcode: <span className="text-white ml-2">{event.passcode}</span></p>
+                      </div>
+                    )}
                   </div>
 
                   <div className="mb-4">

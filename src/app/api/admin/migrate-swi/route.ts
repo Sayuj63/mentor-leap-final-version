@@ -27,7 +27,9 @@ export async function GET(req: NextRequest) {
             date: new Date("2026-03-28T19:00:00Z"), // Official start
             displayDate: "Saturday, 28th March & Sunday, 29th March",
             time: "7:00 PM - 9:00 PM IST",
-            zoomLink: "https://zoom.us/j/mentorleap", // Placeholder
+            zoomLink: "https://us05web.zoom.us/j/85625593374?pwd=VqabWHfa5B5Uf4lkBXCsjtPLOLPw6C.1",
+            meetingId: "856 2559 3374",
+            passcode: "2VZXAJ",
             banner: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=800&q=80",
             thumbnail: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=800&q=80",
             imageUrl: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=1000&q=80",
