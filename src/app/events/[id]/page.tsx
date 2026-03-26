@@ -442,18 +442,12 @@ export default function EventDetailsPage() {
                       <span className="text-[#475569] font-black w-14 uppercase text-[9px] tracking-widest">Time</span>
                       <span className="font-bold text-white italic">{isSWI ? "7:00 - 9:00 PM IST" : "Check Agenda"}</span>
                     </div>
-                    <div className="flex items-center gap-3 text-sm text-[#cbd5f5]">
-                      <span className="text-[#475569] font-black w-14 uppercase text-[9px] tracking-widest">Link</span>
-                      <span className="font-bold text-white">
-                        {isRegistered || isFreeSuccess ? (
-                          <a href={event.zoomLink || "#"} target="_blank" className="text-[#00e5ff] hover:underline underline-offset-4 decoration-[#00e5ff]/30">Click to Join Zoom</a>
-                        ) : "Zoom (Locked)"}
-                      </span>
-                    </div>
-                    {(isRegistered || isFreeSuccess) && event.meetingId && (
-                      <div className="pt-2 pl-17 space-y-1">
-                        <p className="text-[10px] text-[#475569] font-black uppercase tracking-widest">Meeting ID: <span className="text-white ml-2">{event.meetingId}</span></p>
-                        <p className="text-[10px] text-[#475569] font-black uppercase tracking-widest">Passcode: <span className="text-white ml-2">{event.passcode}</span></p>
+                    {(isRegistered || isFreeSuccess) && event.zoomLink && (
+                      <div className="flex items-center gap-3 text-sm text-[#cbd5f5]">
+                        <span className="text-[#475569] font-black w-14 uppercase text-[9px] tracking-widest">Link</span>
+                        <span className="font-bold text-white">
+                            <a href={event.zoomLink} target="_blank" className="text-[#00e5ff] hover:underline underline-offset-4 decoration-[#00e5ff]/30">Click to Join Zoom</a>
+                        </span>
                       </div>
                     )}
                   </div>

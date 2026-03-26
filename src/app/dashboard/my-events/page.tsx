@@ -253,10 +253,10 @@ export default function MyEventsPage() {
                                         )}
                                     </div>
 
-                                    {isUpcoming ? (
+                                    {isUpcoming && event.zoomLink ? (
                                         <div className="space-y-3">
                                             <a
-                                                href={event.id === "speak-with-impact-bootcamp" ? "https://us05web.zoom.us/j/85625593374?pwd=VqabWHfa5B5Uf4lkBXCsjtPLOLPw6C.1" : (event.zoomLink || "#")}
+                                                href={event.zoomLink}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="block"
@@ -266,12 +266,6 @@ export default function MyEventsPage() {
                                                     Join Event
                                                 </button>
                                             </a>
-                                            {event.id === "speak-with-impact-bootcamp" && (
-                                                <div className="p-3 bg-white/5 rounded-xl border border-white/10 space-y-1">
-                                                    <p className="text-[10px] text-[#475569] font-black uppercase tracking-widest">Meeting ID: <span className="text-white ml-2">856 2559 3374</span></p>
-                                                    <p className="text-[10px] text-[#475569] font-black uppercase tracking-widest">Passcode: <span className="text-white ml-2">2VZXAJ</span></p>
-                                                </div>
-                                            )}
                                         </div>
                                     ) : null}
                                 </div>
