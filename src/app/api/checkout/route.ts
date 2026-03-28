@@ -32,11 +32,14 @@ export async function POST(req: NextRequest) {
 
 
         // 3. Handle Discounts / Early Bird Logic
-        const enrollCount = itemData.enrollmentCount || 0;
         const submittedCoupon = couponCode || userDetails?.couponCode;
 
         if (itemId === "speak-with-impact-bootcamp") {
-            price = 1999;
+            if (submittedCoupon === "FAMILYFREE" || submittedCoupon === "MENTORFREE") {
+                price = 0;
+            } else {
+                price = 1999;
+            }
         }
 
         // 4. Handle Free Enrollment
