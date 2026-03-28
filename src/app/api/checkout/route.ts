@@ -38,6 +38,8 @@ export async function POST(req: NextRequest) {
         if (itemId === "speak-with-impact-bootcamp") {
             if (submittedCoupon === "EARLYBIRD" && enrollCount < 20) {
                 price = 3999;
+            } else if (submittedCoupon === "SAVE75") {
+                price = 1999;
             } else {
                 price = 7999;
             }
