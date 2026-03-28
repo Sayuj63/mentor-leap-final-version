@@ -185,7 +185,12 @@ export default function PaymentDetailsModal({
                 <Button fullWidth size="lg" type="submit" className="h-14 tracking-widest">
                   Proceed to Payment <CheckCircle2 size={16} className="ml-2" />
                 </Button>
-                <p className="text-[9px] text-center text-[#475569] font-black uppercase tracking-widest mt-4">
+                <div className="mt-4 text-center">
+                  <p className="text-[10px] text-[#00e5ff] font-bold uppercase tracking-widest">
+                    Use Code <span className="text-white bg-white/10 px-1.5 py-0.5 rounded border border-[#00e5ff]/30">SAVE75</span> for 75% Off!
+                  </p>
+                </div>
+                <p className="text-[9px] text-center text-[#475569] font-black uppercase tracking-widest mt-3">
                   By clicking proceed, you agree to MentorLeap&apos;s Terms of Service.
                 </p>
               </div>
