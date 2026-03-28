@@ -41,7 +41,7 @@ const SWI_EVENT_CONTENT = {
   title: "Speak With Impact: Public Speaking Bootcamp",
   category: "High-Intensity Live Bootcamp",
   description: "Transform how you communicate in high-stakes situations. A practice-driven 2-day live training designed for executive presence and instant impact.",
-  price: 7999,
+  price: 1999,
   date: "Mar 28, 2026",
   duration: "2 Days (7 PM - 9 PM IST)",
   imageUrl: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=1000&q=80",
@@ -425,9 +425,9 @@ export default function EventDetailsPage() {
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00e5ff] to-[#6366f1]"></div>
                   
                   <div className="text-4xl font-black mb-1 tracking-tight text-white">
-                    ₹{event.price || 7999}
+                    ₹{event.price || 1999}
                   </div>
-                  {isSWI && <p className="text-[10px] font-black text-[#00e5ff] uppercase tracking-widest mb-10">Limited Time Early Bird Pricing</p>}
+                  {isSWI && <p className="text-[10px] font-black text-[#00e5ff] uppercase tracking-widest mb-10">75% OFF - Limited Time Offer</p>}
 
                   {!isSWI && <div className="h-10"></div>}
 
@@ -470,7 +470,7 @@ export default function EventDetailsPage() {
                         {(() => {
                           const enrollmentCount = event.enrollmentCount || 0;
                           if (enrollmentCount < 20) {
-                            return "EARLY BIRD SLOTS AVAILABLE";
+                            return "75% OFF SLOTS AVAILABLE";
                           }
                           return "STANDARD REGISTRATION OPEN";
                         })()}

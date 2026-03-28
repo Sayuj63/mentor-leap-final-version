@@ -150,33 +150,18 @@ export default function PaymentDetailsModal({
                   </div>
                 </div>
 
-                {/* LinkedIn & Coupon Code */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-[10px] font-black text-[#475569] uppercase tracking-widest ml-1 mb-1.5 block">LinkedIn (Optional)</label>
-                    <div className="relative group">
-                      <Linkedin size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#475569] group-focus-within:text-[#00e5ff] transition-colors" />
-                      <input
-                        type="url"
-                        placeholder="https://linkedin.com/in/..."
-                        value={formData.linkedin}
-                        onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
-                        className="w-full bg-white/[0.03] border border-white/10 rounded-2xl p-4 pl-10 text-sm text-white focus:border-[#00e5ff]/50 outline-none transition-all"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-black text-[#00e5ff] uppercase tracking-widest ml-1 mb-1.5 block">Early Bird Coupon</label>
-                    <div className="relative group">
-                      <Tag size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#475569] group-focus-within:text-[#00e5ff] transition-colors" />
-                      <input
-                        type="text"
-                        placeholder="CODE"
-                        value={formData.couponCode}
-                        onChange={(e) => setFormData({ ...formData, couponCode: e.target.value.toUpperCase() })}
-                        className="w-full bg-[#00e5ff]/5 border border-[#00e5ff]/20 rounded-2xl p-4 pl-10 text-sm text-white focus:border-[#00e5ff]/50 outline-none transition-all placeholder:text-[#00e5ff]/20 uppercase font-black"
-                      />
-                    </div>
+                {/* LinkedIn */}
+                <div>
+                  <label className="text-[10px] font-black text-[#475569] uppercase tracking-widest ml-1 mb-1.5 block">LinkedIn (Optional)</label>
+                  <div className="relative group">
+                    <Linkedin size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#475569] group-focus-within:text-[#00e5ff] transition-colors" />
+                    <input
+                      type="url"
+                      placeholder="https://linkedin.com/in/..."
+                      value={formData.linkedin}
+                      onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
+                      className="w-full bg-white/[0.03] border border-white/10 rounded-2xl p-4 pl-10 text-sm text-white focus:border-[#00e5ff]/50 outline-none transition-all"
+                    />
                   </div>
                 </div>
               </div>
@@ -185,12 +170,7 @@ export default function PaymentDetailsModal({
                 <Button fullWidth size="lg" type="submit" className="h-14 tracking-widest">
                   Proceed to Payment <CheckCircle2 size={16} className="ml-2" />
                 </Button>
-                <div className="mt-4 text-center">
-                  <p className="text-[10px] text-[#00e5ff] font-bold uppercase tracking-widest">
-                    Use Code <span className="text-white bg-white/10 px-1.5 py-0.5 rounded border border-[#00e5ff]/30">SAVE75</span> for 75% Off!
-                  </p>
-                </div>
-                <p className="text-[9px] text-center text-[#475569] font-black uppercase tracking-widest mt-3">
+                <p className="text-[9px] text-center text-[#475569] font-black uppercase tracking-widest mt-4">
                   By clicking proceed, you agree to MentorLeap&apos;s Terms of Service.
                 </p>
               </div>
