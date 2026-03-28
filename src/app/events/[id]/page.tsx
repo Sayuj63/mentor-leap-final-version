@@ -424,10 +424,17 @@ export default function EventDetailsPage() {
                 <div className="bg-[#0f172a]/80 backdrop-blur-xl rounded-3xl p-10 border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.6)] relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00e5ff] to-[#6366f1]"></div>
                   
-                  <div className="text-4xl font-black mb-1 tracking-tight text-white">
-                    ₹{event.price || 1999}
+                  <div className="flex items-end gap-3 mb-1">
+                    <span className="text-4xl font-black tracking-tight text-white">
+                      ₹{isSWI ? 1999 : (event.price || 1999)}
+                    </span>
+                    {isSWI && (
+                      <span className="text-2xl font-bold text-[#475569] line-through decoration-[#ef4444]/80 decoration-2 mb-0.5">
+                        ₹7999
+                      </span>
+                    )}
                   </div>
-                  {isSWI && <p className="text-[10px] font-black text-[#00e5ff] uppercase tracking-widest mb-10">75% OFF - Limited Time Offer</p>}
+                  {isSWI && <p className="text-[10px] font-black text-[#00e5ff] uppercase tracking-widest mb-10 mt-2">75% OFF - Limited Time Offer</p>}
 
                   {!isSWI && <div className="h-10"></div>}
 
