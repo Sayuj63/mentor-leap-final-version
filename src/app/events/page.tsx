@@ -13,7 +13,20 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchEvents().then(data => {
+    fetchEvents().then((data: any[]) => {
+      // --- Fallback for new Masterclass if not yet in DB ---
+      const hasMasterclass = data.some((ev: any) => ev.id === "interview-to-offer-letter");
+      if (!hasMasterclass) {
+        data.unshift({
+          id: "interview-to-offer-letter",
+          title: "Interview to Offer Letter",
+          price: 499,
+          speaker: "Mridu Bhandari",
+          seats: 100,
+          banner: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1000",
+          date: "2026-04-30" // Used for internal reference
+        });
+      }
       setEvents(data);
       setLoading(false);
     }).catch(() => setLoading(false));
