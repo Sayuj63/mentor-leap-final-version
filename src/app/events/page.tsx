@@ -23,7 +23,7 @@ export default function EventsPage() {
           price: 499,
           speaker: "Mridu Bhandari",
           seats: 100,
-          banner: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1000",
+          banner: "/events/interview-to-offer-banner.png",
           date: "2026-04-30" // Used for internal reference
         });
       }

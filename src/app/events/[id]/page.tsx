@@ -89,7 +89,7 @@ const MASTERCLASS_EVENT_CONTENT = {
   price: 499,
   date: "Apr 30, 2026",
   duration: "1 Day (7:30 PM - 9:30 PM IST)",
-  imageUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1000",
+  imageUrl: "/events/interview-to-offer-banner.png",
   audience: [
     { label: "Job Seekers", desc: "Freshers looking for their first break", icon: <User size={20} /> },
     { label: "Career Switchers", desc: "Professionals moving to new roles", icon: <Zap size={20} /> },
