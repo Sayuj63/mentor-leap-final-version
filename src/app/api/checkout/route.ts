@@ -12,12 +12,22 @@ export async function POST(req: NextRequest) {
         if (!itemId) return NextResponse.json({ error: "Item ID is required" }, { status: 400 });
 
         // 1. Fetch Item (Course or Event)
+        let itemData: any = null;
+        let price = 0;
         const itemRef = db.collection(itemType === "course" ? "courses" : "events").doc(itemId);
-        const itemDoc = await itemRef.get();
-        if (!itemDoc.exists) return NextResponse.json({ error: "Item not found" }, { status: 404 });
 
-        const itemData = itemDoc.data()!;
-        let price = itemData.price || 0;
+        if (itemId === "interview-to-offer-letter") {
+            itemData = {
+                title: "Interview to Offer Letter",
+                price: 499
+            };
+            price = 499;
+        } else {
+            const itemDoc = await itemRef.get();
+            if (!itemDoc.exists) return NextResponse.json({ error: "Item not found" }, { status: 404 });
+            itemData = itemDoc.data()!;
+            price = itemData.price || 0;
+        }
 
         // --- NEW: General Interest Notification ---
         // We notify admin as soon as the form is submitted (intent created)
@@ -69,10 +79,12 @@ export async function POST(req: NextRequest) {
                 });
             }
 
-            // Increment enrollment count for the item
-            batch.update(itemRef, {
-                enrollmentCount: admin.firestore.FieldValue.increment(1)
-            });
+            // Increment enrollment count ONLY if item exists in Firestore
+            if (itemId !== "interview-to-offer-letter") {
+                batch.update(itemRef, {
+                    enrollmentCount: admin.firestore.FieldValue.increment(1)
+                });
+            }
 
             // Create a "FREE" transaction record for admin tracking
             const txRef = db.collection("transactions").doc();
