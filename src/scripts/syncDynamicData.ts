@@ -22,7 +22,7 @@ async function syncDynamicData() {
   console.log("Syncing Events...");
   const eventSnapshot = await db.collection("events").get();
   for (const doc of eventSnapshot.docs) {
-    if (!["speak-with-impact-bootcamp"].includes(doc.id)) {
+    if (!["speak-with-impact-bootcamp", "interview-to-offer-letter"].includes(doc.id)) {
       await doc.ref.delete();
     }
   }
@@ -53,6 +53,23 @@ async function syncDynamicData() {
     zoomLink: "https://us05web.zoom.us/j/85625593374?pwd=VqabWHfa5B5Uf4lkBXCsjtPLOLPw6C.1",
     meetingId: "856 2559 3374",
     passcode: "2VZXAJ",
+    updatedAt: new Date()
+  }, { merge: true });
+
+  const masterclassId = "interview-to-offer-letter";
+  await db.collection("events").doc(masterclassId).set({
+    title: "Interview to Offer Letter",
+    category: "Communication Masterclass",
+    description: "The Ultimate Communication Masterclass. Learn how to answer the most commonly asked interview questions with clarity, structure, and confidence.",
+    price: 499,
+    date: "Thursday, 30th April 2026",
+    time: "7:30 PM IST",
+    speaker: "Mridu Bhandari",
+    seats: 100,
+    imageUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1000",
+    zoomLink: "https://us05web.zoom.us/j/123456789?pwd=example",
+    meetingId: "123 456 789",
+    passcode: "MASTER",
     updatedAt: new Date()
   }, { merge: true });
 

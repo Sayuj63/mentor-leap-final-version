@@ -183,7 +183,7 @@ export default function PaymentDetailsModal({
 
               <div className="pt-4 pb-2">
                 <Button fullWidth size="lg" type="submit" className="h-14 tracking-widest">
-                  Proceed to Payment <CheckCircle2 size={16} className="ml-2" />
+                  {["MASTERCLASSFREE", "FAMILYFREE", "MENTORFREE"].includes(formData.couponCode || "") ? "Claim Free Access" : "Proceed to Payment"} <CheckCircle2 size={16} className="ml-2" />
                 </Button>
                 <p className="text-[9px] text-center text-[#475569] font-black uppercase tracking-widest mt-4">
                   By clicking proceed, you agree to MentorLeap&apos;s Terms of Service.

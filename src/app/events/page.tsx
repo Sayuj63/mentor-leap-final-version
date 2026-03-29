@@ -47,6 +47,7 @@ export default function EventsPage() {
                       {(() => {
                         const rawDate = ev.date;
                         if (ev.id === "speak-with-impact-bootcamp") return "Mar 27 & 28, 2026";
+                        if (ev.id === "interview-to-offer-letter") return "Apr 30, 2026";
                         try {
                           let d: Date | null = null;
                           if (rawDate?._seconds) d = new Date(rawDate._seconds * 1000);

@@ -42,6 +42,14 @@ export async function POST(req: NextRequest) {
             }
         }
 
+        if (itemId === "interview-to-offer-letter") {
+            if (submittedCoupon === "MASTERCLASSFREE") {
+                price = 0;
+            } else {
+                price = 499;
+            }
+        }
+
         // 4. Handle Free Enrollment
         // 4. Handle Free Enrollment
         if (price === 0) {

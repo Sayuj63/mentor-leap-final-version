@@ -81,6 +81,48 @@ const SWI_EVENT_CONTENT = {
   passcode: "2VZXAJ"
 };
 
+const MASTERCLASS_EVENT_CONTENT = {
+  id: "interview-to-offer-letter",
+  title: "Interview to Offer Letter: The Ultimate Communication Masterclass",
+  category: "Communication Masterclass",
+  description: "Learn how to answer the most commonly asked interview questions with clarity, structure, and confidence. Discover how to present yourself powerfully and turn interviews into offer letters.",
+  price: 499,
+  date: "Apr 30, 2026",
+  duration: "1 Day (7:30 PM - 9:30 PM IST)",
+  imageUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1000",
+  audience: [
+    { label: "Job Seekers", desc: "Freshers looking for their first break", icon: <User size={20} /> },
+    { label: "Career Switchers", desc: "Professionals moving to new roles", icon: <Zap size={20} /> },
+    { label: "Tech Professionals", desc: "Master behavioral interviews", icon: <Target size={20} /> },
+    { label: "Students", desc: "Get ahead of the competition", icon: <Users size={20} /> }
+  ],
+  agenda: [
+    { day: "Thursday, 30th April", time: "7:30 PM - 9:30 PM", topics: ["Introduction Patterns", "Handling Why Us?", "Strength/Weakness Storytelling", "Salary Negotiation Basics"] }
+  ],
+  modules: [
+    { title: "Answering with Clarity", desc: "Learn to structure your thoughts using the STAR and Pyramid methods." },
+    { title: "Executive Presence", desc: "How to sound confident and authoritative without overdoing it." },
+    { title: "Mastering Body Language", desc: "Eye contact, posture, and virtual interview etiquette." },
+    { title: "Repeatable Frameworks", desc: "A system to prepare for any interview in under 60 minutes." }
+  ],
+  howItWorks: [
+    { title: "Live Deep-Dive", desc: "A 2-hour interactive session with Mridu Bhandari.", icon: <Video size={20} /> },
+    { title: "Power Drills", desc: "Participat in live Q&A and mocks.", icon: <Mic2 size={20} /> },
+    { title: "Resource Vault", desc: "Get access to cheat sheets and templates.", icon: <MessageSquare size={20} /> },
+    { title: "Lifetime Community", desc: "Join our networking groups.", icon: <Users size={20} /> }
+  ],
+  bonuses: [
+    { title: "Interview Prep Guide", desc: "50+ questions and answers.", icon: <FileText size={20} /> },
+    { title: "LinkedIn Optimization", desc: "Get noticed by recruiters.", icon: <Layout size={20} /> },
+    { title: "Email Templates", desc: "Follow-up like a pro.", icon: <Star size={20} /> }
+  ],
+  mentorBio: "Award-winning TV Journalist, Chevening Scholar, and Communication Coach with 20+ years of experience. Trained leaders across 13+ countries.",
+  outcome: ["Answering tough questions easily", "Sounding like an expert", "Higher selection ratios", "Confidence in any room"],
+  zoomLink: "https://us05web.zoom.us/j/123456789?pwd=example",
+  meetingId: "123 456 789",
+  passcode: "MASTER"
+};
+
 export default function EventDetailsPage() {
   const { id } = useParams();
   const { user, userData } = useAuth();
@@ -93,6 +135,7 @@ export default function EventDetailsPage() {
   const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
 
   const isSWI = id === "speak-with-impact-bootcamp";
+  const isMasterclass = id === "interview-to-offer-letter";
 
   const { data: event, isLoading } = useQuery({
     queryKey: ["event", id],
@@ -103,6 +146,7 @@ export default function EventDetailsPage() {
         return res.json();
       } catch (error) {
         if (isSWI) return SWI_EVENT_CONTENT;
+        if (isMasterclass) return MASTERCLASS_EVENT_CONTENT;
         throw error;
       }
     }
@@ -261,11 +305,11 @@ export default function EventDetailsPage() {
                 </div>
 
                 {/* WHO IS THIS FOR? */}
-                {isSWI && (
+                {(isSWI || isMasterclass) && (
                   <Reveal>
                     <h3 className="text-2xl font-black mb-8 underline decoration-[#00e5ff]/20 underline-offset-8">Who this is <GradientText>Targeted Toward</GradientText></h3>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                      {SWI_EVENT_CONTENT.audience.map((item, i) => (
+                      {(isSWI ? SWI_EVENT_CONTENT : MASTERCLASS_EVENT_CONTENT).audience.map((item: any, i: number) => (
                         <div key={i} className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-[#00e5ff]/50 transition-all group">
                           <div className="w-10 h-10 rounded-xl bg-[#00e5ff]/10 flex items-center justify-center text-[#00e5ff] mb-4 group-hover:scale-110 transition-transform">
                             {item.icon}
@@ -281,11 +325,11 @@ export default function EventDetailsPage() {
                 {/* AGENDA / MASTERY */}
                 <div className="p-10 rounded-3xl bg-white/[0.02] border border-white/5 space-y-8 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-[#00e5ff05] blur-3xl rounded-full -mr-32 -mt-32"></div>
-                  <h3 className="text-2xl font-bold text-[#00e5ff] relative z-10">{isSWI ? "Bootcamp Schedule & Outcomes" : "Masterclass Agenda"}</h3>
+                  <h3 className="text-2xl font-bold text-[#00e5ff] relative z-10">{(isSWI || isMasterclass) ? "Schedule & Outcomes" : "Masterclass Agenda"}</h3>
                   <div className="space-y-6 relative z-10">
-                    {isSWI ? (
+                    {(isSWI || isMasterclass) ? (
                       <div className="space-y-10">
-                        {SWI_EVENT_CONTENT.agenda.map((item, i) => (
+                        {(isSWI ? SWI_EVENT_CONTENT : MASTERCLASS_EVENT_CONTENT).agenda.map((item: any, i: number) => (
                           <div key={i} className="flex flex-col gap-4 pb-8 border-b border-white/5 last:border-0 last:pb-0">
                             <div className="flex items-center justify-between">
                                <div className="text-[#00e5ff] font-black text-xs uppercase tracking-widest">{item.day}</div>
@@ -295,7 +339,7 @@ export default function EventDetailsPage() {
                                </div>
                             </div>
                             <div className="grid sm:grid-cols-3 gap-4">
-                               {item.topics.map((topic, j) => (
+                               {item.topics.map((topic: string, j: number) => (
                                  <div key={j} className="bg-white/5 p-3 rounded-xl border border-white/5 text-xs text-[#cbd5f5] font-medium flex items-center gap-2">
                                    <div className="w-1.5 h-1.5 rounded-full bg-[#00e5ff]"></div>
                                    {topic}
@@ -308,7 +352,7 @@ export default function EventDetailsPage() {
                         <div className="pt-6 grid gap-6">
                            <h4 className="text-white font-bold text-sm uppercase tracking-widest border-l-2 border-[#00e5ff] pl-4">Core Mastery Modules:</h4>
                            <div className="grid md:grid-cols-2 gap-6">
-                              {SWI_EVENT_CONTENT.modules.map((m, i) => (
+                              {(isSWI ? SWI_EVENT_CONTENT : MASTERCLASS_EVENT_CONTENT).modules.map((m: any, i: number) => (
                                 <div key={i} className="flex gap-4 items-start">
                                   <div className="mt-1 flex-shrink-0"><CheckCircle2 size={16} className="text-[#00e5ff]" /></div>
                                   <div>
@@ -340,11 +384,11 @@ export default function EventDetailsPage() {
                 </div>
 
                 {/* HOW IT WORKS */}
-                {isSWI && (
+                {(isSWI || isMasterclass) && (
                   <Reveal>
-                    <h3 className="text-2xl font-black mb-8 tracking-tight">How the Bootcamp <GradientText>Works</GradientText></h3>
+                    <h3 className="text-2xl font-black mb-8 tracking-tight">How the Event <GradientText>Works</GradientText></h3>
                     <div className="grid sm:grid-cols-2 gap-6">
-                      {SWI_EVENT_CONTENT.howItWorks.map((item, i) => (
+                      {(isSWI ? SWI_EVENT_CONTENT : MASTERCLASS_EVENT_CONTENT).howItWorks.map((item: any, i: number) => (
                         <div key={i} className="p-8 rounded-2xl bg-white/[0.01] border border-white/5 flex gap-5">
                           <div className="w-12 h-12 rounded-xl bg-[#00e5ff]/10 flex items-center justify-center text-[#00e5ff] flex-shrink-0">
                             {item.icon}
@@ -360,7 +404,7 @@ export default function EventDetailsPage() {
                 )}
 
                 {/* BONUSES */}
-                {isSWI && (
+                {(isSWI || isMasterclass) && (
                   <Reveal>
                      <div className="relative group">
                         <div className="absolute -inset-1 bg-gradient-to-r from-[#00e5ff] to-[#6366f1] rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
@@ -370,7 +414,7 @@ export default function EventDetailsPage() {
                             <Gift className="text-[#00e5ff]" size={24} />
                           </h3>
                           <div className="grid sm:grid-cols-2 gap-8">
-                            {SWI_EVENT_CONTENT.bonuses.map((item, i) => (
+                            {(isSWI ? SWI_EVENT_CONTENT : MASTERCLASS_EVENT_CONTENT).bonuses.map((item: any, i: number) => (
                               <div key={i} className="flex gap-4 items-center">
                                 <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[#00e5ff]">
                                   {item.icon}
@@ -426,15 +470,15 @@ export default function EventDetailsPage() {
                   
                   <div className="flex items-end gap-3 mb-1">
                     <span className="text-4xl font-black tracking-tight text-white">
-                      ₹{isSWI ? 1999 : (event.price || 1999)}
+                      ₹{isSWI ? 1999 : isMasterclass ? 499 : (event.price || 499)}
                     </span>
-                    {isSWI && (
+                    {(isSWI || isMasterclass) && (
                       <span className="text-2xl font-bold text-[#475569] line-through decoration-[#ef4444]/80 decoration-2 mb-0.5">
-                        ₹7999
+                        ₹{isSWI ? 7999 : 1999}
                       </span>
                     )}
                   </div>
-                  {isSWI && <p className="text-[10px] font-black text-[#00e5ff] uppercase tracking-widest mb-10 mt-2">75% OFF - Limited Time Offer</p>}
+                  {(isSWI || isMasterclass) && <p className="text-[10px] font-black text-[#00e5ff] uppercase tracking-widest mb-10 mt-2">Special Launch Offer</p>}
 
                   {!isSWI && <div className="h-10"></div>}
 
@@ -442,12 +486,12 @@ export default function EventDetailsPage() {
                     <div className="flex items-center gap-3 text-sm text-[#cbd5f5]">
                       <span className="text-[#475569] font-black w-14 uppercase text-[9px] tracking-widest">Date</span>
                       <span className="font-bold text-white italic">
-                        {event.displayDate || (isSWI ? "28th & 29th March '26" : (event.date ? new Date(event.date).toLocaleDateString() : "TBA"))}
+                        {event.displayDate || (isSWI ? "28th & 29th March '26" : isMasterclass ? "30th April '26" : (event.date ? new Date(event.date).toLocaleDateString() : "TBA"))}
                       </span>
                     </div>
                     <div className="flex items-center gap-3 text-sm text-[#cbd5f5]">
                       <span className="text-[#475569] font-black w-14 uppercase text-[9px] tracking-widest">Time</span>
-                      <span className="font-bold text-white italic">{isSWI ? "7:00 - 9:00 PM IST" : "Check Agenda"}</span>
+                      <span className="font-bold text-white italic">{isSWI ? "7:00 - 9:00 PM IST" : isMasterclass ? "7:30 - 9:30 PM IST" : "Check Agenda"}</span>
                     </div>
                     {(isRegistered || isFreeSuccess) && event.zoomLink && (
                       <div className="flex items-center gap-3 text-sm text-[#cbd5f5]">
@@ -466,7 +510,7 @@ export default function EventDetailsPage() {
                       onClick={handleRegisterInitiation}
                       className={(isRegistered || isFreeSuccess) ? "bg-emerald-500 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)] h-14 font-black uppercase tracking-widest" : "h-14 font-black uppercase tracking-widest shadow-[0_10px_25px_#00e5ff30]"}
                     >
-                      {registering ? "Processing..." : (isRegistered || isFreeSuccess) ? "Seat Confirmed" : isSWI ? "Secure Your Seat" : "Complete Registration"}
+                      {registering ? "Processing..." : (isRegistered || isFreeSuccess) ? "Seat Confirmed" : (isSWI || isMasterclass) ? "Secure Your Seat" : "Complete Registration"}
                     </Button>
                   </div>
 
