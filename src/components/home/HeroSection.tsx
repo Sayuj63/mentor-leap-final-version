@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { BRAND } from "@/lib/constants";
 
@@ -24,12 +23,12 @@ export default function HeroSection() {
         className="w-full px-5 py-[140px] md:px-10"
     >
         <div
-            className="mx-auto flex flex-col-reverse md:flex-row items-center gap-10 md:gap-20 max-w-[1300px]"
+            className="mx-auto flex flex-col items-center max-w-[900px]"
             suppressHydrationWarning
         >
             {/* LEFT CONTENT */}
             <div
-                className={`flex flex-col flex-1 min-w-[300px] md:w-[45%] transition-all duration-700 ease-out ${
+                className={`flex flex-col text-center transition-all duration-700 ease-out ${
                     visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
                 }`}
             >
@@ -53,7 +52,7 @@ export default function HeroSection() {
 
                 {/* CTA BUTTONS */}
                 <div
-                    className={`flex flex-wrap gap-4 transition-all duration-600 delay-500 ease-out ${
+                    className={`flex flex-wrap gap-4 justify-center transition-all duration-600 delay-500 ease-out ${
                         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
                     }`}
                 >
@@ -78,22 +77,6 @@ export default function HeroSection() {
                 </div>
             </div>
 
-            {/* RIGHT VISUAL */}
-            <div
-                className={`relative flex justify-center items-center flex-1 min-w-[300px] md:w-[55%] transition-all duration-700 delay-300 ease-out ${
-                    visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"
-                }`}
-            >
-                <div className="hero-ai-glow" />
-                <Image
-                    src="https://marktaleevents.com/mentorleap/wp-content/uploads/2026/03/MriduBhandari_ProfilePic.jpg"
-                    alt={BRAND.founder}
-                    width={420}
-                    height={520}
-                    className="rounded-2xl relative z-10 shadow-[0_30px_80px_rgba(0,0,0,0.5)] object-cover hover:scale-[1.02] hover:-translate-y-1 transition-all duration-400"
-                    priority
-                />
-            </div>
         </div>
     </section>
   );
