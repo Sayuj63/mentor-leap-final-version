@@ -66,6 +66,21 @@ export async function fetchBlogs() {
   }
 }
 
+export async function fetchBlogById(id: string) {
+  try {
+    const { doc, getDoc } = await import("firebase/firestore");
+    const docRef = doc(db, "blogs", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() };
+    }
+    return null;
+  } catch (error) {
+    console.error("Firestore fetch error:", error);
+    return null;
+  }
+}
+
 export async function fetchReviews() {
   try {
     const q = query(collection(db, "reviews"));
