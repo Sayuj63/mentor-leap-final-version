@@ -35,8 +35,8 @@ export default function AdminSettings() {
                         <Input label="Platform Name" defaultValue="MentorLeap" />
                         <Textarea label="Global SEO Description" defaultValue="The ultimate mentorship and growth platform for future leaders." />
                         <div className="grid grid-cols-2 gap-4">
-                            <Input label="Support Email" defaultValue="support@mentorleap.com" />
-                            <Input label="WhatsApp API Contact" defaultValue="+91 9999999999" />
+                            <Input label="Support Email" defaultValue="hello@mentorleap.co" />
+                            <Input label="WhatsApp API Contact" defaultValue="+91 98923 22427" />
                         </div>
                     </Card>
                 </section>

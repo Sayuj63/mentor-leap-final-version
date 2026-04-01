@@ -28,18 +28,9 @@ export default function StudioPage() {
           </div>
         </Reveal>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {[1, 2, 3].map(i => (
-             <Reveal key={i} delay={i * 0.1}>
-               <Card className="!p-4">
-                 <div className="aspect-video bg-[#0a0f21] rounded-lg mb-4 flex items-center justify-center text-sm border border-white/5 relative group cursor-pointer overflow-hidden">
-                    <div className="w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-xl group-hover:bg-[#00e5ff] transition-all">▶</div>
-                 </div>
-                 <h4 className="text-lg font-bold mb-2">Mastering the Boardroom</h4>
-                 <p className="text-xs text-[#94a3b8]">12 Mins • Video Talk</p>
-               </Card>
-             </Reveal>
-          ))}
+        <div className="text-center py-16 bg-white/[0.02] rounded-3xl border border-white/5">
+          <p className="text-[#94a3b8] italic text-lg mb-2">New content coming soon.</p>
+          <p className="text-[#475569] text-sm">We are producing exclusive video talks and interviews. Stay tuned!</p>
         </div>
       </section>
     </PageWrapper>

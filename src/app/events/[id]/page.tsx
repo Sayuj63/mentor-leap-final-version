@@ -88,7 +88,7 @@ const MASTERCLASS_EVENT_CONTENT = {
   description: "Learn how to answer the most commonly asked interview questions with clarity, structure, and confidence. Discover how to present yourself powerfully and turn interviews into offer letters.",
   price: 499,
   date: "Apr 30, 2026",
-  duration: "1 Day (7:30 PM - 9:30 PM IST)",
+  duration: "1 Day (7:30 PM - 9:00 PM IST)",
   imageUrl: "/events/interview-to-offer-banner.png",
   audience: [
     { label: "Job Seekers", desc: "Freshers looking for their first break", icon: <User size={20} /> },
@@ -97,7 +97,7 @@ const MASTERCLASS_EVENT_CONTENT = {
     { label: "Students", desc: "Get ahead of the competition", icon: <Users size={20} /> }
   ],
   agenda: [
-    { day: "Thursday, 30th April", time: "7:30 PM - 9:30 PM", topics: ["Introduction Patterns", "Handling Why Us?", "Strength/Weakness Storytelling", "Salary Negotiation Basics"] }
+    { day: "Thursday, 30th April", time: "7:30 PM - 9:00 PM", topics: ["Introduction Patterns", "Handling Why Us?", "Strength/Weakness Storytelling", "Salary Negotiation Basics"] }
   ],
   modules: [
     { title: "Answering with Clarity", desc: "Learn to structure your thoughts using the STAR and Pyramid methods." },
@@ -491,7 +491,7 @@ export default function EventDetailsPage() {
                     </div>
                     <div className="flex items-center gap-3 text-sm text-[#cbd5f5]">
                       <span className="text-[#475569] font-black w-14 uppercase text-[9px] tracking-widest">Time</span>
-                      <span className="font-bold text-white italic">{isSWI ? "7:00 - 9:00 PM IST" : isMasterclass ? "7:30 - 9:30 PM IST" : "Check Agenda"}</span>
+                      <span className="font-bold text-white italic">{isSWI ? "7:00 - 9:00 PM IST" : isMasterclass ? "7:30 - 9:00 PM IST" : "Check Agenda"}</span>
                     </div>
                     {(isRegistered || isFreeSuccess) && event.zoomLink && (
                       <div className="flex items-center gap-3 text-sm text-[#cbd5f5]">

@@ -27,6 +27,19 @@ export default function ProgramsSection() {
 
   useEffect(() => {
     fetchEvents().then(data => {
+      // Ensure Interview to Offer Letter masterclass is always present
+      const hasMasterclass = data.some((ev: any) => ev.id === "interview-to-offer-letter");
+      if (!hasMasterclass) {
+        data.unshift({
+          id: "interview-to-offer-letter",
+          title: "Interview to Offer Letter: The Ultimate Communication Masterclass",
+          description: "Learn how to answer the most commonly asked interview questions with clarity, structure, and confidence. Turn interviews into offer letters.",
+          price: 499,
+          speaker: "Mridu Bhandari",
+          date: "2026-04-30",
+          banner: "/events/interview-to-offer-banner.png",
+        } as any);
+      }
       setEvents(data);
       setLoading(false);
     });
@@ -187,6 +200,7 @@ export default function ProgramsSection() {
                   📅 {(() => {
                     const rawDate = event.date;
                     if (event.id === "speak-with-impact-bootcamp") return "Saturday, 28th March & Sunday, 29th March";
+                    if (event.id === "interview-to-offer-letter") return "Thursday, 30th April 2026 • 7:30 - 9:00 PM IST";
                     try {
                       let d: Date | null = null;
                       if (rawDate?._seconds) d = new Date(rawDate._seconds * 1000);

@@ -174,9 +174,9 @@ export default function MyEventsPage() {
             ) : (
                 <div className="grid md:grid-cols-2 gap-6">
                     {filteredEvents.map((event) => {
-                        // Fail-safe for critical launch event
-                        const isUpcoming = (event.id === "speak-with-impact-bootcamp") 
-                            ? true 
+                        // Fail-safe for critical launch events
+                        const isUpcoming = (event.id === "speak-with-impact-bootcamp" || event.id === "interview-to-offer-letter")
+                            ? true
                             : !!(event.eventDate && event.eventDate >= now);
                         
                         return (
@@ -222,6 +222,11 @@ export default function MyEventsPage() {
                                             <div className="flex items-center gap-2 text-xs text-[#cbd5f5]">
                                                 <Calendar size={12} className="text-[#00e5ff]" />
                                                 Saturday, 28th March & Sunday, 29th March
+                                            </div>
+                                        ) : event.id === "interview-to-offer-letter" ? (
+                                            <div className="flex items-center gap-2 text-xs text-[#cbd5f5]">
+                                                <Calendar size={12} className="text-[#00e5ff]" />
+                                                Thursday, 30th April 2026 • 7:30 - 9:00 PM IST
                                             </div>
                                         ) : event.displayDate ? (
                                             <div className="flex items-center gap-2 text-xs text-[#cbd5f5]">

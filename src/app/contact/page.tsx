@@ -16,7 +16,11 @@ export default function ContactPage() {
           <div className="mt-10 space-y-6">
             <div className="flex gap-4">
                <div className="text-2xl">📧</div>
-               <div><h4 className="font-bold text-white">Email</h4><p className="text-[#94a3b8] text-sm">support@mentorleap.com</p></div>
+               <div><h4 className="font-bold text-white">Email</h4><p className="text-[#94a3b8] text-sm">hello@mentorleap.co</p></div>
+            </div>
+            <div className="flex gap-4">
+               <div className="text-2xl">📱</div>
+               <div><h4 className="font-bold text-white">WhatsApp</h4><p className="text-[#94a3b8] text-sm"><a href="https://wa.me/919892322427" target="_blank" rel="noopener noreferrer" className="hover:text-[#00e5ff] transition-colors">+91 98923 22427</a></p></div>
             </div>
             <div className="flex gap-4">
                <div className="text-2xl">📍</div>

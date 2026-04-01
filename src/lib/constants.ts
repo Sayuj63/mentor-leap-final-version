@@ -1,7 +1,7 @@
 export const BRAND = {
     name: "MentorLeap",
     founder: "Mridu Bhandari",
-    supportEmail: "support@mentorleap.com",
+    supportEmail: "hello@mentorleap.co",
     mainUrl: "https://mentorleap.com",
     logoUrl: "https://marktaleevents.com/mentorleap/wp-content/uploads/2026/03/Logo.svg",
 };

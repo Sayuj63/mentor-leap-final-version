@@ -4,26 +4,15 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const offerText =
-  "MentorLeap Launch – 15 March 2026  •  Free Personality Development Masterclass by Mridu Bhandari (Worth ₹2999)  •  Speak with Impact Bootcamp – 28–29 March 2026 (Worth ₹7999)  •  10 Lucky Participants Get Bootcamp FREE  •  Next 50 Participants Get 50 percent Discount";
+  "Interview to Offer Letter: The Ultimate Communication Masterclass – 30th April 2026  •  Speak with Impact Bootcamp – 28–29 March 2026  •  Learn from Award-Winning Journalist Mridu Bhandari";
 
 export default function OfferBanner() {
   const [mounted, setMounted] = useState(false);
   const [paused, setPaused] = useState(false);
-  const [attendees, setAttendees] = useState<string[]>([]);
 
   useEffect(() => {
     setMounted(true);
-    fetch("/api/events/speak-with-impact-bootcamp")
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.attendees) {
-          setAttendees(data.attendees);
-        }
-      })
-      .catch(err => console.error("Error fetching event data:", err));
   }, []);
-
-  const freeSeatsLeft = Math.max(0, 10 - attendees.length);
 
   return (
     <>
@@ -169,21 +158,21 @@ export default function OfferBanner() {
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className="flex items-center gap-12">
                     <div className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#6366f1] animate-pulse" />
+                      <span className="text-white/90 text-sm font-bold tracking-wide">
+                        Interview to Offer Letter – Communication Masterclass – 30th April 2026
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-[#00e5ff] animate-pulse" />
                       <span className="text-white/90 text-sm font-bold tracking-wide">
-                        MentorLeap Launch – 15 March 2026
+                        Speak with Impact Bootcamp – 28–29 March 2026
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-[#6366f1] animate-pulse" />
                       <span className="text-white/90 text-sm font-bold tracking-wide">
-                        Speak with Impact Bootcamp – 28–29 March 2026 (Worth ₹7999)
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#00e5ff] animate-pulse" />
-                      <span className="text-white/90 text-sm font-bold tracking-wide">
-                        10 Lucky Participants Get Bootcamp FREE
+                        Learn from Award-Winning Journalist Mridu Bhandari
                       </span>
                     </div>
                   </div>
@@ -192,27 +181,19 @@ export default function OfferBanner() {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 gap-y-12 ml-6 md:ml-8 relative py-4">
-            {freeSeatsLeft > 0 && (
-              <div className="absolute -top-3 md:-top-10 left-1/2 -translate-x-1/2 whitespace-nowrap z-50">
-                <span className="text-[#00e5ff] text-[10px] font-black tracking-widest animate-bounce flex items-center gap-1.5 bg-[#020617] md:bg-[#00e5ff]/10 px-3 py-1 rounded-full border border-[#00e5ff]/20 shadow-[0_0_15px_rgba(0,229,255,0.2)]">
-                  <span className="w-1 h-1 rounded-full bg-[#00e5ff] animate-pulse" />
-                  {freeSeatsLeft} FREE SEATS LEFT
-                </span>
-              </div>
-            )}
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 ml-6 md:ml-8 py-4">
             <div className="flex items-center gap-3">
               <Link
-                href="/events/speak-with-impact-bootcamp"
+                href="/events/interview-to-offer-letter"
                 className="px-4 py-1.5 bg-[#00e5ff] text-[#020617] text-[11px] md:text-xs font-bold rounded-full hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] transition-all no-underline whitespace-nowrap"
               >
                 Secure Your Seat
               </Link>
               <Link
-                href="/events/speak-with-impact-bootcamp"
+                href="/events"
                 className="px-4 py-1.5 bg-white/10 text-white text-[11px] md:text-xs font-bold rounded-full border border-white/20 hover:bg-white/20 transition-all no-underline whitespace-nowrap"
               >
-                View Details
+                All Events
               </Link>
             </div>
           </div>
