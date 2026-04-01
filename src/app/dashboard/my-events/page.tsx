@@ -52,11 +52,19 @@ export default function MyEventsPage() {
 
             for (let i = 0; i < registeredEventIds.length; i += batchSize) {
                 const batch = registeredEventIds.slice(i, i + batchSize);
-                const eventsSnap = await getDocs(
-                    query(collection(db, "events"), where("__name__", "in", batch))
+                
+                // Filter out hardcoded fallback events before querying Firestore
+                const firestoreBatch = batch.filter(id => 
+                    id !== "interview-to-offer-letter" && 
+                    id !== "speak-with-impact-bootcamp"
                 );
-                eventsSnap.forEach((docSnap) => {
-                    const data = docSnap.data();
+
+                if (firestoreBatch.length > 0) {
+                    const eventsSnap = await getDocs(
+                        query(collection(db, "events"), where("__name__", "in", firestoreBatch))
+                    );
+                    eventsSnap.forEach((docSnap) => {
+                        const data = docSnap.data();
                     // Normalize date
                     const rawDate = data.date;
                     let eventDate: Date | null = null;
@@ -79,6 +87,36 @@ export default function MyEventsPage() {
                         ...data,
                         eventDate: eventDate && !isNaN(eventDate.getTime()) ? eventDate : null,
                     });
+                    });
+                }
+            }
+
+            // --- Inject Hardcoded Launch Events if Registered ---
+            if (registeredEventIds.includes("speak-with-impact-bootcamp")) {
+                allEvents.push({
+                    id: "speak-with-impact-bootcamp",
+                    title: "Speak With Impact: Public Speaking Bootcamp",
+                    description: "Transform how you communicate in high-stakes situations. A practice-driven 2-day live training designed for executive presence and instant impact.",
+                    banner: "https://images.unsplash.com/photo-1475721027187-402ad2989a3b?w=1000&q=80",
+                    eventDate: new Date("2026-03-28T19:00:00+05:30"),
+                    displayDate: "Saturday, 28th March & Sunday, 29th March",
+                    zoomLink: "https://us05web.zoom.us/j/85625593374?pwd=VqabWHfa5B5Uf4lkBXCsjtPLOLPw6C.1",
+                    speaker: "Mridu Bhandari",
+                    type: "Bootcamp"
+                });
+            }
+
+            if (registeredEventIds.includes("interview-to-offer-letter")) {
+                allEvents.push({
+                    id: "interview-to-offer-letter",
+                    title: "Interview to Offer Letter: The Ultimate Communication Masterclass",
+                    description: "Learn how to answer the most commonly asked interview questions with clarity, structure, and confidence. Discover how to present yourself powerfully and turn interviews into offer letters.",
+                    banner: "/events/interview-to-offer-banner.png",
+                    eventDate: new Date("2026-04-30T19:30:00+05:30"),
+                    displayDate: "Thursday, 30th April 2026 • 7:30 - 9:00 PM IST",
+                    zoomLink: "https://us05web.zoom.us/j/123456789?pwd=example",
+                    speaker: "Mridu Bhandari",
+                    type: "Masterclass"
                 });
             }
 
