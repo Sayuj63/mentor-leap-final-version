@@ -57,7 +57,7 @@ export async function fetchCourseData() {
 
 export async function fetchBlogs() {
   try {
-    const q = query(collection(db, "blog_posts"));
+    const q = query(collection(db, "blogs"));
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {

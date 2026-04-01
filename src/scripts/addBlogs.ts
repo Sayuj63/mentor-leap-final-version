@@ -39,7 +39,7 @@ const BLOG_POSTS = [
 
 async function addBlogs() {
     console.log("--- Seeding Blog Posts ---");
-    const blogCollection = db.collection("blog_posts");
+    const blogCollection = db.collection("blogs");
     
     // Clear existing
     const snapshot = await blogCollection.get();
