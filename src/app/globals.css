@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
   --background: #020617;
@@ -78,4 +79,124 @@ body {
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(0,229,255,0.3);
+}
+
+/* Blog article content styles */
+.blog-content h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.blog-content h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.blog-content h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.blog-content h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.blog-content p {
+  color: #cbd5f5;
+  font-size: 1.1rem;
+  line-height: 1.85;
+  margin-bottom: 1.25rem;
+  font-weight: 400;
+}
+
+.blog-content strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.blog-content em {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.blog-content ul,
+.blog-content ol {
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  color: #cbd5f5;
+}
+
+.blog-content ul {
+  list-style-type: disc;
+}
+
+.blog-content ol {
+  list-style-type: decimal;
+}
+
+.blog-content li {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+.blog-content li::marker {
+  color: #00e5ff;
+}
+
+.blog-content blockquote {
+  border-left: 3px solid #00e5ff;
+  padding: 1rem 1.5rem;
+  margin: 2rem 0;
+  background: rgba(0, 229, 255, 0.03);
+  border-radius: 0 12px 12px 0;
+  color: #94a3b8;
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+.blog-content a {
+  color: #00e5ff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.blog-content a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.blog-content hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 2.5rem 0;
+}
+
+/* First paragraph after heading — no extra top margin */
+.blog-content h2 + p,
+.blog-content h3 + p {
+  margin-top: 0;
 }
