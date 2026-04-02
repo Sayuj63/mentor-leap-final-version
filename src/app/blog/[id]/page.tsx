@@ -32,6 +32,10 @@ function formatContent(content: string): string {
     // Detect short bold-only paragraphs and promote them to headings.
     let html = content;
 
+    // Remove "Tab N" markers left over from Google Docs tab export
+    html = html.replace(/<h[1-6][^>]*>\s*Tab\s+\d+\s*<\/h[1-6]>/gi, "");
+    html = html.replace(/<p[^>]*>\s*(?:<strong>)?\s*Tab\s+\d+\s*(?:<\/strong>)?\s*<\/p>/gi, "");
+
     // Convert paragraphs that are entirely bold and short (< 120 chars) into h2
     // Pattern: <p><strong>Some Heading Text</strong></p>
     html = html.replace(
