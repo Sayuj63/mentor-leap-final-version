@@ -23,11 +23,11 @@ export const BlogService = {
 
     async getBlogs() {
         const snapshot = await db.collection("blogs").orderBy("createdAt", "desc").get();
-        return snapshot.docs.map((doc: any) => doc.data() as Blog);
+        return snapshot.docs.map((doc: any) => ({ ...doc.data(), id: doc.id }) as Blog);
     },
 
     async getBlog(blogId: string) {
         const doc = await db.collection("blogs").doc(blogId).get();
-        return doc.exists ? (doc.data() as Blog) : null;
+        return doc.exists ? ({ ...doc.data(), id: doc.id } as Blog) : null;
     },
 };
