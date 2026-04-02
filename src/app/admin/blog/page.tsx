@@ -8,7 +8,7 @@ import { Input, Textarea } from "@/components/ui/Input";
 import { Toast } from "@/components/ui/Toast";
 import { AdminAPI } from "@/lib/admin-api";
 import { Loader } from "@/components/ui/Loader";
-import { Edit2, Trash2, FileText, Calendar, User } from "lucide-react";
+import { Edit2, Trash2, FileText, Calendar, User, Upload } from "lucide-react";
 
 export default function AdminBlog() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -29,6 +29,10 @@ export default function AdminBlog() {
     status: "published"
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
+  const [bulkFile, setBulkFile] = useState<File | null>(null);
+  const [isBulkUploading, setIsBulkUploading] = useState(false);
+  const [bulkResult, setBulkResult] = useState<any>(null);
 
   useEffect(() => {
     fetchPosts();
@@ -101,6 +105,23 @@ export default function AdminBlog() {
     }
   };
 
+  const handleBulkUpload = async () => {
+    if (!bulkFile) return;
+    try {
+      setIsBulkUploading(true);
+      setBulkResult(null);
+      showToast("Processing document...", "success");
+      const result = await AdminAPI.bulkUploadBlogs(bulkFile);
+      setBulkResult(result);
+      showToast(`${result.created?.length || 0} articles imported successfully!`, "success");
+      fetchPosts();
+    } catch (error: any) {
+      showToast(error.message, "error");
+    } finally {
+      setIsBulkUploading(false);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -139,7 +160,12 @@ export default function AdminBlog() {
           </div>
           <p className="text-[#475569] font-bold text-[10px] md:text-xs uppercase tracking-[0.2em] ml-0 md:ml-11">Article & Newsletter Management</p>
         </div>
-        <Button onClick={() => { resetForm(); setIsModalOpen(true); }} className="w-full sm:w-auto">+ Draft New Post</Button>
+        <div className="flex gap-3 w-full sm:w-auto">
+          <Button onClick={() => { setBulkFile(null); setBulkResult(null); setIsBulkModalOpen(true); }} className="w-full sm:w-auto !bg-white/5 !text-white hover:!bg-white/10 flex items-center gap-2">
+            <Upload size={16} /> Bulk Import
+          </Button>
+          <Button onClick={() => { resetForm(); setIsModalOpen(true); }} className="w-full sm:w-auto">+ Draft New Post</Button>
+        </div>
       </div>
 
       {loading ? (
@@ -207,7 +233,7 @@ export default function AdminBlog() {
         <form onSubmit={handleCreate} className="space-y-6 pt-4 max-h-[70vh] overflow-y-auto px-1 custom-scrollbar">
           <Input label="Article Headline" required value={formData.title} onChange={(e: any) => setFormData({ ...formData, title: e.target.value })} />
           <Textarea label="Article Brief / Excerpt" required value={formData.excerpt} onChange={(e: any) => setFormData({ ...formData, excerpt: e.target.value })} />
-          <Textarea label="Full Editorial Content" required value={formData.content} onChange={(e: any) => setFormData({ ...formData, content: e.target.value })} className="min-h-[200px]" />
+          <Textarea label="Full Editorial Content (supports HTML & Markdown headings)" required value={formData.content} onChange={(e: any) => setFormData({ ...formData, content: e.target.value })} className="min-h-[200px]" />
 
           <div className="grid grid-cols-2 gap-4">
              <Input label="Classification (Category)" value={formData.category} onChange={(e: any) => setFormData({ ...formData, category: e.target.value })} />
@@ -236,6 +262,66 @@ export default function AdminBlog() {
             {isSubmitting ? "Synchronizing Asset..." : "Commit Article Updates"}
           </Button>
         </form>
+      </Modal>
+
+      {/* BULK UPLOAD MODAL */}
+      <Modal isOpen={isBulkModalOpen} onClose={() => !isBulkUploading && setIsBulkModalOpen(false)} title="Bulk Import Articles">
+        <div className="space-y-6 pt-4 max-h-[70vh] overflow-y-auto px-1 custom-scrollbar">
+          <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10">
+            <h4 className="text-sm font-bold text-white mb-3">How to prepare your document</h4>
+            <ol className="text-xs text-[#94a3b8] space-y-2 list-decimal list-inside">
+              <li>Open your Google Doc with all blog tabs</li>
+              <li>Copy all tabs into a single document</li>
+              <li>Each blog should start with a <strong className="text-white">BLOG 1</strong>, <strong className="text-white">BLOG 2</strong>, etc. marker</li>
+              <li>The blog title should be the heading right after the marker</li>
+              <li>Download as <strong className="text-white">.docx</strong> format</li>
+            </ol>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] text-[#475569] font-black uppercase tracking-widest pl-1">Upload .docx File</label>
+            <input
+              type="file"
+              accept=".docx"
+              onChange={(e) => setBulkFile(e.target.files ? e.target.files[0] : null)}
+              className="w-full text-xs text-[#cbd5f5] file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-white/10 file:text-white hover:file:bg-white/20 cursor-pointer"
+            />
+          </div>
+
+          {bulkFile && (
+            <p className="text-xs text-[#94a3b8]">Selected: <span className="text-white font-bold">{bulkFile.name}</span></p>
+          )}
+
+          {bulkResult && (
+            <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20">
+              <p className="text-sm font-bold text-green-400 mb-2">{bulkResult.message}</p>
+              {bulkResult.created?.length > 0 && (
+                <ul className="text-xs text-[#94a3b8] space-y-1">
+                  {bulkResult.created.map((b: any, i: number) => (
+                    <li key={i} className="truncate">&#10003; {b.title}</li>
+                  ))}
+                </ul>
+              )}
+              {bulkResult.errors?.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-white/10">
+                  <p className="text-xs text-red-400 font-bold mb-1">Errors:</p>
+                  {bulkResult.errors.map((e: any, i: number) => (
+                    <p key={i} className="text-xs text-red-300">{e.title}: {e.error}</p>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          <Button
+            fullWidth
+            className="h-14 !mt-8 font-black uppercase tracking-[0.2em]"
+            disabled={!bulkFile || isBulkUploading}
+            onClick={handleBulkUpload}
+          >
+            {isBulkUploading ? "Importing Articles..." : `Import from Document`}
+          </Button>
+        </div>
       </Modal>
 
       <Toast isVisible={toast.show} message={toast.message} type={toast.type} onClose={() => setToast({ ...toast, show: false })} />

@@ -8,6 +8,27 @@ import { Loader } from "@/components/ui/Loader";
 import { Calendar, Clock, User, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
+function formatContent(content: string): string {
+    // If content already has HTML tags, return as-is
+    if (/<[a-z][\s\S]*>/i.test(content)) {
+        return content;
+    }
+    // Convert plain text / markdown-like content to HTML
+    return content
+        .split("\n")
+        .map((line) => {
+            const trimmed = line.trim();
+            if (!trimmed) return "";
+            if (trimmed.startsWith("### ")) return `<h3>${trimmed.slice(4)}</h3>`;
+            if (trimmed.startsWith("## ")) return `<h2>${trimmed.slice(3)}</h2>`;
+            if (trimmed.startsWith("# ")) return `<h1>${trimmed.slice(2)}</h1>`;
+            // Bold text: **text**
+            const withBold = trimmed.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+            return `<p>${withBold}</p>`;
+        })
+        .join("\n");
+}
+
 export default function BlogPostPage() {
     const { id } = useParams();
     const [blog, setBlog] = useState<any>(null);
@@ -84,11 +105,18 @@ export default function BlogPostPage() {
                         </div>
                     )}
                     
-                    <div className="prose prose-invert prose-lg max-w-none">
-                        <div className="text-[#cbd5f5] leading-relaxed text-lg whitespace-pre-wrap font-medium tracking-tight">
-                            {blog.content}
-                        </div>
-                    </div>
+                    <div
+                        className="prose prose-invert prose-lg max-w-none
+                            prose-headings:text-white prose-headings:font-black prose-headings:tracking-tight
+                            prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4
+                            prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
+                            prose-p:text-[#cbd5f5] prose-p:leading-relaxed prose-p:text-lg prose-p:font-medium prose-p:tracking-tight
+                            prose-strong:text-white
+                            prose-ul:text-[#cbd5f5] prose-ol:text-[#cbd5f5]
+                            prose-li:text-[#cbd5f5] prose-li:leading-relaxed
+                            prose-a:text-[#00e5ff] prose-a:no-underline hover:prose-a:underline"
+                        dangerouslySetInnerHTML={{ __html: formatContent(blog.content) }}
+                    />
                 </Reveal>
 
                 {/* CTAs or Footer for Blog */}

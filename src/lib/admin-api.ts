@@ -207,6 +207,29 @@ export const AdminAPI = {
         return res.json();
     },
 
+    async bulkUploadBlogs(file: File) {
+        const user = auth.currentUser;
+        if (!user) throw new Error("You must be logged in to upload");
+        const token = await getIdToken(user);
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const res = await fetch("/api/blogs/bulk", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+            body: formData,
+        });
+
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || "Bulk upload failed");
+        }
+        return res.json();
+    },
+
     // EVENTS
     async getEvents() {
         const res = await fetch("/api/events");
