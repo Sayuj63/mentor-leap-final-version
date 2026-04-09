@@ -115,12 +115,12 @@ export default function ServicesSection() {
             suppressHydrationWarning
           >
             {[
-              { title: "Executive Coaching", icon: "👔", desc: "Hyper-personalised 1:1 coaching designed for senior professionals, founders and leaders who want to improve public speaking, communication, leadership presence or media readiness." },
-              { title: "Corporate Training", icon: "🏢", desc: "Customised training programs and workshops designed for organisations that want to strengthen communication, leadership conversations and structured thinking across teams." },
-              { title: "Live Online Events", icon: "🌐", desc: "Interactive masterclasses, bootcamps and cohorts for public speaking, leadership communication and executive presence - transforming professionals through applied learning." },
-              { title: "Recorded Courses", icon: "🎥", desc: "Self-paced learning programs that help professionals build communication frameworks and leadership thinking at their own pace." },
-              { title: "Mentorleap Studio", icon: "🎙", desc: "Your one-stop hub for articles, insights, content into everything that’s changing at the modern global workplace – helping you become future-ready." },
-              { title: "Digital Resources", icon: "💻", desc: "A comprehensive library of frameworks, templates, and tools to help you communicate more effectively and build strategic leadership presence." }
+              { title: "Executive Coaching", icon: "👔", desc: "Hyper-personalised 1:1 coaching designed for senior professionals, founders and leaders who want to improve public speaking, communication, leadership presence or media readiness.", link: "/executive-coaching" },
+              { title: "Corporate Training", icon: "🏢", desc: "Customised training programs and workshops designed for organisations that want to strengthen communication, leadership conversations and structured thinking across teams.", link: "/contact" },
+              { title: "Live Online Events", icon: "🌐", desc: "Interactive masterclasses, bootcamps and cohorts for public speaking, leadership communication and executive presence - transforming professionals through applied learning.", link: "/events" },
+              { title: "Recorded Courses", icon: "🎥", desc: "Self-paced learning programs that help professionals build communication frameworks and leadership thinking at their own pace.", link: "/courses" },
+              { title: "Mentorleap Studio", icon: "🎙", desc: "Your one-stop hub for articles, insights, content into everything that’s changing at the modern global workplace – helping you become future-ready.", link: "/mentorleap-studio" },
+              { title: "Digital Resources", icon: "💻", desc: "A comprehensive library of frameworks, templates, and tools to help you communicate more effectively and build strategic leadership presence.", link: "/resources" }
             ].map((s, i) => (
               <div
                 key={s.title}
@@ -161,7 +161,7 @@ export default function ServicesSection() {
                 <p className="mb-4 line-clamp-3" style={{ color: "#94a3b8", fontSize: "14px", flexGrow: 1 }}>
                   {s.desc}
                 </p>
-                <Link href="/contact" className="service-card-link">
+                <Link href={s.link} className="service-card-link">
                   Learn More
                 </Link>
               </div>
